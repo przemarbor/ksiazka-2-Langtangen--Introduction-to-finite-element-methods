@@ -1,0 +1,115 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+	\chapter{Comparison of finite element and finite difference approximation}
+	\label{chap:chap_5}
+	\noindent The previous sections on approximating f by a finite element function u utilize
+	the projection/Galerkin or least squares approaches to minimize the approximation error. We may, alternatively, use the collocation/interpolation method
+	as described in Section \hyperref[sec:sec_4_4]{4.4}. Here we shall compare these three approaches with
+	what one does in the finite difference method when representing a given function
+	on a mesh.
+	\section[Finite difference approximation of given functions]{Finite difference approximation of given functions}
+	\label{sec:sec_5_1}
+	Approximating a given function $f(x)$ on a mesh in a finite difference context will typically just sample $f$ at the mesh points. If $u_{\imath}$ is the value of the approximate $u$ at the mesh point $x_{i}$, we have $u_{i}=f\left(x_{i}\right)$. The collocation/interpolation method using finite element basis functions gives exactly the same representation, as shown Section \hyperref[sec:sec_4_4]{4.4},
+	$$
+	u\left(x_{i}\right)=c_{i}=f\left(x_{i}\right) .
+	$$
+	How does a finite element Galerkin or least squares approximation differ from this straightforward interpolation of $f$ ? This is the question to be addressed next. We now limit the scope to $\mathrm{P} 1$ elements since this is the element type that gives formulas closest to those arising in the finite difference method.
+	\section[Finite difference interpretation of a finite element approximation]{Finite difference interpretation of a finite element approximation}
+	\label{sec:sec_5_2}
+	The linear system arising from a Galerkin or least squares approximation reads in general
+	$$
+	\sum_{j \in \mathcal{I}_{s}} c_{j}\left(\psi_{i}, \psi_{j}\right)=\left(f, \psi_{i}\right), \quad i \in \mathcal{I}_{s}.
+	$$
+	In the finite element approximation we choose $\psi_{i}=\varphi_{i}$. With $\varphi_{i}$ corresponding to $\mathrm{P} 1$ elements and a uniform mesh of element length $h$ we have in Section \hyperref[sec:sec_3_6]{3.6} calculated the matrix with entries $\left(\varphi_{i}, \varphi_{j}\right)$. Equation number $i$ reads
+	\begin{equation}\label{eqa84}
+		\frac{h}{6}\left(u_{i-1}+4 u_{i}+u_{i+1}\right)=\left(f, \varphi_{i}\right).
+	\end{equation}
+	The first and last equation, corresponding to $i=0$ and $i=N$ are slightly different, see Section \hyperref[sec:sec_4_6]{4.6}.
+	
+	The finite difference counterpart to (\hyperref[eqa84]{84}) is just $u_{i}=f_{i}$ as explained in Section \hyperref[sec:sec_5_1]{5.1}. To easier compare this result to the finite element approach to approximating functions, we can rewrite the left-hand side of (\hyperref[eqa84]{84}) as
+	\begin{equation}\label{eqa85}
+		h\left(u_{i}+\frac{1}{6}\left(u_{i-1}-2 u_{i}+u_{i+1}\right)\right).
+	\end{equation}
+	Thinking in terms of finite differences, we can write this expression using finite difference operator notation:
+	$$
+	\left[h\left(u+\frac{h^{2}}{6} D_{x} D_{x} u\right)\right]_{i},
+	$$
+	which is nothing but the standard discretization of
+	$$
+	h\left(u+\frac{h^{2}}{6} u^{\prime \prime}\right) .
+	$$
+	Before interpreting the approximation procedure as solving a differential equation, we need to work out what the right-hand side is in the context of P1 elements. Since $\varphi_{i}$ is the linear function that is 1 at $x_{i}$ and zero at all other nodes, only the interval $\left[x_{i-1}, x_{i+1}\right]$ contribute to the integral on the right-hand side. This integral is naturally split into two parts according to (\hyperref[eqa54]{54}):
+	$$
+	\left(f, \varphi_{i}\right)=\int_{x_{i-1}}^{x_{i}} f(x) \frac{1}{h}\left(x-x_{i-1}\right) d x+\int_{x_{i}}^{x_{i+1}} f(x) \frac{1}{h}\left(1-\left(x-x_{i}\right)\right) d x.
+	$$
+	However, if $f$ is not known we cannot do much else with this expression. It is clear that many values of $f$ around $x_{i}$ contributes to the right-hand side, not just the single point value $f\left(x_{i}\right)$ as in the finite difference method.
+	
+	To proceed with the right-hand side, we can turn to numerical integration schemes. The Trapezoidal method for $\left(f, \varphi_{i}\right)$, based on sampling the integrand $f \varphi_{i}$ at the node points $x_{i}=i h$ gives
+	$$
+	\left(f, \varphi_{i}\right)=\int_{\Omega} f \varphi_{i} d x \approx h \frac{1}{2}\left(f\left(x_{0}\right) \varphi_{i}\left(x_{0}\right)+f\left(x_{N}\right) \varphi_{i}\left(x_{N}\right)\right)+h \sum_{j=1}^{N-1} f\left(x_{j}\right) \varphi_{i}\left(x_{j}\right) .
+	$$
+	Since $\varphi_{i}$ is zero at all these points, except at $x_{i}$, the Trapezoidal rule collapses to one term:
+	\begin{equation}\label{eqa86}
+		\left(f, \varphi_{i}\right) \approx h f\left(x_{i}\right),
+	\end{equation}
+	for $i=1, \ldots, N-1$, which is the same result as with collocation/interpolation, and of course the same result as in the finite difference method. For $i=0$ and $i=N$ we get contribution from only one element so
+	\begin{equation}\label{eqa87}
+		\left(f, \varphi_{i}\right) \approx \frac{1}{2} h f\left(x_{i}\right), \quad i=0, i=N .
+	\end{equation}
+	Simpson's rule with sample points also in the middle of the elements, at $x_{i+\frac{1}{2}}=\left(x_{i}+x_{i+1}\right) / 2$, can be written as
+	$$
+	\int_{\Omega} g(x) d x \approx \frac{\tilde{h}}{3}\left(g\left(x_{0}\right)+2 \sum_{j=1}^{N-1} g\left(x_{j}\right)+4 \sum_{j=0}^{N-1} g\left(x_{j+\frac{1}{2}}\right)+f\left(x_{2 N}\right)\right),
+	$$
+	where $\tilde{h}=h / 2$ is the spacing between the sample points. Our integrand is $g=$ $f \varphi_{i}$. For all the node points, $\varphi_{i}\left(x_{j}\right)=\delta_{i j}$, and therefore $\sum_{j=1}^{N-1} f\left(x_{j}\right) \varphi_{i}\left(x_{j}\right)=$ $f\left(x_{i}\right)$. At the midpoints, $\varphi_{i}\left(x_{i \pm \frac{1}{2}}\right)=1 / 2$ and $\varphi_{i}\left(x_{j+\frac{1}{2}}\right)=0$ for $j>1$ and $j<i-1$. Consequently,
+	$$
+	\sum_{j=0}^{N-1} f\left(x_{j+\frac{1}{2}}\right) \varphi_{i}\left(x_{j+\frac{1}{2}}\right)=\frac{1}{2}\left(f x_{j-\frac{1}{2}}+x_{j+\frac{1}{2}}\right) \text {. }
+	$$
+	When $1 \leq i \leq N-1$ we then get
+	\begin{equation}\label{eqa88}
+		\left(f, \varphi_{i}\right) \approx \frac{h}{3}\left(f_{i-\frac{1}{2}}+f_{i}+f_{i+\frac{1}{2}}\right) .
+	\end{equation}
+	This result shows that, with Simpson's rule, the finite element method operates with the average of $f$ over three points, while the finite difference method just applies $f$ at one point. We may interpret this as a "smearing" or smoothing of $f$ by the finite element method.
+	
+	We can now summarize our findings. With the approximation of $\left(f, \varphi_{i}\right)$ by the Trapezoidal rule, P1 elements give rise to equations that can be expressed as a finite difference discretization of
+	\begin{equation}\label{eqa89}
+		u+\frac{h^{2}}{6} u^{\prime \prime}=f, \quad u^{\prime}(0)=u^{\prime}(L)=0,
+	\end{equation}
+	expressed with operator notation as
+	\begin{equation}\label{eqa90}
+		\left[u+\frac{h^{2}}{6} D_{x} D_{x} u=f\right]_{i}.
+	\end{equation}
+	As $h \rightarrow 0$, the extra term proportional to $u^{\prime \prime}$ goes to zero, and the two methods are then equal.
+	With the Simpson's rule, we may say that we solve
+	\begin{equation}\label{eqa91}
+		\left[u+\frac{h^{2}}{6} D_{x} D_{x} u=\bar{f}\right]_{i},
+	\end{equation}
+	where $\bar{f}_{i}$ means the average $\frac{1}{3}\left(f_{i-1 / 2}+f_{i}+f_{i+1 / 2}\right)$.
+	
+	The extra term $\frac{h^{2}}{6} u^{\prime \prime}$ represents a smoothing effect: with just this term, we would find $u$ by integrating $f$ twice and thereby smooth $f$ considerably. In addition, the finite element representation of $f$ involves an average, or a smoothing, of $f$ on the right-hand side of the equation system. If $f$ is a noisy function, direct interpolation $u_{i}=f_{i}$ may result in a noisy $u$ too, but with a Galerkin or least squares formulation and P1 elements, we should expect that $u$ is smoother than $f$ unless $h$ is very small.
+	
+	The interpretation that finite elements tend to smooth the solution is valid in applications far beyond approximation of $1 \mathrm{D}$ functions.
+	
+	\section[Making finite elements behave as finite differences]{Making finite elements behave as finite differences}
+	\label{sec:sec_5_3}
+	\noindent With a simple trick, using numerical integration, we can easily produce the result $u_{i}=f_{i}$ with the Galerkin or least square formulation with P1 elements. This is useful in many occasions when we deal with more difficult differential equations and want the finite element method to have properties like the finite difference method (solving standard linear wave equations is one primary example).
+	
+	\noindent \textbf{Computations in physical space.} We have already seen that applying the Trapezoidal rule to the right-hand side $\left(f, \varphi_{i}\right)$ simply gives $f$ sampled at $x_{i}$. Using the Trapezoidal rule on the matrix entries $A_{i, j}=\left(\varphi_{i}, \varphi_{j}\right)$ involves a sum
+	$$
+	\sum_{k} \varphi_{i}\left(x_{k}\right) \varphi_{j}\left(x_{k}\right),
+	$$
+	but $\varphi_{i}\left(x_{k}\right)=\delta_{i k}$ and $\varphi_{j}\left(x_{k}\right)=\delta_{j k}$. The product $\varphi_{i} \varphi_{j}$ is then different from zero only when sampled at $x_{i}$ and $i=j$. The Trapezoidal approximation to the integral is then
+	$$
+	\left(\varphi_{i}, \varphi_{j}\right) \approx h, \quad i=j,
+	$$
+	and zero if $i \neq j$. This means that we have obtained a diagonal matrix! The first and last diagonal elements, $\left(\varphi_{0}, \varphi_{0}\right)$ and $\left(\varphi_{N}, \varphi_{N}\right)$ get contribution only from the first and last element, respectively, resulting in the approximate integral value $h / 2$. The corresponding right-hand side also has a factor $1 / 2$ for $i=0$ and $i=N$. Therefore, the least squares or Galerkin approach with $\mathrm{P} 1$ elements and Trapezoidal integration results in
+	$$
+	c_{i}=f_{i}, \quad i \in \mathcal{I}_{s} .
+	$$
+	Simpsons's rule can be used to achieve a similar result for $\mathrm{P} 2$ elements, i.e, a diagonal coefficient matrix, but with the previously derived average of $f$ on the right-hand side.
+	\bigbreak
+	\noindent \textbf{Elementwise computations.} Identical results to those above will arise if we perform elementwise computations. The idea is to use the Trapezoidal rule on the reference element for computing the element matrix and vector. When assembled, the same equations $c_{i}=f\left(x_{i}\right)$ arise. Exercise \hyperref[sec:sec_10_19]{19} encourages you to carry out the details.
+	\bigbreak
+	\noindent \textbf{Terminology}. The matrix with entries $\left(\varphi_{i}, \varphi_{j}\right)$ typically arises from terms proportional to $u$ in a differential equation where $u$ is the unknown function. This matrix is often called the mass matrix, hecause in the early days of the finite element method, the matrix arose from the mass times acceleration term in Newton's second law of motion. Making the mass matrix diagonal by, e.g., numerical integration, as demonstrated above, is a widely used technique and is called mass lumping. In time-dependent problems it can sometimes enhance the numerical accuracy and computational efficiency of the finite element method. However, there are also examples where mass lumping destroys accuracy.
+	
+\clearpage
+\end{document} 

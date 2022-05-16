@@ -1,0 +1,180 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+\chapter{Exercises}
+	\label{chap:chap_10}
+	
+	\section*{Exercise 1: Linear algebra refresher I}
+	\label{sec:sec_10_1}
+	\noindent Look up the topic of \textit{vector} space in your favorite linear algebra book or search for the term at Wikipedia. Prove that vectors in the plane $(a, b)$ form a vector space by showing that all the axioms of a vector space are satisfied. Similarly, prove that all linear functions of the form $a x+b$ constitute a vector space, $a, b \in \mathbb{R}$.
+	
+	On the contrary, show that all quadratic functions of the form $1+a x^{2}+b x$ \textit{do not} constitute a vector space. Filename: linalg1.pdf.
+	\bigbreak
+	\section*{Exercise 2: Linear algebra refresher II}
+	\label{sec:sec_10_2}
+	\noindent As an extension of Exercise 1, check out the topic of \textit{inner product spaces}. Suggest a possible inner product for the space of all linear functions of the form $a x+b$, $a, b \in \mathbb{R}$. Show that this inner product satisfies the general requirements of an inner product in a vector space. Filename: linalg2.pdf.
+	\bigbreak
+	\section*{Exercise 3: Approximate a three-dimensional vector in a plane}
+	\label{sec:sec_10_3}
+	\noindent Given $\boldsymbol{f}=(1,1,1)$ in $\mathbb{R}^{3}$, find the best approximation vector $\boldsymbol{u}$ in the plane spanned by the unit vectors $(1,0)$ and $(0,1)$. Repeat the calculations using the vectors $(2,1)$ and $(1,2)$. Filename: vec111\textunderscore approx.pdf.
+	\bigbreak
+	\section*{Exercise 4: Approximate the exponential function by power functions}
+	\label{sec:sec_10_4}
+	\noindent Let $V$ be a function space with basis functions $x^{i}, i=0,1, \ldots, N$. Find the best approximation to $f(x)=\exp (-x)$ on $\Omega=[0,4]$ among all functions in $V$ for $N=2,4,6$. Illustrate the three approximations in three separate plots. Add the corresponding Taylor polynomial approximation of degree $N$ in each plot. Filename: exp\textunderscore powers.py.
+	\bigbreak
+	\section*{Exercise 5: Approximate the sine function by power functions}
+	\label{sec:sec_10_5}
+	\noindent Let $V$ be a function space with basis functions $x^{2 i+1}, i=0,1, \ldots, N$. Find the best approximation to $f(x)=\sin (x)$ among all functions in $V$, using $N=8$ for a domain that includes more and more half-periods of the sine function: $\Omega=[0, k \pi / 2], k=2,3, \ldots, 12$. How does a Taylor series of $\sin (x)$ around $x$ up to degree 9 behave for the largest domain?
+	\bigbreak
+	\noindent \textbf{Hint.} One can make a loop over $k$ and call the functions least\textunderscore squares and comparison\textunderscore plot from the approx1D module.
+	
+	Filename: sin\textunderscore powers.py.
+	\bigbreak
+	\section*{Exercise 6: Approximate a steep function by sines}
+	\label{sec:sec_10_6}
+	\noindent Find the best approximation of $f(x)=\tanh (s(x-\pi))$ on $[0,2 \pi]$ in the space $V$ with basis $\psi_{i}(x)=\sin ((2 i+1) x), i \in \mathcal{I}_{s}=\{0, \ldots, N\}$. Make a movie showing how $u=\sum_{j \in \mathcal{I}_{s}} c_{j} \psi_{j}(x)$ approximates $f(x)$ as $N$ grows. Choose $s$ such that $f$ is steep ( $s=20$ may be appropriate).
+	\bigbreak
+	\noindent \textbf{Hint.} One may naively call the least\textunderscore squares\textunderscore orth and comparison\textunderscore plot from the approx1D module in a loop and extend the basis with one new element in each pass. This approach implies a lot of recomputations. A more efficient strategy is to let least\textunderscore squares\textunderscore orth compute with only one basis function at a time and accumulate the corresponding $u$ in the total solution.
+	Filename: tanh\textunderscore sines\textunderscore approx1.py.
+	\bigbreak
+	\section*{Exercise 7: Animate the approximation of a steep function by sines}
+	\label{sec:sec_10_7}
+	\noindent Make a movie where the steepness $(s)$ of the tanh function in Exercise \hyperref[sec:sec_10_6]{6} grows in "time", and for each value of the steepness, the movie shows how the approximation improves with increasing $N$. Filename: tanh\textunderscore sines\textunderscore approx2.py.
+	\bigbreak
+	\section*{Exercise 8: Fourier series as a least squares approximation}
+	\label{sec:sec_10_8}
+	\noindent Given a function $f(x)$ on an interval $[0, L]$, look up the formula for the coefficients $a_{j}$ and $b_{j}$ in the Fourier series of $f$ :
+	$$
+	f(x)=a_{0}+\sum_{j=1}^{\infty} a_{j} \cos \left(j \frac{\pi x}{L}\right)+\sum_{j=1}^{\infty} b_{j} \sin \left(j \frac{\pi x}{L}\right).
+	$$
+	Let an infinite-dimensional vector space $V$ have the basis functions $\cos j \frac{\pi x}{L}$ for $j=0,1, \ldots, \infty$ and $\sin j \frac{\pi x}{L}$ for $j=1, \ldots, \infty$. Show that the least squares approximation method from Section \hyperref[chap:chap_2]{2} leads to a linear system whose solution coincides with the standard formulas for the coefficients in a Fourier series of $\int(x)$ (see also Section \hyperref[sec:sec_2_7]{2.7}). You may choose
+	$$
+	\psi_{2 i}=\cos \left(i \frac{\pi}{L} x\right), \quad \psi_{2 i+1}=\sin \left(i \frac{\pi}{L} x\right),
+	$$
+	for $i=0,1, \ldots, N \rightarrow \infty$.
+	Choose $f(x)=\tanh \left(s\left(x-\frac{1}{2}\right)\right)$ on $\Omega=[0,1]$, which is a smooth function, but with considerable steepness around $x=1 / 2$ as $s$ grows in size. Calculate the coefficients in the Fourier expansion by solving the linear system, arising from the least squares or Galerkin methods, by hand. Plot some truncated versions of the series together with $f(x)$ to show how the series expansion converges for $s=10$ and $s=100$. Filename: Fourier\textunderscore approx.py.
+	\bigbreak
+	\section*{Exercise 9: Approximate a steep function by Lagrange polynomials}
+	\label{sec:sec_10_9}
+	\noindent Use interpolation/collocation with uniformly distributed points and Chebychev nodes to approximate
+	$$
+	f(x)=-\tanh \left(s\left(x-\frac{1}{2}\right)\right), \quad x \in[0,1]
+	$$
+	by Lagrange polynomials for $s=10$ and $s=100$, and $N=3,6,9,11$. Make separate plots of the approximation for each combination of $s$, point type (Chebyshev or uniform), and $N$. Filename: tanh\textunderscore Lagrange.py.
+	\bigbreak
+	\section*{Exercise 10: Define nodes and elements}
+	\label{sec:sec_10_10}
+	\noindent Consider a domain $\Omega=[0,2]$ divided into the three $\mathrm{P} 2$ elements $[0,1],[1,1.2]$, and $[1.2,2]$.
+	
+	For P1 and P2 elements, set up the list of coordinates and nodes (nodes) and the numbers of the nodes that belong to each element (elements) in two cases: 1) nodes and elements numbered from left to right, and 2) nodes and elements numbered from right to left. Filename: fe\textunderscore numberings 1 .py ..
+	\bigbreak
+	\section*{Exercise 11: Define vertices, cells, and dof maps}
+	\label{sec:sec_10_11}
+	\noindent Repeat Exercise \hyperref[sec:sec_10_10]{10}, but define the data structures vertices, cells, and dof\textunderscore map instead of nodes and elements. Filename: fe\textunderscore numberings2.py.
+	\bigbreak
+	\section*{Exercise 12: Construct matrix sparsity patterns}
+	\label{sec:sec_10_12}
+	\noindent Exercise \hyperref[sec:sec_10_10]{10} describes a element mesh with a total of five elements, but with two different element and node orderings. For each of the two orderings, make a $5 \times 5$ matrix and fill in the entries that will be nonzero.
+	\bigbreak
+	\noindent \textbf{Hint.} A matrix entry $(i, j)$ is nonzero if $i$ and $j$ are nodes in the same element. Filename: \textunderscore sparsity\textunderscore pattern.pdf.
+	
+	\section*{Exercise 13: Perform symbolic finite element computations}
+	\label{sec:sec_10_13}
+	\noindent Perform hand calculations to find formulas for the coefficient matrix and righthand side when approximating $f(x)=\sin (x)$ on $\Omega=[0, \pi]$ by two P1 elements of size $\pi / 2$. Solve the system and compare $u(\pi / 2)$ with the exact value 1 .
+	Filename: sin\textunderscore approx\textunderscore P1.py.
+	\bigbreak
+	\section*{Exercise 14: Approximate a steep function by $\mathrm{P} 1$ and $\mathrm{P} 2$ elements}
+	\label{sec:sec_10_14}
+	\noindent Given
+	$$
+	f(x)=\tanh \left(s\left(x-\frac{1}{2}\right)\right)
+	$$
+	use the Galerkin or least squares method with finite elements to find an approximate function $u(x)$. Choose $s=40$ and try $N_{e}=4,8,16 \mathrm{P} 1$ elements and $N_{e}=2,4,8 \mathrm{P} 2$ elements. Integrate $f \varphi_{i}$ numerically. Filename: tanh\textunderscore fe\textunderscore P1P2\textunderscore approx.py.
+	\bigbreak
+	\section*{Exercise 15: Approximate a steep function by $\mathrm{P} 3$ and $\mathrm{P} 4$ elements}
+	\label{sec:sec_10_15}
+	\noindent Solve Exercise \hyperref[sec:sec_10_14]{14} using $N_{e}=1,2,4 \mathrm{P} 3$ and P4 elements. How will a collocation/interpolation method work in this case with the same number of nodes? Filename: tanh\textunderscore fe\textunderscore P3P4\textunderscore approx.py.
+	\bigbreak
+	\section*{Exercise 16: Investigate the approximation error in finite elements}
+	\label{sec:sec_10_16}
+	\noindent The theory (\hyperref[eqa93]{93}) from Section ?? predicts that the error in the $\mathrm{P} d$ approximation of a function should behave as $h^{d+1}$. Use experiments to verify this asymptotic behavior (i.e., for small enough $h$ ). Choose two examples: $f(x)=A e^{-\omega x}$ on
+	
+	$[0,3 / \omega]$ and $f(x)=A \sin (\omega x)$ on $\Omega=[0,2 \pi / \omega]$ for constants $A$ and $\omega$. What happens if you try $f(x)=\sqrt{x}$ on $[0,1]$ ?
+	\bigbreak
+	\noindent \textbf{Hint}. Run a series of experiments: $\left(h_{i}, E\right), i=0, \ldots, m$, where $E_{i}$ is the $L^{2}$ norm of the error corresponding to element length $h_{i}$. Assume an error model $E=C h^{r}$ and compute $r$ from two successive experiments:
+	$$
+	r_{i}=\ln \left(E_{i+1} / E_{i}\right) / \ln \left(h_{i+1} / h_{i}\right), \quad i=0, \ldots, m-1 .
+	$$
+	Hopefully, the sequence $r_{0}, \ldots, r_{m-1}$ converges to the true $r$, and $r_{m-1}$ can be taken as an approximation to $r$.
+	
+	Filename: Asinwt\textunderscore interpolation\textunderscore error.py.
+	\bigbreak
+	\section*{Exercise 17: Approximate a step function by finite elements}
+	\label{sec:sec_10_17}
+	\noindent Approximate the step function
+	$$
+	f(x)= \begin{cases}1 & x<1 / 2 \\ 2 & x \geq 1 / 2\end{cases}
+	$$
+	by 2,4 , and $8 \mathrm{P} 1$ and P2 elements. Compare approximations visually.
+	Hint. This $f$ can also be expressed in terms of the Heaviside function $H(x)$ : $f(x)=H(x-1 / 2)$. Therefore, $f$ can be defined by
+	\begin{lstlisting}[numbers=none]
+		f = sp.Heaviside(x - sp.Rational(1,2))	
+	\end{lstlisting}
+	making the approximate function in the fe\textunderscore approx1D.py module an obvious candidate to solve the problem. However, sympy does not handle symbolic integration with this particular integrand, and the approximate function faces a problem when converting $f$ to a Python function (for plotting) since Heaviside is not an available function in numpy. It is better to make special-purpose code for this case or perform all calculations by hand.
+	
+	Filename: Heaviside\textunderscore approx\textunderscore P1P2.py ..
+	\bigbreak
+	\section*{Exercise 18: 2D approximation with orthogonal functions}
+	\label{sec:sec_10_18}
+	\noindent Assume we have basis functions $\varphi_{i}(x, y)$ in $2 \mathrm{D}$ that are orthogonal such that $\left(\varphi_{i}, \varphi_{j}\right)=0$ when $i \neq j$. The function least\textunderscore squares in the file \href{http://tinyurl.com/jvzzcfn/fem/fe_approx2D.py}{approx2D.py} will then spend much time on computing off-diagonal terms in the coefficient matrix that we know are zero. To speed up the computations, make a version least\textunderscore squares\textunderscore orth that utilizes the orthogonality among the basis functions. Apply the function to approximate
+	$$
+	f(x, y)=x(1-x) y(1-y) e^{-x-y}
+	$$
+	on $\Omega=[0,1] \times[0,1]$ via basis functions
+	$$
+	\varphi_{i}(x, y)=\sin (p \pi x) \sin (q \pi y), \quad i=q N_{x}+p
+	$$
+	
+	\noindent \textbf{Hint.} Get ideas from the function least\textunderscore squares\textunderscore orth in Section 2.8 and
+	file \href{http://tinyurl.com/jvzzcfn/fem/fe_approx2D.py}{approx2D.py.}
+	
+	Filename: approx2D\textunderscore lsorth\textunderscore sin.py.
+	\bigbreak
+	\section*{Exercise 19: Use the Trapezoidal rule and $\mathrm{P} 1$ elements}
+	\label{sec:sec_10_19}
+	\noindent Consider approximation of some $f(x)$ on an interval $\Omega$ using the least squares or Galerkin methods with $\mathrm{P} 1$ elements. Derive the element matrix and vector using the Trapezoidal rule (\hyperref[eqa101]{101}) for calculating integrals on the reference element. Assemble the contributions, assuming a uniform cell partitioning, and show that the resulting linear system has the form $c_{i}=f\left(x_{i}\right)$ for $i \in \mathcal{I}_{s}$. Filename: fe\textunderscore P1\textunderscore trapez.pdf.
+	\bigbreak
+	\section*{Problem 20: Compare P1 elements and interpolation}
+	\label{sec:sec_10_20}
+	\noindent We shall approximate the function
+	$$
+	f(x)=1+\epsilon \sin (2 \pi n x), \quad x \in \Omega=[0,1]
+	$$
+	where $n \in \mathbb{Z}$ and $\epsilon \geq 0$.
+	\begin{enumerate}[label=(\alph*)]
+		\item Sketch $f(x)$ and find the wave length of the function.
+		\item We want to use $N_{P}$ elements per wave length. Show that the number of elements is then $n N_{P}$.
+		\item The critical quantity for accuracy is the number of elements per wave length, not the element size in itself. It therefore suffices to study an $f$ with just one wave length in $\Omega=[0,1]$. Set $\epsilon=0.5$.
+		
+		Run the least squares or projection/Galerkin method for $N_{P}=2,4,8,16,32$. Compute the error $E=\|u-f\|_{L^{2}}$.
+		\bigbreak
+		\textbf{Hint.} Use the fe\textunderscore approx1D\textunderscore numint module to compute $u$ and use the technique from Section \hyperref[sec:sec_6_4]{6.4} to compute the norm of the error.
+		\item Repeat the set of experiments in the above point, but use interpolation/collocation based on the node points to compute $u(x)$ (recall that $c_{i}$ is now simply $\left.f\left(x_{i}\right)\right)$. Compute the error $E=\|u-f\|_{L^{2}}$. Which method seems to be most accurate?
+		
+		Filename: P1\textunderscore vs\textunderscore interp.py.
+	\end{enumerate}
+	\bigbreak
+	\section*{Exercise 21: Implement 3D computations with global basis functions}
+	\label{sec:sec_10_21}
+	\noindent Extend the \href{http://tinyurl.com/jvzzcfn/fem/approx2D.py}{approx2D.py} code to 3D applying ideas from Section \hyperref[sec:sec_8_4]{8.4}. Use a
+	3D generalization of the test problem in Section \hyperref[sec:sec_8_3]{8.3} to test the implementation.
+	Filename: approx3D.py
+	\bigbreak
+	\section*{Exercise 22: Use Simpson's rule and P2 elements}
+	\label{sec:sec_10_22}
+	\noindent Redo Exercise \hyperref[sec:sec_10_19]{19}, but use P2 elements and Simpson's rule based on sampling
+	the integrands at the nodes in the reference cell.
+	Filename: fe\textunderscore P2\textunderscore simpson.pdf.
+
+\clearpage
+\end{document} 

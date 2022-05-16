@@ -1,0 +1,47 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+	
+		\chapter{Numerical integration}
+	\label{chap:chap_7}
+	\noindent Finite element codes usually apply numerical approximations to integrals. Since the integrands in the coefficient matrix often are (lower-order) polynomials, integration rules that can integrate polynomials cxactly are popular.
+	The numerical integration rules can be expressed in a common form,
+	\begin{equation}\label{eqa99}
+		\int_{-1}^{1} g(X) d X \approx \sum_{j=0}^{M} w_{j} g\left(\bar{X}_{j}\right),
+	\end{equation}	
+	where $\bar{X}_{j}$ are integration points and $w_{j}$ are integration weights, $j=0, \ldots, M$. Different rules correspond to different choices of points and weights.
+	The very simplest method is the Midpoint rule,
+	\begin{equation}\label{eqa100}
+		\int_{-1}^{1} g(X) d X \approx 2 g(0), \quad \bar{X}_{0}=0, w_{0}=2,
+	\end{equation}	
+	which integrates linear functions exactly.
+	\section[Newton-Cotes rules]{Newton-Cotes rules}
+	\label{sec:sec_7_1}
+	\noindent The \href{https://en.wikipedia.org/wiki/Newton%E2%80%93Cotes_formulas}{Newton-Cotes} rules are based on a fixed uniform distribution of the integration points. The first two formulas in this family are the well-known \textit{Trapezoidal rule},
+	\begin{equation}\label{eqa101}
+		\int_{-1}^{1} g(X) d X \approx g(-1)+g(1), \quad \bar{X}_{0}=-1, \quad \bar{X}_{1}=1, w_{0}=w_{1}=1,
+	\end{equation}
+	and \textit{Simpson's rule},
+	\begin{equation}\label{eqa102}
+		\int_{-1}^{1} g(X) d X \approx \frac{1}{3}(g(-1)+4 g(0)+g(1)),
+	\end{equation}
+	where
+	\begin{equation}\label{eqa103}
+		\bar{X}_{0}=-1, \bar{X}_{1}=0, \bar{X}_{2}=1, w_{0}=w_{2}=\frac{1}{3}, w_{1}=\frac{4}{3}.
+	\end{equation}
+	Newton-Cotes rules up to five points is supported in the module file \href{https://github.com/hplgit/INF5620/blob/master/src/fem/numint.py}{numint.py.}
+	
+	For higher accuracy one can divide the reference cell into a set of subintervals and use the rules above on each subinterval. This approach results in composite rules, well-known from basic introductions to numerical integration of $\int_{a}^{b} f(x) d x$.
+	\bigbreak
+	\section[Gauss-Legendre rules with optimized points]{Gauss-Legendre rules with optimized points}
+	\label{sec:sec_7_2}
+	More accurate rules, for a given $M$, arise if the location of the integration points are optimized for polynomial integrands. The\href{https://en.wikipedia.org/wiki/Gaussian_quadrature}{Gauss-Legendre rules} (also known as Gauss-Legendre quadrature or Gaussian quadrature) constitute one such class of integration methods. Two widely applied Gauss-Legendre rules in this family have the choice
+	\begin{equation}\label{eqa104}
+		M=1: \bar{X}_{0}=-\frac{1}{\sqrt{3}}, \bar{X}_{1}=\frac{1}{\sqrt{3}}, w_{0}=w_{1}=1
+	\end{equation}
+	\begin{equation}\label{eqa105}
+		M=2: \bar{X}_{0}=-\sqrt{\frac{3}{5}}, \bar{X}_{0}=0, \bar{X}_{2}=\sqrt{\frac{3}{5}}, w_{0}=w_{2}=\frac{5}{9}, w_{1}=\frac{8}{9}.
+	\end{equation}
+	These rules integrate 3 rd and 5 th degree polynomials exactly. In general, an $M$-point Gauss-Legendre rule integrates a polynomial of degree $2 M+1$ exactly. The code numint.py contains a large collection of Gauss-Legendre rules.
+	
+\clearpage
+\end{document} 

@@ -1,0 +1,272 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+	
+\chapter{Variational formulations in 2D and 3D}
+\label{chap:chap_17}
+%\pagenumbering{arabic}
+	\noindent The major difference between deriving variational formulations in $2 \mathrm{D}$ and $3 \mathrm{D}$ compared to $1 \mathrm{D}$ is the rule for integrating by parts. A typical second-order term in a PDE may be written in dimension-independent notation as
+	$$
+	\nabla^{2} u \text { or } \nabla \cdot(a(\boldsymbol{x}) \nabla u) .
+	$$
+	The explicit forms in a 2D problem become
+	$$
+	\nabla^{2} u=\nabla \cdot \nabla u=\frac{\partial^{2} u}{\partial x^{2}}+\frac{\partial^{2} u}{\partial y^{2}},
+	$$
+	and
+	$$
+	\nabla \cdot(a(\boldsymbol{x}) \nabla u)=\frac{\partial}{\partial x}\left(a(x, y) \frac{\partial u}{\partial x}\right)+\frac{\partial}{\partial y}\left(a(x, y) \frac{\partial u}{\partial y}\right) .
+	$$
+	We shall continue with the latter operator as the form arises from just setting $a=1$.
+	
+	The general rule for integrating by parts is often referred to as \href{https://en.wikipedia.org/wiki/Green's_identities}{Green's first identity}:
+	
+	\begin{equation}
+		\label{eqa197}
+		-\int_{\Omega} \nabla \cdot(a(\boldsymbol{x}) \nabla u) v \mathrm{~d} x=\int_{\Omega} a(\boldsymbol{x}) \nabla u \cdot \nabla v \mathrm{~d} x-\int_{\partial \Omega} a \frac{\partial u}{\partial n} v \mathrm{~d} s,
+	\end{equation}
+
+	where $\partial \Omega$ is the boundary of $\Omega$ and $\partial u / \partial n=n \cdot \nabla u$ is the derivative of $u$ in the outward normal direction, $\boldsymbol{n}$ being an outward unit normal to $\partial \Omega$. The integrals $\int_{\Omega}() \mathrm{d} x$ are area integrals in $2 \mathrm{D}$ and volume integrals in $3 \mathrm{D}$, while $\int_{\partial \Omega}() \mathrm{d} s$ is a line integral in 2D and a surface integral in 3D. \smallbreak
+	Let us divide the boundary into two parts:
+	\begin{itemize}
+		\item $\partial \Omega_{N}$, where we have Neumann conditions $-a \frac{\partial u}{\partial n}=g$, and
+		\item $\partial \Omega_{D}$, where we have Dirichlet conditions $u=u_{0}$.
+	\end{itemize} \smallbreak
+	\noindent The test functions $v$ are required to vanish on $\partial \Omega_{D}$.
+	
+	\textbf{Example.   } Here is a quite general, stationary, linear PDE arising in many problems:
+	
+	\begin{equation}
+		\label{eqa198}
+		v \cdot \nabla u+\alpha u=\nabla \cdot(a \nabla u)+f, \quad x \in \Omega \\
+	\end{equation}
+
+	\begin{equation}
+		\label{eqa199}
+		u=u_{0}, \quad x \in \partial \Omega_{D} \\
+	\end{equation}
+
+	\begin{equation}
+		\label{eqa200}
+		-a \frac{\partial u}{\partial n}=g, \quad x \in \partial \Omega_{N}
+	\end{equation}
+	
+	\noindent The vector field $v$ and the scalar functions $a, \alpha, f, u_{0}$, and $g$ may vary with the spatial coordinate $\boldsymbol{x}$ and must be known.
+	
+	Such a second-order PDE needs exactly one boundary condition at each point of the boundary, so $\partial \Omega_{N} \cup \partial \Omega_{D}$ must be the complete boundary $\partial \Omega$.
+	
+	Assume that the boundary function $u_{0}(\boldsymbol{x})$ is defined for all $\boldsymbol{x} \in \Omega$. The unknown function can then be expanded as
+	$$
+	u=B+\sum_{j \in \mathcal{I}_{*}} c_{j} \psi_{j}, \quad B=u_{0}
+	$$
+	The variational formula is obtained from Galerkin's method, which technically implies multiplying the PDE by a test function $v$ and integrating over $\Omega$ :
+	$$
+	\int_{\Omega}(v \cdot \nabla u+\alpha u) v \mathrm{~d} x=\int_{\Omega} \nabla \cdot(a \nabla u) \mathrm{d} x+\int_{\Omega} f v \mathrm{~d} x .
+	$$
+	The second-order term is integrated by parts, according to
+	$$
+	\int_{\Omega} \nabla \cdot(a \nabla u) v \mathrm{~d} x=-\int_{\Omega} a \nabla u \cdot \nabla v \mathrm{~d} x+\int_{\partial \Omega} a \frac{\partial u}{\partial n} v \mathrm{~d} s .
+	$$
+	The variational form now reads
+	$$
+	\int_{\Omega}(v \cdot \nabla u+\alpha u) v \mathrm{~d} x=-\int_{\Omega} a \nabla u \cdot \nabla v \mathrm{~d} x+\int_{\partial \Omega} a \frac{\partial u}{\partial n} v \mathrm{~d} s+\int_{\Omega} f v \mathrm{~d} x .
+	$$
+	The boundary term can be developed further by noticing that $v \neq 0$ only on $\partial \Omega_{N}$,
+	$$
+	\int_{\partial \Omega} a \frac{\partial u}{\partial n} v \mathrm{~d} s=\int_{\partial \Omega_{N}} a \frac{\partial u}{\partial n} v \mathrm{~d} s,
+	$$
+	and that on $\partial \Omega_{N}$, we have the condition $a \frac{\partial u}{\partial n}=-g$, so the term becomes
+	$$
+	-\int_{\partial \Omega_{N}} g v \mathrm{~d} s
+	$$
+	The variational form is then
+	$$
+	\int_{\Omega}(\boldsymbol{v} \cdot \nabla u+\alpha u) v \mathrm{~d} x=-\int_{\Omega} a \nabla u \cdot \nabla v \mathrm{~d} x-\int_{\partial \Omega_{N}} g v \mathrm{~d} s+\int_{\Omega} f v \mathrm{~d} x
+	$$
+	
+	Instead of using the integral signs we may use the inner product notation:
+	$$
+	(v \cdot \nabla u, v)+(\alpha u, v)=-(a \nabla u, \nabla v)-(g, v)_{N}+(f, v) .
+	$$
+	The subscript $N$ in $(g, v)_{N}$ is a notation for a line or surface integral over $\partial \Omega_{N}$.\smallbreak Inserting the $u$ expansion results in
+	$$
+	\begin{aligned}
+		\sum_{j \in I_{x}}\left(\left(\boldsymbol{v} \cdot \nabla \psi_{j}, \psi_{i}\right)+\left(\alpha \psi_{j}, \psi_{i}\right)+\left(a \nabla \psi_{j}, \nabla \psi_{i}\right)\right) c_{j}=\\
+		\left(g, \psi_{i}\right)_{N}+\left(f, \psi_{i}\right)-\left(\boldsymbol{v} \cdot \nabla u_{0}, \psi_{i}\right)+\left(\alpha u_{0}, \psi_{i}\right)+\left(a \nabla u_{0}, \nabla \psi_{i}\right)
+	\end{aligned}
+	$$
+	This is a linear system with matrix entries
+	$$
+	A_{i, j}=\left(v \cdot \nabla \psi_{j}, \psi_{i}\right)+\left(\alpha \psi_{j,} \psi_{i}\right)+\left(a \nabla \psi_{j}, \nabla \psi_{i}\right)
+	$$
+	and right-hand side entries
+	$$
+	b_{i}=\left(g, \psi_{i}\right)_{N}+\left(f, \psi_{i}\right)-\left(v \cdot \nabla u_{0}, \psi_{i}\right)+\left(\alpha u_{0}, \psi_{i}\right)+\left(a \nabla u_{0}, \nabla \psi_{i}\right)
+	$$
+	for $i, j \in \mathcal{I}_{8}$.\smallbreak
+	In the finite element method, we usually express $u_{0}$ in terms of basis functions and restrict $i$ and $j$ to run over the degrees of freedom that are not prescribed as Dirichlet conditions. However, we can also keep all the $c_{j}, j \in \mathcal{I}_{s}$, as unknowns drop the $u_{0}$ in the expansion for $u$, and incorporate all the known $c_{j}$ values in the linear system. This has been explained in detail in the 1D case.\bigbreak 
+	
+	\section[Transformation to a reference cell in 2D and 3D]{Transformation to a reference cell in 2D and 3D}
+		\label{sec:sec_17_1}
+	 
+		\noindent We consider an integral of the type
+		
+		\begin{equation}
+			\label{eqa201}
+			\int_{\left.\Omega^{(} \Leftrightarrow\right)} a(\boldsymbol{x}) \nabla \varphi_{i} \cdot \nabla \varphi_{j} \mathrm{~d} x
+		\end{equation}
+	
+		\noindent Where the $\varphi_{i}$ functions are finite element basis functions in $2 \mathrm{D}$ or $3 \mathrm{D}$, defined in the physical domain. Suppose we want to calculate this integral over a reference cell, denoted by $\Omega^{r}$, in a coordinate system with coordinates $\boldsymbol{X}=\left(X_{0}, X_{1}\right)(2 \mathrm{D})$ or $\boldsymbol{X}=\left(X_{0}, X_{1}, X_{2}\right)$ (3D). The mapping between a point $\boldsymbol{X}$ in the reference coordinate system and the corresponding point $\boldsymbol{x}$ in the physical coordinate system is given by a vector relation $\boldsymbol{x}(\boldsymbol{X})$. The corresponding Jacobian, $J$, of this mapping has entries
+		$$
+		J_{i, j}=\frac{\partial x_{j}}{\partial X_{i}}
+		$$
+		The change of variables requires $\mathrm{d} x$ to be replaced by det $J \mathrm{~d} X$. The derivatives in the $\nabla$ operator in the variational form are with respect to $\boldsymbol{x}$, which we may denote by $\nabla_{\boldsymbol{x}}$. The $\varphi_{i}(\boldsymbol{x})$ functions in the integral are replaced by local basis functions $\tilde{\varphi}_{r}(\boldsymbol{X})$ so the integral features $\nabla_{\boldsymbol{x}} \tilde{\varphi}_{r}(\boldsymbol{X})$. We readily have
+		$\nabla_{\boldsymbol{X}} \tilde{\varphi}_{r}(\boldsymbol{X})$ from formulas for the basis functions in the reference cell, but the desired quantity $\nabla_{\boldsymbol{x}} \tilde{\varphi}_{r}(\boldsymbol{X})$ requires some efforts to compute. All the details are provided below.\smallbreak
+		Let $i=q(e, r)$ and consider two space dimensions. By the chain rule,
+		$$
+		\frac{\partial \tilde{\varphi}_{r}}{\partial X}=\frac{\partial \varphi_{i}}{\partial X}=\frac{\partial \varphi_{i}}{\partial x} \frac{\partial x}{\partial X}+\frac{\partial \varphi_{i}}{\partial y} \frac{\partial y}{\partial X},
+		$$
+		and
+		$$
+		\frac{\partial \tilde{\varphi}_{r}}{\partial Y}=\frac{\partial \varphi_{i}}{\partial Y}=\frac{\partial \varphi_{i}}{\partial x} \frac{\partial x}{\partial Y}+\frac{\partial \varphi_{i}}{\partial y} \frac{\partial y}{\partial Y} .
+		$$
+		We can write these two equations as a vector equation
+		$$
+		\left[\begin{array}{l}
+			\frac{\partial \bar{\varphi}_{r}}{\partial X} \\
+			\frac{\partial \varphi_{r}}{\partial Y}
+		\end{array}\right]=\left[\begin{array}{ll}
+			\frac{\partial x}{\partial X} & \frac{\partial y}{\partial X} \\
+			\frac{\partial x}{\partial Y} & \frac{\partial y}{\partial Y}
+		\end{array}\right]\left[\begin{array}{l}
+			\frac{\partial \varphi_{i}}{\partial x} \\
+			\frac{\partial \varphi_{i}}{\partial y}
+		\end{array}\right]
+		$$
+		Identifying
+		$$
+		\nabla_{\boldsymbol{X}} \tilde{\varphi}_{r}=\left[\begin{array}{l}
+			\frac{\partial \bar{\varphi}_{r}}{\partial X} \\
+			\frac{\partial \varphi_{r}}{\partial Y}
+		\end{array}\right], \quad J=\left[\begin{array}{ll}
+			\frac{\partial x}{\partial X} & \frac{\partial y}{\partial X} \\
+			\frac{\partial x}{\partial Y} & \frac{\partial y}{\partial Y}
+		\end{array}\right], \quad \nabla_{\boldsymbol{x} \varphi_{r}}=\left[\begin{array}{c}
+			\frac{\partial \varphi_{i}}{\partial x} \\
+			\frac{\partial \varphi_{i}}{\partial y}
+		\end{array}\right],
+		$$
+		we have the relation
+		$$
+		\nabla_{\boldsymbol{X}} \bar{\varphi}_{r}=J \cdot \nabla_{\boldsymbol{x}} \varphi_{i},
+		$$
+		which we can solve with respect to $\nabla_{\boldsymbol{x}} \varphi_{i}$ :
+		
+		\begin{equation}
+			\label{eqa202}
+			\nabla_{\boldsymbol{x}} \varphi_{i}=J^{-1} \cdot \nabla_{\boldsymbol{X}} 	\tilde{\varphi}_{r} .
+		\end{equation}
+	
+		\noindent On the reference cell, $\varphi_{i}(\boldsymbol{x})=\tilde{\varphi}_{r}(\boldsymbol{X})$, so
+		
+		\begin{equation}
+			\label{eqa203}
+			\nabla_{\boldsymbol{x}} \tilde{\varphi}_{r}(\boldsymbol{X})=J^{-1}(\boldsymbol{X}) \cdot \nabla_{\boldsymbol{X} \tilde{\varphi}_{r}}(\boldsymbol{X}) .
+		\end{equation}
+	
+		This means that we have the following transformation of the integral in the physical domain to its counterpart over the reference cell:
+		\begin{equation}
+			\label{eqa204}
+			\int_{\Omega}^{(e)} a(\boldsymbol{x}) \nabla_{\boldsymbol{x} \varphi_{i}} \cdot 	\nabla_{\boldsymbol{x} \varphi_{j}} \mathrm{~d} x \int_{\bar{\Omega}^{r}} a(\boldsymbol{x}(\boldsymbol{X}))\left(J^{-1} \cdot \nabla_{\boldsymbol{X}} \tilde{\varphi}_{r}\right) \cdot\left(J^{-1} \cdot \nabla \tilde{\varphi}_{s}\right) \operatorname{det} J \mathrm{~d} X
+		\end{equation}\bigbreak
+	
+	\section[Numerical integration]{Numerical integration}
+		\label{sec:sec_17_2}
+		\noindent Integrals are normally computed by numerical integration rules. For multidimensional cells, various families of rules exist. All of them are similar to what is shown in $1 \mathrm{D}: \int f \mathrm{~d} x \approx \sum_{j} w_{i} f\left(\boldsymbol{x}_{j}\right)$, where $w_{j}$ are weights and $\boldsymbol{x}_{j}$ are corresponding points.
+		
+		The file \href{https://github.com/hplgit/INF5620/blob/master/src/fem/numint.py}{numint.py} contains the functions \textbf{\texttt{quadrature\_for\_triangles(n)}} and \textbf{\texttt{quadrature\_for\_tetrahedra(n)}}, which returns lists of points and weights corresponding to integration rules with \textbf{\texttt{n}} points over the reference triangle with vertices $(0,0),(1,0),(0,1)$, and the reference tetrahedron with vertices $(0,0,0),(1,0,0),(0,1,0),(0,0,1)$, respectively. For example, the first two rules for integration over a triangle have 1 and 3 points:
+		
+		\begin{lstlisting}[numbers=none]
+			>>> import numint
+			>>> x, w = numint.quadrature_for_triangles(num_points=1)
+			>>> x
+			[(0.3333333333333333, 0.3333333333333333)]
+			>>> w
+			[0.5]
+			>>> x, w = numint.quadrature_for_triangles(num_points=3)
+			>>> x
+			[(0.16666666666666666, 0.16666666666666666),
+			(0.66666666666666666, 0.16666666666666666),
+			(0.16666666666666666, 0.66666666666666666)]
+			>>> w
+			[0.16666666666666666, 0.16666666666666666, 0.16666666666666666]
+		\end{lstlisting}
+		Rules with $1,3,4$, and 7 points over the triangle will exactly integrate polynomials of degree $1,2,3$, and 4 , respectively. In $3 \mathrm{D}$, rules with $1,4,5$, and 11 points over the tetrahedron will exactly integrate polynomials of degree $1,2,3$, and 4 , respectively. \bigbreak
+		
+	\section[Convenient formulas for P1 elements in 2D]{Convenient formulas for P1 elements in 2D}
+	\label{sec:sec_17_3}
+	\noindent We shall now provide some formulas for piecewise linear $\varphi_{i}$ functions and their integrals \emph{in the physical coordinate system}. These formulas make it convenient to compute with P1 elements without the need to work in the reference coordinate system and deal with mappings and Jacobians. A lot of computational and algorithmic details are hidden by this approach.
+	
+	Let $\Omega^{(e)}$ be cell number $e$, and let the three vertices have global vertex numbers $I, J$, and $K$. The corresponding coordinates are $\left(x_{I}, y_{I}\right),\left(x_{J}, y_{J}\right)$, and $\left(x_{K}, y_{K}\right)$. The basis function $\varphi_{I}$ over $\Omega^{(e)}$ have the explicit formula
+	
+	\begin{equation}
+		\label{eqa205}
+		\varphi_{I}(x, y)=\frac{1}{2} \Delta\left(\alpha_{I}+\beta_{I} x+\gamma_{I} y\right)
+	\end{equation}
+
+	\noindent where
+	
+	\begin{equation}
+		\label{eqa206}
+			\alpha_{I} =x_{J} y_{K}-x_{K} y_{J}, 
+	\end{equation}
+
+	\begin{equation}
+		\label{eqa207}
+			\beta_{I} =y_{J}-y_{K}
+	\end{equation}
+
+	\begin{equation}
+		\label{eqa208}
+			\gamma_{I} =x_{K}-x_{J},
+	\end{equation}
+
+	\begin{equation}
+		\label{eqa209}
+			2 \Delta =\operatorname{det}\left(\begin{array}{ccc}
+				1\quad  x_{I}\quad  y_{I} \\
+				1\quad  x_{J}\quad  y_{J} \\
+				1\quad  x_{K}\quad  y_{K}
+			\end{array}\right)
+	\end{equation}
+
+	\noindent The quantity $\Delta$ is the area of the cell. \smallbreak
+	The following formula is often convenient when computing element matrices and vectors:
+	
+	\begin{equation}
+		\label{eqa210}
+		\int_{\left.\Omega^{(}\right)} \varphi_{I}^{p} \varphi_{J}^{q} \varphi_{K}^{r} d x d y=\frac{p ! q ! r !}{(p+q+r+2) !} 2 \Delta
+	\end{equation}
+
+	\noindent (Note that the $q$ in this formula is not to be mixed with the $q(e, r)$ mapping of degrees of freedom.)
+	
+	As an example, the element matrix entry $\int_{\Omega(c)} \varphi_{I} \varphi_{J} \mathrm{~d} x$ can be computed by setting $p=q=1$ and $r=0$, when $I \neq J$, yielding $\Delta / 12$, and $p=2$ and $q=r=0$, when $I=J$, resulting in $\Delta / 6$. We collect these numbers in a local element matrix:
+	$$
+	\frac{\Delta}{12}\left[\begin{array}{lll}
+		2 & 1 & 1 \\
+		1 & 2 & 1 \\
+		1 & 1 & 2
+	\end{array}\right]
+	$$
+	
+	The common element matrix entry $\int_{\Omega^{(e)}} \nabla \varphi_{I} \cdot \nabla \varphi_{J} \mathrm{~d} x$, arising from a Laplace term $\nabla^{2} u$, can also easily be computed by the formulas above. We have
+	$$
+	\nabla \varphi_{I} \cdot \nabla \varphi_{J}=\frac{\Delta^{2}}{4}\left(\beta_{I} \beta_{J}+\gamma_{I} \gamma_{J}\right)=\text { const, }
+	$$
+	so that the element matrix entry becomes $\frac{1}{4} \Delta^{3}\left(\beta_{I} \beta_{J}+\gamma_{I} \gamma_{J}\right)$.\smallbreak
+	From an implementational point of view, one will work with local vertex numbers $r=0,1,2$, parameterize the coefficients in the basis functions by $r$, and look up vertex coordinates through $q(e, r)$.\smallbreak
+	Similar formulas exist for integration of P1 elements in 3D.
+
+
+	
+\clearpage
+\end{document} 

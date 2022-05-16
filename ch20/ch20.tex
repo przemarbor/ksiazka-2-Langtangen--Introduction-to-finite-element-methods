@@ -1,0 +1,615 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+\chapter{Systems of differential equations}
+\label{chap:chap_20}
+%\pagenumbering{arabic}
+
+\noindent Many mathematical models involve $m+1$ unknown functions governed by a system of $m+1$ differential equations. In abstract form we may denote the unknowns by $u^{(0)}, \ldots, u^{(m)}$ and write the governing equations as
+$$
+\begin{gathered}
+	\mathcal{L}_{0}\left(u^{(0)}, \ldots, u^{(m)}\right)=0 \\
+	\vdots \\
+	\mathcal{L}_{m}\left(u^{(0)}, \ldots, u^{(m)}\right)=0
+\end{gathered}
+$$
+where $\mathcal{L}_{i}$ is some differential operator defining differential equation number $i$.\smallbreak
+	\section[Systems of differential equations]{Variational forms}
+		\label{sec:sec_20_1}
+		\noindent There are basically two ways of formulating a variational form for a system of differential equations. The first method treats each equation independently as a scalar equation, while the other method views the total system as a vector equation with a vector function as unknown.
+		
+		Let us start with the one equation at a time approach. We multiply equation number $i$ by some test function $v^{(i)} \in V^{(i)}$ and integrate over the domain:
+		
+		\begin{equation}
+		\label{eqa256}
+			\int_{\Omega} \mathcal{L}^{(0)}\left(u^{(0)}, \ldots, u^{(m)}\right) v^{(0)} \mathrm{d} x=0 \\
+		\end{equation}
+			
+		\begin{equation}
+		\label{eqa257}
+			\vdots \\
+		\end{equation}
+	
+		\begin{equation}
+		\label{eqa258}
+			\int_{\Omega} \mathcal{L}^{(m)}\left(u^{(0)}, \ldots, u^{(m)}\right) v^{(m)} \mathrm{d} x=0
+		\end{equation}
+	
+		\noindent Terms with second-order derivatives may be integrated by parts, with Neumann conditions inserted in boundary integrals. Let
+		$$
+		V^{(i)}=\operatorname{span}\left\{\psi_{0}^{(i)}, \ldots, \psi_{N_{i}}^{(i)}\right\},
+		$$
+		such that
+		$$
+		u^{(i)}=B^{(i)}(\boldsymbol{x})+\sum_{j=0}^{N_{i}} c_{j}^{(i)} \psi_{j}^{(i)}(\boldsymbol{x}),
+		$$
+		where $B^{(i)}$ is a boundary function to handle nonzero Dirichlet conditions. Observe that different unknowns live in different spaces with different basis functions and numbers of degrees of freedom.
+		
+		From the $m$ equations in the variational forms we can derive $m$ coupled systems of algebraic equations for the $\prod_{i=0}^{m} N_{i}$ unknown coefficients $c_{j}^{(i)}, j=$ $0, \ldots, N_{i}, i=0, \ldots, m$.\smallbreak
+		
+		The alternative method for deriving a variational form for a system of differential equations introduces a vector of unknown functions
+		$$
+		\boldsymbol{u}=\left(u^{(0)}, \ldots, u^{(m)}\right)
+		$$
+		a vector of test functions
+		$$
+		\boldsymbol{v}=\left(u^{(0)}, \ldots, u^{(m)}\right)
+		$$
+		with
+		$$
+		\boldsymbol{u}, \boldsymbol{v} \in \boldsymbol{V}=V^{(0)} \times \cdots \times V^{(m)} .
+		$$
+		With nonzero Dirichlet conditions, we have a vector $\boldsymbol{B}=\left(B^{(0)}, \ldots, B^{(m)}\right)$ with boundary functions and then it is $u-B$ that lies in $V$, not $u$ itself. \smallbreak
+		The governing system of differential equations is written
+		$$
+		\mathcal{L}(\boldsymbol{u})=0,
+		$$
+		where
+		$$
+		\mathcal{L}(\boldsymbol{u})=\left(\mathcal{L}^{(0)}(\boldsymbol{u}), \ldots, \mathcal{L}^{(m)}(\boldsymbol{u})\right)
+		$$
+		The variational form is derived by taking the inner product of the vector of equations and the test function vector:
+		
+		\begin{equation}
+			\label{eqa259}
+			\int_{\Omega} \mathcal{L}(\boldsymbol{u}) \cdot \boldsymbol{v}=0 \quad \forall \boldsymbol{v} \in \boldsymbol{V} .
+		\end{equation}
+	
+		Observe that (\ref{eqa259}) is one scalar equation. To derive systems of algebraic equations for the unknown coefficients in the expansions of the unknown functions, one chooses $m$ linearly independent $\boldsymbol{v}$ vectors to generate $m$ independent variational forms from (\ref{eqa259}). The particular choice $v=\left(v^{(0)}, 0, \ldots, 0\right)$ recovers (\ref{eqa256}), $\boldsymbol{v}=\left(0, \ldots, 0, v^{(m)}\right.$ recovers $(258)$, and $\boldsymbol{v}=\left(0, \ldots, 0, v^{(i)}, 0, \ldots, 0\right)$ recovers the variational form number i, $\int_{\Omega} \mathcal{L}^{(i)} v^{(i)} \mathrm{d} x=0$, in (\ref{eqa256})-(\ref{eqa258}).\bigbreak
+	\section[A worked example]{A worked example}
+		\label{sec:sec_20_2}
+		\noindent We now consider a specific system of two partial differential equations in two space dimensions:
+		
+		\begin{equation}
+			\label{eqa260}
+			\mu \nabla^{2} w=-\beta \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa261}
+			\kappa \nabla^{2} T=-\mu\|\nabla w\|^{2}
+		\end{equation}
+		
+		\noindent The unknown functions $w(x, y)$ and $T(x, y)$ are defined in a domain $\Omega$, while $\mu, \beta$, and $\kappa$ are given constants. The norm in (\ref{eqa261}) is the standard Eucledian norm:
+		$$
+		\|\nabla w\|^{2}=\nabla w \cdot \nabla w=w_{x}^{2}+w_{y}^{2}
+		$$
+		The boundary conditions associated with (\ref{eqa260})-(\ref{eqa261}) are $w=0$ on $\partial \Omega$ and $T=T_{0}$ on $\partial \Omega$. Each of the equations (\ref{eqa260}) and (\ref{eqa261}) need one condition at each point on the boundary.
+		
+		The system (\ref{eqa260})-(\ref{eqa261}) arises from fluid flow in a straight pipe, with the $z$ axis in the direction of the pipe. The domain $\Omega$ is a cross section of the pipe, $w$ is the velocity in the $z$ direction, $\mu$ is the viscosity of the fluid, $\beta$ is the pressure gradient along the pipe, $T$ is the temperature, and $\kappa$ is the heat conduction coefficient of the fluid. The equation $(260)$ comes from the Navier-Stokes equations, and (261) follows from the energy equation. The term $-\mu\|\nabla w\|^{2}$ models heating of the fluid due to internal friction.
+		
+		Observe that the system (\ref{eqa260})-(\ref{eqa261}) has only a one-way coupling: $T$ depends on $w$, but $w$ does not depend on $T$, because we can solve (\ref{eqa260}) with respect to $w$ and then (\ref{eqa261}) with respect to $T$. Some may argue that this is not a real system of PDEs, but just two scalar PDEs. Nevertheless, the one-way coupling is convenient when comparing different variational forms and different implementations.
+	\section[Identical function spaces for the unknowns]{Identical function spaces for the unknowns}
+		\label{sec:sec_20_3}
+		\noindent Let us first apply the same function space $V$ for $w$ and $T$ (or more precisely, $w \in V$ and $\left.T-T_{0} \in V\right)$. With
+		$$
+		V=\operatorname{span}\left\{\psi_{0}(x, y), \ldots, \psi_{N}(x, y)\right\}
+		$$
+		we write
+		
+		\begin{equation}
+			\label{eqa262}
+		w=\sum_{j=0}^{N} c_{j}^{(w)} \psi_{j}, \quad T=T_{0}+\sum_{j=0}^{N} c_{j}^{(T)} \psi_{j}
+		\end{equation}
+	
+		\noindent Note that $w$ and $T$ in (\ref{eqa260})-(\ref{eqa261}) denote the exact solution of the PDEs, while $w$ and T (\ref{eqa262}) are the discrete functions that approximate the exact solution. It should be clear from the context whether a symbol means the exact or approximate solution, but when we need both at the same time, we use a subscript e to denote the exact solution.\bigbreak
+		
+		\noindent \textbf{Variational form of each individual PDE.   } Inserting the expansions (\ref{eqa262}) in the governing PDEs, results in a residual in each equation,
+		
+		\begin{equation}
+			\label{eqa263}
+			R_{w}=\mu \nabla^{2} w+\beta \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa264}
+			R_{T}=\kappa \nabla^{2} T+\mu\|\nabla w\|^{2}
+		\end{equation}
+		
+		\noindent A Galerkin method demands $R_{w}$ and $R_{T}$ do be orthogonal to $V$ :
+		$$
+		\begin{aligned}
+			&\int_{\Omega} R_{w} v \mathrm{~d} x=0 \quad \forall v \in V \\
+			&\int_{\Omega} R_{T} v \mathrm{~d} x=0 \quad \forall v \in V
+		\end{aligned}
+		$$
+		Because of the Dirichlet conditions, $v=0$ on $\partial \Omega$. We integrate the Laplace terms by parts and note that the boundary terms vanish since $v=0$ on $\partial \Omega$ :
+		
+		\begin{equation}
+			\label{eqa265}
+			\int_{\Omega} \mu \nabla w \cdot \nabla v \mathrm{~d} x=\int_{\Omega} \beta v \mathrm{~d} x \quad \forall v \in V \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa266}
+			\int_{\Omega} \kappa \nabla T \cdot \nabla v \mathrm{~d} x=\int_{\Omega} \mu \nabla w \cdot \nabla w v \mathrm{~d} x \quad \forall v \in V
+		\end{equation}
+		
+		\noindent \textbf{Compound scalar variational form.   } The alternative way of deriving the variational from is to introduce a test vector function $v \in V=V \times V$ and take the inner product of $v$ and the residuals, integrated over the domain:
+		$$
+		\int_{\Omega}\left(R_{w}, R_{T}\right) \cdot \boldsymbol{v} \mathrm{d} x=0 \quad \forall \boldsymbol{v} \in \boldsymbol{V}
+		$$
+		With $\boldsymbol{v}=\left(v_{0}, v_{1}\right)$ we get
+		$$
+		\int_{\Omega}\left(R_{w} v_{0}+R_{T} v_{1}\right) \mathrm{d} x=0 \quad \forall v \in \boldsymbol{V} .
+		$$
+		Integrating the Laplace terms by parts results in
+		
+		\begin{equation}
+			\label{eqa267}
+			\int_{\Omega}\left(\mu \nabla w \cdot \nabla v_{0}+\kappa \nabla T \cdot \nabla v_{1}\right) \mathrm{d} x=\int_{\Omega}\left(\beta v_{0}+\mu \nabla w \cdot \nabla w v_{1}\right) \mathrm{d} x, \quad \forall v \in \boldsymbol{V} . \text { (267) }
+		\end{equation}
+	
+		\noindent Choosing $v_{0}=v$ and $v_{1}=0$ gives the variational form (\ref{eqa265}), while $v_{0}=0$ and $v_{1}=v$ gives (\ref{eqa266})\smallbreak
+		With the inner product notation, $(p, q)=\int_{\Omega} p q \mathrm{~d} x$, we can alternatively write (\ref{eqa265}) and (\ref{eqa266}) as
+		$$
+		\begin{aligned}
+			&(\mu \nabla w, \nabla v)=(\beta, v) \quad \forall v \in V \\
+			&(\kappa \nabla T, \nabla v)=(\mu \nabla w, \nabla w, v) \quad \forall v \in V
+		\end{aligned}
+		$$
+		or since $\mu$ and $\kappa$ are considered constant,
+		
+		\begin{equation}
+			\label{eqa268}
+			\mu(\nabla w, \nabla v)=(\beta, v) \quad \forall v \in V \\
+		\end{equation}
+	
+		\begin{equation}
+		\label{eqa269}
+			\kappa(\nabla T, \nabla v)=\mu(\nabla w \cdot \nabla w, v) \quad \forall v \in V
+		\end{equation}
+		
+		\noindent \textbf{Decoupled linear systems.   } The linear systems governing the coefficients $c_{j}^{(w)}$ and $c_{j}^{(T)}, j=0, \ldots, N$, are derived by inserting the expansions (\ref{eqa262}) in (\ref{eqa265}) and (\ref{eqa266}), and choosing $v=\psi_{i}$ for $i=0, \ldots, N$. The result becomes
+	
+		\begin{equation}
+			\label{eqa270}
+			\sum_{j=0}^{N} A_{i, j}^{(w)} c_{j}^{(w)}=b_{i}^{(w)}, \quad i=0, \ldots, N, \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa271}
+			\sum_{j=0}^{N} A_{i, j}^{(T)} c_{j}^{(T)}=b_{i}^{(T)}, \quad i=0, \ldots, N, \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa272}
+			A_{i, j}^{(w)} =\mu\left(\nabla \psi_{j}, \nabla \psi_{i}\right) \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa273}
+			b_{i}^{(w)} =\left(\beta, \psi_{i}\right), \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa274}
+			A_{i, j}^{(T)} =\kappa\left(\nabla \psi_{j}, \nabla \psi_{i}\right), \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa275}
+			b_{i}^{(T)} =\mu\left(\left(\sum_{j} c_{j}^{(w)} \nabla \psi_{j}\right) \cdot\left(\sum_{k} c_{k}^{(w)} \nabla \psi_{k}\right), \psi_{i}\right) .
+		\end{equation}
+	
+		It can also be instructive to write the linear systems using matrices and vectors. Define $K$ as the matrix corresponding to the Laplace operator $\nabla^{2}$. That is, $K_{i, j}=\left(\nabla \psi_{j}, \nabla \psi_{i}\right)$. Let us introduce the vectors
+		$$
+		\begin{aligned}
+			b^{(w)} &=\left(b_{0}^{(w)}, \ldots, b_{N}^{(w)}\right) \\
+			b^{(T)} &=\left(b_{0}^{(T)}, \ldots, b_{N}^{(T)}\right) \\
+			c^{(w)} &=\left(c_{0}^{(w)}, \ldots, c_{N}^{(w)}\right) \\
+			c^{(T)} &=\left(c_{0}^{(T)}, \ldots, c_{N}^{(T)}\right)
+		\end{aligned}
+		$$
+		The system (\ref{eqa270})-(\ref{eqa271}) can now be expressed in matrix-vector form as
+		
+		\begin{equation}
+			\label{eqa276}
+			\mu K c^{(w)}=b^{(w)} \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa277}
+			\kappa K c^{(T)}=b^{(T)}
+		\end{equation}
+		
+		We can solve the first system for $c^{(w)}$, and then the right-hand side $b^{(T)}$ is known such that we can solve the second system for $c^{(T)}$.\bigbreak
+		
+		\noindent \textbf{Coupled linear systems.   } Despite the fact that $w$ can be computed first, without knowing $T$, we shall now pretend that $w$ and $T$ enter a two-way coupling such that we need to derive the algebraic equations as one system for all the unknowns $c_{j}^{(w)}$ and $c_{j}^{(T)}, j=0, \ldots, N$. This system is nonlinear in $c_{j}^{(w)}$ because of the $\nabla w \cdot \nabla w$ product. To remove this nonlinearity, imagine that we introduce an iteration method where we replace $\nabla w \cdot \nabla w$ by $\nabla w_{-} \cdot \nabla w$, weing the $w$ computed in the previous iteration. Then the term $\nabla w_{-} \cdot \nabla w$ is linear in $w$ since $w_{-}$is known. The total linear system becomes
+		
+		\begin{equation}
+			\label{eqa278}
+			\sum_{j=0}^{N} A_{i, j}^{(w, w)} c_{j}^{(w)}+\sum_{j=0}^{N} A_{i, j}^{(w, T)} c_{j}^{(T)} =b_{i}^{(w)}, \quad i=0, \ldots, N, \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa279}
+			\sum_{j=0}^{N} A_{i, j}^{(T, w)} c_{j}^{(w)}+\sum_{j=0}^{N} A_{i, j}^{(T, T)} c_{j}^{(T)} =b_{i}^{(T)}, \quad i=0, \ldots, N, \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa280}
+			A_{i, j}^{(w, w)} =\mu\left(\nabla \psi_{j}, \psi_{i}\right), \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa281}
+			A_{i, j}^{(w, T)} =0, \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa282}
+			b_{i}^{(w)} =\left(\beta, \psi_{i}\right), \\
+		\end{equation}
+
+		\begin{equation}
+			\label{eqa283}	
+			A_{i, j}^{(w, T)} \left.=\mu\left(\left(\nabla \psi_{-}\right) \cdot \nabla \psi_{j}\right), \psi_{i}\right), \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa284}
+			A_{i, j}^{(T, T)}=\kappa\left(\nabla \psi_{j}, \psi_{i}\right), \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa285}
+			b_{i}^{(T)}=0 .
+		\end{equation}
+		
+		\noindent This system can alternatively be written in matrix-vector form as
+		
+		\begin{equation}
+			\label{eqa286}
+			\mu K c^{(w)}=0 b^{(w)}, \\
+		\end{equation}
+
+		\begin{equation}
+			\label{eqa287}
+			L c^{(w)}+\kappa K c^{(T)}=0
+		\end{equation}
+	
+		\noindent with $L$ as the matrix from the $\nabla w_{-} \cdot \nabla$ operator: $L_{i, j}=A_{i, j}^{(w, T)}$.\smallbreak
+		The matrix-vector equations are often conveniently written in block form:
+		$$
+		\left(\begin{array}{cc}
+			\mu K & 0 \\
+			L & \kappa K
+		\end{array}\right)\left(\begin{array}{c}
+			c^{(w)} \\
+			c^{(T)}
+		\end{array}\right)=\left(\begin{array}{c}
+			b^{(w)} \\
+			0
+		\end{array}\right)
+		$$\smallbreak
+		Note that in the general case where all unknowns enter all equations, we have to solve the compound system (\ref{eqa297})-(\ref{eqa298}) since then we cannot utilize the special property that (\ref{eqa270}) does not involve $T$ and can be solved first.
+		
+		When the viscosity depends on the temperature, the $\mu \nabla^{2} w$ term must be replaced by $\nabla \cdot(\mu(T) \nabla w)$, and then $T$ enters the equation for $w$. Now we have a two-way coupling since both equations contain $w$ and $T$ and therefore must be solved simultaneously Th equation $\nabla \cdot(\mu(T) \nabla w)=-\beta$ is nonlinear, and if some iteration procedure is invoked, where we use a previously computed $T_{-}$in the viscosity $\left(\mu\left(T_{-}\right)\right)$, the coefficient is known, and the equation involves only one unknown, $w$. In that case we are back to the one-way coupled set of PDEs.
+		We may also formulate our PDE system as a vector equation. To this end, we introduce the vector of unknowns $\boldsymbol{u}=\left(u^{(0)}, u^{(1)}\right)$, where $u^{(0)}=w$ and $u^{(1)}=T$. We then have
+		$$
+		\nabla^{2} u=\left(\begin{array}{c}
+			-\mu^{-1} \beta \\
+			-\kappa^{-1} \mu \nabla u^{(0)} \cdot \nabla u^{(0)}
+		\end{array}\right)
+		$$
+	\section[Different function spaces for the unknowns]{Different function spaces for the unknowns}
+		\label{sec:sec_20_4}
+		\noindent It is easy to generalize the previous formulation to the case where $w \in V^{(w)}$ and $T \in V^{(T)}$, where $V^{(w)}$ and $V^{(T)}$ can be different spaces with different numbers of degrees of freedom. For example, we may use quadratic basis functions for $w$ and linear for $T$. Approximation of the unknowns by different finite element spaces is known as \emph{mixed finite} element methods.\smallbreak
+		We write
+		$$
+		\begin{aligned}
+			&V^{(w)}=\operatorname{span}\left\{\psi_{0}^{(w)}, \ldots, \psi_{N_{w}}^{(w)}\right\}, 
+			&V^{(T)}=\operatorname{span}\left\{\psi_{0}^{(T)}, \ldots, \psi_{N_{T}}^{(T)}\right\} .
+		\end{aligned}
+		$$
+		The next step is to multiply (\ref{eqa260}) by a test function $v^{(w)} \in V^{(w)}$ and (\ref{eqa261}) by a $v^{(T)} \in V^{(T)}$, integrate by parts and arrive at
+		
+		
+		\begin{equation}
+			\label{eqa288}
+			\int_{\Omega} \mu \nabla w \cdot \nabla v^{(w)} \mathrm{d} x=\int_{\Omega} \beta v^{(w)} \mathrm{d} x \quad \forall v^{(w)} \in V^{(w)} \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa289}
+			\int_{\Omega} \kappa \nabla T \cdot \nabla v^{(T)} \mathrm{d} x=\int_{\Omega} \mu \nabla w \cdot \nabla w v^{(T)} \mathrm{d} x \quad \forall v^{(T)} \in V^{(T)}
+		\end{equation}
+	
+		The compound scalar variational formulation applies a test vector function $\boldsymbol{v}=\left(v^{(w)}, v^{(T)}\right)$ and reads
+		
+		\begin{equation}
+			\label{eqa290}
+			\int_{\Omega}\left(\mu \nabla w \cdot \nabla v^{(w)}+\kappa \nabla T \cdot \nabla v^{(T)}\right) \mathrm{d} x=\int_{\Omega}\left(\beta v^{(w)}+\mu \nabla w \cdot \nabla w v^{(T)}\right) \mathrm{d} x
+		\end{equation}
+		
+		\noindent valid $\forall \boldsymbol{v} \in \boldsymbol{V}=V^{(w)} \times V^{(T)}$.\smallbreak
+		The associated linear system is similar to (\ref{eqa270})-(\ref{eqa271}) or (\ref{eqa297})-(\ref{eqa298}), except that we need to distinguish between $\psi_{i}^{(w)}$ and $\psi_{i}^{(T)}$, and the range in the sums over $j$ must match the number of degrees of freedom in the spaces $V^{(w)}$ and $V^{(T)}$. The formulas become
+		
+		\begin{equation}
+			\label{eqa291}
+			\sum_{j=0}^{N_{w}} A_{i, j}^{(w)} c_{j}^{(w)}=b_{i}^{(w)}, \quad i=0, \ldots, N_{w}, \\
+		\end{equation}
+		
+		\begin{equation}
+			\label{eqa292}
+			\sum_{j=0}^{N_{T}} A_{i, j}^{(T)} c_{j}^{(T)}=b_{i}^{(T)}, \quad i=0, \ldots, N_{T}, \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa293}
+			A_{i, j}^{(w)}=\mu\left(\nabla \psi_{j}^{(w)}, \psi_{i}^{(w)}\right) \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa294}
+			b_{i}^{(w)}=\left(\beta, \psi_{i}^{(w)}\right), \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa295}
+			A_{i, j}^{(T)}=\kappa\left(\nabla \psi_{j}^{(T)}, \psi_{i}^{(T)}\right) \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa296}
+			b_{i}^{(T)}=\mu\left(\nabla w_{-}, \psi_{i}^{(T)}\right)
+		\end{equation}
+		
+		In the case we formulate one compound linear system involving both $c_{j}^{(w)}$, $j=0, \ldots, N_{w}$, and $c_{j}^{(T)}, j=0, \ldots, N_{T}$,(\ref{eqa297})-(\ref{eqa298}) becomes
+
+		\begin{equation}
+			\label{eqa297}
+			\sum_{j=0}^{N_{w}} A_{i, j}^{(w, w)} c_{j}^{(w)}+\sum_{j=0}^{N_{T}} A_{i, j}^{(w, T)} c_{j}^{(T)}=b_{i}^{(w)}, \quad i=0, \ldots, N_{w} \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa298}
+			\sum_{j=0}^{N_{w}} A_{i, j}^{(T, w)} c_{j}^{(w)}+\sum_{j=0}^{N_{T}} A_{i, j}^{(T, T)} c_{j}^{(T)}=b_{i}^{(T)}, \quad i=0, \ldots, N_{T}, \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa299}
+			A_{i, j}^{(w, w)}=\mu\left(\nabla \psi_{j}^{(w)}, \psi_{i}^{(w)}\right) \\
+		\end{equation}
+		
+		\begin{equation}
+			\label{eqa300}
+			A_{i, j}^{(w, T)}=0 \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{eqa301}	
+			b_{i}^{(w)}=\left(\beta, \psi_{i}^{(w)}\right), \\
+		\end{equation}
+		
+		\begin{equation}
+			\label{eqa302}	
+			A_{i, j}^{(w, T)}\left.=\mu\left(\nabla w_{-} \cdot \nabla \psi_{j}^{(w)}\right), \psi_{i}^{(T)}\right) \\
+		\end{equation}
+
+		\begin{equation}
+			\label{eqa303}
+			A_{i, j}^{(T, T)}=\kappa\left(\nabla \psi_{j}^{(T)}, \psi_{i}^{(T)}\right) \\
+		\end{equation}
+	
+		\begin{equation}
+			\label{304}	
+			b_{i}^{(T)}=0
+		\end{equation}
+		
+		\noindent The corresponding block form
+		$$
+		\left(\begin{array}{cc}
+			\mu K^{(w)} & 0 \\
+			L & \kappa K^{(T)}
+		\end{array}\right)\left(\begin{array}{c}
+			c^{(w)} \\
+			c^{(T)}
+		\end{array}\right)=\left(\begin{array}{c}
+			b^{(w)} \\
+			0
+		\end{array}\right)
+		$$
+		has square and rectangular block matrices: $K^{(w)}$ is $N_{w} \times N_{w}, K^{(T)}$ is $N_{T} \times N_{T}$, while $L$ is $N_{T} \times N_{w}$,
+	\section[Computations in 1D]{Computations in 1D}
+		\label{sec:sec_20_5}
+		\noindent We can reduce the system (\ref{eqa260})-(\ref{eqa261}) to one space dimension, which corresponds to flow in a channel between two flat plates. Alternatively, one may consider flow in a circular pipe, introduce cylindrical coordinates, and utilize the radial symmetry to reduce the equations to a one-dimensional problem in the radial coordinate. The former model becomes
+		
+		\begin{equation}
+			\label{eqa305}
+			\mu w_{x x}=-\beta, \\
+		\end{equation}
+	
+		\begin{equation}
+		\label{eqa306}
+			kappa T_{x x}=-\mu w_{x}^{2},
+		\end{equation}
+		
+		\noindent while the model in the radial coordinate $r$ reads
+		
+		\begin{equation}
+			\label{eqa307}
+			\mu \frac{1}{r} \frac{d}{d r}\left(r \frac{d w}{d r}\right)=-\beta \\
+		\end{equation}
+		
+		\begin{equation}
+			\label{eqa308}
+			\kappa \frac{1}{r} \frac{d}{d r}\left(r \frac{d T}{d r}\right)=-\mu\left(\frac{d w}{d r}\right)^{2}
+		\end{equation}
+		
+		\noindent The domain for (\ref{eqa305}) - (\ref{eqa306}) is $\Omega=[0, H]$, with boundary conditions $w(0)=$ $w(H)=0$ and $T(0)=T(H)=T_{0}$. For (\ref{eqa307})-(\ref{eqa308}) the domain is $[0, R]$ ( $R$ being the radius of the pipe) and the boundary conditions are $d u / d r=d T / d r=0$ for $r=0, u(R)=0$, and $T(R)=T_{0} .$\smallbreak
+		\textbf{Calculations to be continued...}
+	
+\chapter{Exercises}
+	\section*{Exercise 23: Refactor functions into a more general class}
+		\label{sec:sec_21_23}
+		Section \ref{sec:sec_11_2} displays three functions for computing the analytical solution of some simple model problems. There is quite some repetitive code, suggesting that the functions can benefit from being refactored into a class where the user can define the $f(x), a(x)$, and the boundary conditions in particular methods in subclasses. Demonstrate how the new class can be used to solve the three particular problems in Section \ref{sec:sec_11_2}.
+		
+		In the method that computes the solution, check that the solution found fulfills the differential equation and the boundary conditions. 
+		Filename: \textbf{\texttt{uxx\_f\_sympy\_class.py}}.\bigbreak
+	\section*{Exercise 24: Compute the deflection of a cable with sine functions}
+		\label{sec:sec_21_24}
+		\noindent A hanging cable of length $L$ with significant tension has a downward deflection $w(x)$ governed by
+		Solve
+		$$
+		T w^{\prime \prime}(x)=\ell(x),
+		$$
+		where $T$ is the tension in the cable and $\ell(x)$ the load per unit length. The cable is fixed at $x=0$ and $x=L$ so the boundary conditions become $T(0)=T(L)=0$. We assume a constant load $\ell(x)=$ const.
+		
+		The solution is expected to be symmetric around $x=L / 2$. Formulating the problem for $x \in \Omega=[0, L / 2]$ and then scaling it, results in the scaled problem for the dimensionless vertical deflection $u$ :
+		$$
+		u^{\prime \prime}=1, \quad x \in(0,1), \quad u(0)=0, u^{\prime}(1)=0 .
+		$$
+		Introduce the function space spanned by $\psi_{i}=\sin ((i+1) \pi x / 2), i=1, \ldots, N$. Use a Galerkin and a least squares method to find the coefficients $c_{j}$ in $u(x)=$ $\sum_{j} c_{j} \psi_{j}$. Find how fast the coefficients decrease in magnitude by looking at $c_{j} / c_{j-1}$. Find the error in the maximum deflection at $x=1$ when only one basis function is used $(N=0)$.
+		
+		What happens if we choose basis functions $\psi_{i}=\sin ((i+1) \pi x)$ ? These basis functions are appropriate if we do not utilize symmetry and solve the problem on $[0, L]$. A scaled version of this problem reads
+		$$
+		u^{\prime \prime}=1, \quad x \in(0,1), \quad u(0)=u(1)=0 .
+		$$
+		Carry out the computations with $N=0$ and demonstrate that the maximum deflection $u(1 / 2)$ is the same in the problem utilizing symmetry and the problem covering the whole cable.
+		Filename: \textbf{\texttt{cable\_sin.pdf}}. \bigbreak
+	\section*{Exercise 25: Check integration by parts}
+		Consider the Galerkin method for the problem involving $u$ in Exercise \hyperref[sec:sec_21_24]{24}. Show that the formulas for $c_{j}$ are independent of whether we perform integration by parts or not. Filename: \textbf{\texttt{cable\_integr\_by\_parts.pdf}}.\bigbreak
+	\section*{Exercise 26: Compute the deflection of a cable with 2 P1 elements}
+		Solve the problem for $u$ in Exercise \hyperref[sec:sec_21_24]{24} using two P1 linear elements. Filename: \textbf{\texttt{cable\_2P1.pdf}}.\bigbreak
+	\section*{Exercise 27: Compute the deflection of a cable with 1 P2 element}
+		Solve the problem for $u$ in Exercise \hyperref[sec:sec_21_24]{24} using one P2 element with quadratic basis functions. Filename: \textbf{\texttt{cable\_1P2.pdf.}} \bigbreak
+	\section*{Exercise 28: Compute the deflection of a cable with a step load}
+		\noindent We consider the deflection of a tension cable as described in Exercise \hyperref[sec:sec_21_24]{24}. Now the load is
+		$$
+		\ell(x)=\left\{\begin{array}{ll}
+			\ell_{1}, & x<L / 2, \\
+			\ell_{2}, & x \geq L / 2
+		\end{array} \quad x \in[0, L] .\right.
+		$$
+		This load is not symmetric with respect to the midpoint $x=L / 2$ so the solution loses its symmetry and we must solve the scaled problem
+		$$
+		u^{\prime \prime}=\left\{\begin{array}{ll}
+			1, & x<1 / 2, \\
+			0, & x \geq 1 / 2
+		\end{array} \quad x \in(0,1), \quad u(0)=0, u(1)=0\right.
+		$$
+		\begin{enumerate}
+			\item[a)] Use $\psi_{i}=\sin ((i+1) \pi x), i=0, \ldots, N$ and the Galerkin method without integration by parts. Derive a formula for $c_{j}$ in the solution expansion $u=$ $\sum_{j} c_{j} \psi_{j}$. Plot how fast the coefficients $c_{j}$ tend to zero (on a log scale).
+			\item[b)]Solve the problem with P1 finite elements. Plot the solution for $N_{e}=2,4,8$ elements.
+		\end{enumerate}
+		Filename: \textbf{\texttt{cable\_discont\_load.pdf}}.\bigbreak
+	\section*{Exercise 29: Show equivalence between linear systems}
+		\noindent Incorporation of Dirichlet conditions at $x=0$ and $x=L$ in a finite element mesh on $\Omega=[0, L]$ can either be done by introducing an expansion $u(x)=$ $U_{0} \varphi_{0}+U_{N_{n}} \varphi_{N_{n}}+\sum_{j=0}^{N} c_{j} \varphi_{\nu(j)}$, with $N=N_{n}-2$ and considering $u$ values at the inner nodes as unknowns, or one can assemble the matrix system with $u(x)=\sum_{j=0}^{N=N_{n}} c_{j} \varphi_{j}$ and afterwards replace the rows corresponding to known $c_{j}$ values by the boundary conditions. Show that the two approaches are equivalent.\bigbreak
+	\section*{Exercise 30: Compute with a non-uniform mesh}
+		\noindent Derive the linear system for the problem $-u^{\prime \prime}=2$ on $[0,1]$, with $u(0)=0$ and $u(1)=1$, using $\mathrm{P} 1$ elements and a non-uniform mesh. The vertices have coordinates $x_{0}=0<x_{1}<\cdots<x_{N}=1$, and the length of cell number $e$ is $h_{e}=x_{e+1}-x_{e}$.\smallbreak
+		It is of interest to compare the discrete equations for the finite element method in a non-uniform mesh with the corresponding discrete equations arising from a finite difference method. Go through the derivation of the finite difference formula $u^{\prime \prime}\left(x_{i}\right) \approx\left[D_{x} D_{x} u\right]_{i}$ and modify it to find a natural discretization of $u^{\prime \prime}\left(x_{i}\right)$ on a non-uniform mesh. \textbf{\texttt{Filename: nonuniform\_P1 pdf}}.\bigbreak		
+	\section*{Problem 31: Solve a 1D finite element problem by hand}
+		\noindent The following scaled 1D problem is a very simple, yet relevant, model for convective transport in fluids:
+		\begin{equation}
+			\label{309}
+			u^{\prime}=\epsilon u^{\prime \prime}, \quad u(0)=0, u(1)=1, x \in[0,1]
+		\end{equation}
+		\begin{enumerate}
+			\item[a)] Find the analytical solution to this problem. (Introduce $w=u^{\prime}$, solve the first-order differential equation for $w(x)$, and integrate once more.)
+			\item [b)] Derive the variational form of this problem.
+			\item[c)] Introduce a finite element mesh with uniform partitioning. Use P1 elements and compute the element matrix and vector for a general element.
+			\item[d)] Incorporate the boundary conditions and assemble the element contributions.
+			\item[e)] Identify the resulting linear system as a finite difference discretization of the differential equation using
+			$$	\left[D_{2 x} u=\epsilon D_{x} D_{x} u\right]_{i} $$
+			\item[f)] Compute the numerical solution and plot it together with the exact solution for a mesh with 20 elements and $\epsilon=10,1,0.1,0.01$.
+		\end{enumerate}
+		\textbf{\texttt{Filename: convdiff1D\_P1.pdf}}.\bigbreak 
+	\section*{Exercise 32: Compare finite elements and differences for a radially symmetric Poisson equation}
+		\noindent We consider the Poisson problem in a disk with radius $R$ with Dirichlet conditions at the boundary. Given that the solution is radially symmetric and hence dependent only on the radial coordinate $\left(r=\sqrt{x^{2}+y^{2}}\right)$, we can reduce the problem to a 1D Poisson equation
+		\begin{equation}
+			\label{eqa310}
+			-\frac{1}{r} \frac{d}{d r}\left(r \frac{d u}{d r}\right)=f(r), \quad r \in(0, R), u^{\prime}(0)=0, u(R)=U_{R} .
+		\end{equation}
+		\begin{enumerate}
+			\item [a)] Derive a variational form of (\ref{eqa310}) by integrating over the whole disk, or posed equivalently: use a weighting function $2 \pi r v(r)$ and integrate $r$ from 0 to $R$.
+			\item[b)] Use a uniform mesh partition with P1 elements and show what the resulting set of equations becomes. Integrate the matrix entries exact by hand, but use a Trapezoidal rule to integrate the $f$ term.
+			\item[c)]Explain that an intuitive finite difference method applied to (\ref{eqa310}) gives
+		\end{enumerate}
+		$$
+		\frac{1}{r_{i}} \frac{1}{h^{2}}\left(r_{i+\frac{1}{2}}\left(u_{i+1}-u_{i}\right)-r_{i-\frac{1}{2}}\left(u_{i}-u_{i-1}\right)\right)=f_{i}, \quad i=r h \text {. }
+		$$\smallbreak
+		For $i=0$ the factor $1 / r_{i}$ seemingly becomes problematic. One must always have $u^{\prime}(0)=0$, because of the radial symmetry, which implies $u_{-1}=u_{1}$, if we allow introduction of a fictitious value $u_{-1}$. Using this $u_{-1}$ in the difference equation for $i=0$ gives
+		$$
+		\begin{aligned}
+			&\frac{1}{r_{0}} \frac{1}{h^{2}}\left(r_{\frac{1}{2}}\left(u_{1}-u_{0}\right)-r_{-\frac{1}{2}}\left(u_{0}-u_{1}\right)\right)= \\
+			&\quad \frac{1}{r_{0}} \frac{1}{2 h^{2}}\left(\left(r_{0}+r_{1}\right)\left(u_{1}-u_{0}\right)-\left(r_{-1}+r_{0}\right)\left(u_{0}-u_{1}\right)\right) \approx 2\left(u_{1}-u_{0}\right)
+		\end{aligned}
+		$$
+		if we use $r_{-1}+r_{1} \approx 2 r_{0}$.\smallbreak
+		Set up the complete set of equations for the finite difference method and compare to the finite element method in case a Trapezoidal rule is used to integrate the $f$ term in the latter method.
+		Filename:\textbf{\texttt{radial\_Poisson1D\_P1.pdf}}. \bigbreak
+	\section*{Exercise 33: Compute with variable coefficients and P1 elements by hand}
+		\noindent Consider the problem
+		\begin{equation}
+			\label{311}
+			-\frac{d}{d x}\left(a(x) \frac{d u}{d x}\right)+\gamma u=f(x), \quad x \in \Omega=[0, L], \quad u(0)=\alpha, u^{\prime}(L)=\beta .
+		\end{equation}
+		We choose $a(x)=1+x^{2}$. Then
+		\begin{equation}
+			\label{312}
+			u(x)=\alpha+\beta\left(1+L^{2}\right) \tan ^{-1}(x),
+		\end{equation}
+		is an exact solution if $f(x)=\gamma u$.\smallbreak
+		Derive a variational formulation and compute general expressions for the element matrix and vector in an arbitrary element, using P1 elements and a uniform partitioning of $[0, L]$. The right-hand side integral is challenging and can be computed by a numerical integration rule. The Trapezoidal rule (101) gives particularly simple expressions. Filename: \textbf{\texttt{atan1D\_P1.pdf}}.\bigbreak
+	\section*{Exercise 34: Solve a 2D Poisson equation using polynomials and sines}
+		\noindent The classical problem of applying a torque to the ends of a rod can be modeled by a Poisson equation defined in the cross section $\Omega$ :
+		$$
+		-\nabla^{2} u=2, \quad(x, y) \in \Omega,
+		$$
+		with $u=0$ on $\partial \Omega$. Exactly the same problem arises for the deflection of a membrane with shape $\Omega$ under a constant load.\smallbreak
+		For a circular cross section one can readily find an analytical solution. For a rectangular cross section the analytical approach ends up with a sine series. The idea in this exercise is to use a single basis function to obtain an approximate answer.\smallbreak
+		We assume for simplicity that the cross section is the unit square: $\Omega=$ $[0,1] \times[0,1]$.
+		\begin{enumerate}
+			\item[a)] We consider the basis $\psi_{p, q}(x, y)=\sin ((p+1) \pi x) \sin (q \pi y), p, q=0, \ldots, n$. These basis functions fulfill the Dirichlet condition. Use a Galerkin method and $n=0$.
+			\item[b)] The basis function involving sine functions are orthogonal. Use this property in the Galerkin method to derive the coefficients $c_{p, q}$ in a formula $u=\sum_{p} \sum_{q} c_{p, q} \psi_{p, q}(x, y) .$
+			\item [c)] Another possible basis is $\psi_{i}(x, y)=(x(1-x) y(1-y))^{i+1}, i=0, \ldots, N$. Use the Galerkin method to compute the solution for $N=0$. Which choice of a single basis function is best, $u \sim x(1-x) y(1-y)$ or $u \sim \sin (\pi x) \sin (\pi y)$ ? In order to answer the question, it is necessary to search the web or the literature for an accurate estimate of the maximum $u$ value at $x=y=1 / 2$.
+		\end{enumerate}
+			Filename: \textbf{\texttt{torsion\_sin\_xy.pdf}}.\bigbreak
+	\section*{Exercise 35: Analyze a Crank-Nicolson scheme for the diffusion equation}		
+		\noindent Perform the analysis in Section \ref{sec:sec_19_10} for a $1 \mathrm{D}$ diffusion equation $u_{t}=\alpha u_{x x}$ discretized by the Crank-Nicolson scheme in time:
+		$$
+		\frac{u^{n+1}-u^{n}}{\Delta t}=\alpha \frac{1}{2}\left(\frac{u^{n+1}}{\partial x^{2}} \frac{u^{n}}{\partial x^{2}}\right)
+		$$
+		or written compactly with finite difference operators,
+		$$
+		\left[D_{t} u=\alpha D_{x} D_{x} \bar{u}^{t}\right]^{n+\frac{1}{2}}
+		$$
+		(From a strict mathematical point of view, the $u^{n}$ and $u^{n+1}$ in these equations should be replaced by $u_{e}^{n}$ and $u_{e}^{n+1}$ to indicate that the unknown is the exact solution of the PDE discretized in time, but not yet in space, see Section \ref{sec:sec_19_1}.) Make plots similar to those in Section \ref{sec:sec_19_10}. 
+		Filename: \textbf{\texttt{fe\_diffusion.pdf}}.\bigbreak
+
+%\begin{theindex}
+%	\item 
+%		\subitem 
+%		\subitem 
+%	\indexspace
+%	\item 
+%		\subitem 
+%		\subitem 
+%			\subsubitem 
+%			\subsubitem 
+%\end{theindex}
+
+\clearpage
+\end{document} 

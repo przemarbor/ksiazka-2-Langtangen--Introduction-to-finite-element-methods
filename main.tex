@@ -1,0 +1,57 @@
+\documentclass[8pt,twoside]{book}
+
+\usepackage{main}
+\usepackage{hyperref}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathdots}
+\usepackage[svgnames,table,xcdraw]{xcolor}
+\usepackage{gettitlestring}
+\usepackage{subfiles}
+\usepackage{graphicx}  
+\usepackage{caption}
+\usepackage{float}  
+
+%  begin    mybox
+\usepackage[framemethod=default]{mdframed}
+\newmdenv[innerlinewidth=0.5pt, roundcorner=4pt,linecolor=black,innerleftmargin=6pt,innerrightmargin=6pt,innertopmargin=6pt,innerbottommargin=6pt]{mybox}
+
+\usepackage{titlesec}
+\titleformat{\chapter}[hang] 
+{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{1em}{}
+\renewcommand{\chaptername}{} % eliminate Chapter in divisional heading
+
+\UseRawInputEncoding
+
+\graphicspath{ {./figi/} } %zmienilem
+
+\begin{document}
+    \tableofcontents
+    \addcontentsline{toc}{section}{Contents}
+	\listoffigures    
+    \clearpage
+
+
+ 
+    \subfile{ch1/ch1}  
+    \subfile{ch2/ch2}
+    \subfile{ch3/ch3} 
+    \subfile{ch4/ch4}
+    \subfile{ch5/ch5}
+    \subfile{ch6/ch6} 
+    \subfile{ch7/ch7}
+  	\subfile{ch8/ch8}
+	\subfile{ch9/ch9}
+	\subfile{ch10/ch10}
+	\subfile{ch11/ch11} 
+	\subfile{ch12/ch12} 
+	\subfile{ch13/ch13}
+	\subfile{ch14/ch14}
+	\subfile{ch15/ch15}
+	\subfile{ch16/ch16}
+	\subfile{ch17/ch17}
+	\subfile{ch18/ch18}
+	\subfile{ch19/ch19} 
+	\subfile{ch20/ch20}
+
+
+\end{document}

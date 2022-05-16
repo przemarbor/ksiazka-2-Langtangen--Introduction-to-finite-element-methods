@@ -1,0 +1,178 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+	\chapter{Boundary conditions: specified derivative}
+\label{chap:chap_15}
+%\pagenumbering{arabic}
+
+\noindent Suppose our model problem $-u^{\prime \prime}(x)=f(x)$ features the boundary conditions $u^{\prime}(0)=C$ and $u(L)=D$. As already indicated in Section \ref{chap:chap_12}, the former condition can be incorporated through the boundary term that arises from integration by parts. This details of this method will now be illustrated in the context of finite element basis functions.
+	\section[Boundary conditions: specified derivative]{The variational formulation}
+		\label{sec:sec_15_1}
+		\noindent Starting with the Galerkin method,
+		$$
+		\int_{0}^{L}\left(u^{\prime \prime}(x)+f(x)\right) \psi_{i}(x) \mathrm{d} x=0, \quad i \in \mathcal{I}_{s}
+		$$
+		integrating $u^{\prime \prime} \psi_{i}$ by parts results in
+		$$
+		\int_{0}^{L} u^{\prime}(x)^{\prime} \psi_{i}^{\prime}(x) \mathrm{d} x-\left(u^{\prime}(L) \psi_{i}(L)-u^{\prime}(0) \psi_{i}(0)\right)=\int_{0}^{L} f(x) \psi_{i}(x) \mathrm{d} x, \quad i \in \mathcal{I}_{s}
+		$$\smallbreak
+		The first boundary term, $u^{\prime}(L) \psi_{i}(L)$, vanishes because $u(L)=D$. There are two arguments for this result, explained in detail below. The second boundary term, $u^{\prime}(0) \psi_{i}(0)$, can be used to implement the condition $u^{\prime}(0)=C$, provided $\psi_{i}(0) \neq 0$ for some $i$ (but with finite elements we fortunately have $\psi_{0}(0)=1$ ). The variational form of the differential equation then becomes
+		$$
+		\int_{0}^{L} u^{\prime}(x) \varphi_{i}^{\prime}(x) \mathrm{d} x+C \varphi_{i}(0)=\int_{0}^{L} f(x) \varphi_{i}(x) \mathrm{d} x, \quad i \in \mathcal{I}_{s}
+		$$
+		\bigbreak
+		
+	\section[Boundary conditions: specified derivative]{Boundary term vanishes because of the test functions}
+		\label{sec:sec_15_2}
+		\noindent At points where $u$ is known we may require $\psi_{i}$ to vanish. Here, $u(L)=D$ and then $\psi_{i}(L)=0, i \in \mathcal{I}_{s}$. Obviously, the boundary term $u^{\prime}(L) \psi_{i}(L)$ then vanishes.\smallbreak
+		The set of basis functions $\left\{\psi_{i}\right\}_{i \in \mathcal{I}_{s}}$ contains in this case all the finite element basis functions on the mesh, expect the one that is 1 at $x=L$.
+		The basis function that is left out is used in a boundary function $B(x)$ instead. With a left-to-right numbering, $\psi_{i}=\varphi_{i}, i=0, \ldots, N_{n}-1$, and $B(x)=D \varphi_{N_{n}}$ :
+		$$
+		u(x)=D \varphi_{N_{n}}(x)+\sum_{j=0}^{N=N_{n}-1} c_{j} \varphi_{j}(x) .
+		$$
+		
+		Inserting this expansion for $u$ in the variational form (15.1) leads to the linear system
+	
+		\begin{equation}
+			\label{eqa189}
+			\sum_{j=0}^{N}\left(\int_{0}^{L} \varphi_{i}^{\prime}(x) \varphi_{j}^{\prime}(x) \mathrm{d} 	x\right) c_{j}=\int_{0}^{L}\left(f(x) \varphi_{i}(x)-D \varphi_{N_{n}}^{\prime}(x) \varphi_{i}(x)\right) \mathrm{d} x-C \varphi_{i}(0)
+		\end{equation}
+	
+		for $i=0, \ldots, N=N_{n}-1$ \bigbreak 
+		
+	\section[Boundary conditions: specified derivative]{Boundary term vanishes because of linear system modifications}	
+		\label{sec:sec_15_3}
+		\noindent We may, as an alternative to the approach in the previous section, use a basis $\left\{\psi_{i}\right\}_{i \in \mathcal{I}_{s}}$ which contains all the finite element functions on the mesh: $\psi_{i}=\varphi_{i}$, $i=0, \ldots, N_{n}=N$. In this case, $u^{\prime}(L) \psi_{i}(L)=u^{\prime}(L) \varphi_{i}(L) \neq 0$ for the $i$ corresponding to the boundary node at $x=L$ (where $\varphi_{i}=1$ ). The number of this node is $i=N_{n}=N$ if a left-to-right numbering of nodes is utilized.
+		
+		However, even though $u^{\prime}(L) \varphi_{N}(L) \neq 0$, we do not need to compute this term. For $i<N$ we realize that $\varphi_{i}(L)=0$. The only nonzero contribution to the right-hand side from the affects $b_{N}(i=N)$. Without a boundary function we must implement the condition $u(L)=D$ by the equivalent statement $c_{N}=D$ and modify the linear system accordingly. This modification will earse the last row and replace $b_{N}$ by another value. Any attempt to compute the boundary term $u^{\prime}(L) \varphi_{N}(L)$ and store it in $b_{N}$ will be lost. Therefore, we can safely forget about boundary terms corresponding to Dirichlet boundary conditions also when we use the methods from Section \ref{sec:sec_14_3} or Section \ref{sec:sec_14_4}.\smallbreak
+		The expansion for $u$ reads
+		$$
+		u(x)=\sum_{j \in \mathcal{I}_{s}} c_{j} \varphi_{j}(x), \quad B(x)=D \varphi_{N}(x),
+		$$
+		with $N=N_{n}$. Insertion in the variational form (\ref{sec:sec_15_1}) leads to the linear system
+	
+		\begin{equation}
+			\label{eqa190}
+			\sum_{j \in \mathcal{I}_{s}}\left(\int_{0}^{L} \varphi_{i}^{\prime}(x) \varphi_{j}^{\prime}(x) \mathrm{d} x\right) c_{j}=\int_{0}^{L}\left(f(x) \varphi_{i}(x)\right) \mathrm{d} x-C \varphi_{i}(0), \quad i \in 	\mathcal{I}_{s}
+		\end{equation}
+	
+		\noindent After having computed the system, we replace the last row by $c_{N}=D$, either straightforwardly as in Section refreffem:deq:1D:fem:essBC:Bfunc:modsys or in a symmetric fashion as in Section refreffem:deq:1D:fem:essBC:Bfunc:modsys:symm. These modifications can also be performed in the element matrix and vector for the right-most cell.
+	
+	\section[Direct computation of the global linear system]{Direct computation of the global linear system}
+		\label{sec:sec_15_4}
+		We now turn to actual computations with P1 finite elements. The focus is on how the linear system and the element matrices and vectors are modified by the condition $u^{\prime}(0)=C$.
+		
+		Consider first the approach where Dirichlet conditions are incorporated by a $B(x)$ function and the known degree of freedom $C_{N_{n}}$ is left out from the linear system (see Section \ref{sec:sec_15_2}). The relevant formula for the linear system is given by (\ref{eqa189}). There are three differences compared to the extensively computed case where $u(0)=0$ in Sections \ref{sec:sec_13_2} and \ref{sec:sec_13_4}. First, because we do not have a
+		Dirichlet condition at the left boundary, we need to extend the linear system (\ref{eqa172}) with an equation associated with the node $x_{0}=0$. According to Section \ref{sec:sec_14_3}, this extension consists of including $A_{0,0}=1 / h, A_{0,1}=-1 / h$, and $b_{0}=h$. For $i>0$ we have $A_{i, i}=2 / h, A_{i-1, i}=A_{i, i+1}=-1 / h$. Second, we need to include the extra term $-C \varphi_{i}(0)$ on the right-hand side. Since all $\varphi_{i}(0)=0$ for $i=1, \ldots, N$, this term reduces to $-C \varphi_{0}(0)=-C$ and affects only the first equation $(i=0)$. We simply add $-C$ to $b_{0}$ such that $b_{0}=h-C$. Third, the boundary term $-\int_{0}^{L} D \varphi_{N_{n}}(x) \varphi_{i} \mathrm{~d} x$ must be computed. Since $i=0, \ldots, N=N_{n}-1$, this integral can only get a nonzero contribution with $i=N_{n}-1$ over the last cell. The result becomes $-D h / 6$. The resulting linear system can be summarized in the form
+		
+	\begin{equation}
+		\label{eqa191}
+		\frac{1}{h}\left(\begin{array}{ccccccccc}
+			1 & -1 & 0 & \cdots & \cdots & \cdots & \cdots & \cdots & 0 \\
+			-1 & 2 & -1 & \ddots & & & & & \vdots \\
+			0 & -1 & 2 & -1 & \ddots & & & & \vdots \\
+			\vdots & \ddots & & \ddots & \ddots & 0 & & & \vdots \\
+			\vdots & & \ddots & \ddots & \ddots & \ddots & \ddots & & \vdots \\
+			\vdots & & & 0 & -1 & 2 & -1 & \ddots & \vdots \\
+			\vdots & & & & \ddots & \ddots & \ddots & \ddots & 0 \\
+			\vdots & & & & & \ddots & \ddots & \ddots & -1 \\
+			0 & \cdots & \cdots & \cdots & \cdots & \cdots & 0 & -1 & 2
+		\end{array}\right)\left(\begin{array}{c}
+			c_{0} \\
+			\vdots \\
+			\vdots \\
+			\vdots \\
+			\vdots \\
+			\vdots \\
+			\vdots \\
+			\vdots \\
+			c_{N}
+		\end{array}\right)=\left(\begin{array}{c}
+			h-C \\
+			2 h \\
+			\vdots \\
+			\vdots \\
+			\vdots \\
+			\vdots \\
+			\vdots \\
+			\vdots \\
+			2h -Dh/6
+		\end{array}\right)
+	\end{equation}
+		
+		Next we consider the technique where we modify the linear system to incorporate Dirichlet conditions (see Section \ref{sec:sec_15_3}). Now $N=N_{n}$. The two differences from the case above is that the $-\int_{0}^{L} D \varphi_{N_{n}} \varphi_{i} \mathrm{~d} x$ term is left out of the right-hand side and an extra last row associated with the node $x_{N_{n}}=L$ where the Dirichlet condition applies is appended to the system. This last row is anyway replaced by the condition $C_{N}=D$ or this condition can be incorporated in a symmetric fashion. Using the simplest, former approach gives
+		
+		\begin{equation}
+			\label{eqa192}
+			\frac{1}{h}\left(\begin{array}{ccccccccc}
+				1 & -1 & 0 & \cdots & \cdots & \cdots & \cdots & \cdots & 0 \\
+				-1 & 2 & -1 & \ddots & & & & & \vdots \\
+				0 & -1 & 2 & -1 & \ddots & & & & \vdots \\
+				\vdots & \ddots & & \ddots & \ddots & 0 & & & \vdots \\
+				\vdots & & \ddots & \ddots & \ddots & \ddots & \ddots & & \vdots \\
+				\vdots & & & 0 & -1 & 2 & -1 & \ddots & \vdots \\
+				\vdots & & & & \ddots & \ddots & \ddots & \ddots & 0 \\
+				\vdots & & & & & \ddots & -1 & 2 & -1 \\
+				0 & \cdots & \cdots & \cdots & \cdots & \cdots & 0 & 0 & 1
+			\end{array}\right)\left(\begin{array}{c}
+				c_{0} \\
+				\vdots \\
+				\vdots \\
+				\vdots \\
+				\vdots \\
+				\vdots \\
+				\vdots \\
+				\vdots \\
+				c_{N}
+			\end{array}\right)=\left(\begin{array}{c}
+				h-C \\
+				2 h \\
+				\vdots \\
+				\vdots \\
+				\vdots \\
+				\vdots \\
+				\vdots \\
+				2 h \\
+				D
+			\end{array}\right)
+		\end{equation}
+	
+	\section[Cellwise computations]{Cellwise computations}
+		\label{sec:sec_15_5}
+		\noindent Now we compute with one element at a time, working in the reference coordinate system $X \in[-1,1]$. We need to see how the $u^{\prime}(0)=C$ condition affects the element matrix and vector. The extra term $-C \varphi_{i}(0)$ in the variational formulation only affects the element vector in the first cell. On the reference cell, $-C \varphi_{i}(0)$ is transformed to $-C \tilde{\varphi}_{r}(-1)$, where $r$ counts local degrees of freedom. We have $\tilde{\varphi}_{0}(-1)=1$ and $\tilde{\varphi}_{1}(-1)=0$ so we are left with the contribution $-C \tilde{\varphi}_{0}(-1)=-C$ to $\tilde{b}_{0}^{(0)}$ :
+
+		\begin{equation}
+			\label{eqa193}
+			\tilde{A}^{(0)}=A=\frac{1}{h}\left(\begin{array}{rr}
+				1 & 1 \\
+				-1 & 1
+			\end{array}\right), \quad \tilde{b}^{(0)}=\left(\begin{array}{c}
+				h-C \\
+				h
+			\end{array}\right)
+		\end{equation}
+	
+		\noindent No other element matrices or vectors are affected by the $-C \varphi_{i}(0)$ boundary term.
+		
+		There are two alternative ways of incorporating the Dirichlet condition. Following Section \ref{sec:sec_15_2}, we get a $1 \times 1$ element matrix in the last cell and an element vector with an extra term containing $D$ :
+	
+		\begin{equation}
+			\label{eqa194}
+			\tilde{A}^{(e)}=\frac{1}{h}(1), \quad \tilde{b}^{(e)}=h(1-D / 6),
+		\end{equation}
+	
+		Alternatively, we include the degree of freedom at the node with $u$ specified. The element matrix and vector must then be modified to constrain the $\tilde{c}_{1}=c_{N}$ value at local node $r=1$ :
+		\begin{equation}
+			\label{eqa195}
+			\tilde{A}^{\left(N_{c}\right)}=A=\frac{1}{h}\left(\begin{array}{ll}
+				1 & 1 \\
+				0 & 1
+			\end{array}\right), \quad \tilde{b}^{\left(N_{\epsilon}\right)}=\left(\begin{array}{c}
+				h \\
+				D
+			\end{array}\right)
+		\end{equation}
+	
+		
+	
+\clearpage
+\end{document} 

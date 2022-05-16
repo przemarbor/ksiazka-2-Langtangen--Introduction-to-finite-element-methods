@@ -1,0 +1,212 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+
+\chapter{Examples on variational formulations}
+\label{chap:chap_12}
+%\pagenumbering{arabic}
+
+\section[Variable coefficient]{Variable coefficient}
+	\label{sec:sec_12_1}
+		\noindent Consider the problem
+		\begin{equation}
+		\label{eqa166}
+			-\frac{d}{d x}\left(\alpha(x) \frac{d u}{d x}\right)=f(x), \quad x \in \Omega=[0, L], u(0)=C, u(L)=D .
+		\end{equation}
+	
+		\noindent There are two new features of this problem compared with previous examples: a variable coefficient $a(x)$ and nonzero Dirichlet| conditions at both boundary points.\smallbreak
+		Let us first deal with the boundary conditions. We seek
+		$$ u(x)=B(x)+\sum_{j \in \mathcal{I}_{s}} c_{j} \psi_{i}(x), $$
+		with $\psi_{i}(0)=\psi_{i}(L)=0$ for $i \in \mathcal{I}_{s}$. The function $B(x)$ must then fulfill $B(0)=C$ and $B(L)=D$. How $B$ varies in between $x=0$ and $x=L$ is not of importance.\smallbreak
+		\noindent One possible choice is
+		$$ B(x)=C+\frac{1}{L}(D-C) x, $$
+		which follows from (164) with $p=1$.\smallbreak
+		We seek $(u-B) \in V$. As usual,
+		$$ V=\operatorname{span}\left\{\psi_{0}, \ldots, \psi_{N}\right\}, $$
+		but the two Dirichlet boundary conditions demand that
+		$$ \psi_{i}(0)=\psi_{i}(L)=0, \quad i \in \mathcal{I}_{s} .$$
+		Note that any $v \in V$ has the property $v(0)=v(L)=0$.\smallbreak
+		The residual arises by inserting our $u$ in the differential equation:
+		$$ R=-\frac{d}{d x}\left(\alpha \frac{d u}{d x}\right)-f .$$
+		Galerkin's method is
+		$$(R, v)=0, \quad \forall v \in V,$$
+		or written with explicit integrals,
+		$$\int_{\Omega}\left(\frac{d}{d x}\left(\alpha \frac{d u}{d x}\right)-f\right) v \mathrm{~d} x=0, \quad \forall v \in V$$
+		We proceed with integration by parts to lower the derivative from second to first order:
+		$$
+		-\int_{\Omega} \frac{d}{d x}\left(\alpha(x) \frac{d u}{d x}\right) v \mathrm{~d} x=\int_{\Omega} \alpha(x) \frac{d u}{d x} \frac{d v}{d x} \mathrm{~d} x-\left[\alpha \frac{d u}{d x} v\right]_{0}^{L} .
+		$$\smallbreak
+		The boundary term vanishes since $v(0)=v(L)=0$. The variational formulation is then
+		$$
+		\int_{\Omega} \alpha(x) \frac{d u}{d x} \frac{d v}{d x} \mathrm{~d} x=\int_{\Omega} f(x) v \mathrm{~d} x, \quad \forall v \in V .
+		$$
+		The variational formulation can alternatively be written in a more compact form:
+		$$
+		\left(\alpha u^{\prime}, v^{\prime}\right)=(f, v), \quad \forall v \in V .
+		$$
+		The corresponding abstract notation reads
+		$$
+		a(u, v)=L(v) \quad \forall v \in V
+		$$
+		with
+		$$
+		a(u, v)=\left(\alpha u^{\prime}, v^{\prime}\right), \quad L(v)=(f, v) .
+		$$
+		Note that the $a$ in the notation $a(\cdot, \cdot)$ is not to be mixed with the variable coefficient $a(x)$ in the differential equation.\smallbreak
+		We may insert $u=B+\sum_{j} c_{j} \psi_{j}$ and $v=\psi_{i}$ to derive the linear system:
+		$$\left(\alpha B^{\prime}+\alpha \sum_{j \in \mathcal{I}_{s}} c_{j} \psi_{j}^{\prime}, \psi_{i}^{\prime}\right)=\left(f, \psi_{i}\right), \quad i \in \mathcal{I}_{s} .$$
+		Isolating everything with the $c_{j}$ coefficients on the left-hand side and all known terms on the right-hand side gives
+		$$\sum_{j \in \mathcal{I}_{s}}\left(\alpha \psi_{j}^{\prime}, \psi_{i}^{\prime}\right) c_{j}=\left(f, \psi_{i}\right)+\left(a(D-C) L^{-1}, \psi_{i}^{\prime}\right), \quad i \in \mathcal{I}_{s} .$$
+		This is nothing but a linear system $\sum_{j} A_{i, j} c_{j}=b_{i}$ with
+		$$
+		\begin{aligned}
+			A_{i, j} &=\left(a \psi_{j}^{\prime}, \psi_{i}^{\prime}\right)=\int_{\Omega} \alpha(x) \psi_{j}^{\prime}(x), \psi_{i}^{\prime}(x) \mathrm{d} x \\
+			b_{i} &=\left(f, \psi_{i}\right)+\left(a(D-C) L^{-1}, \psi_{i}^{\prime}\right)=\int_{\Omega}\left(f(x) \psi_{i}(x)+\alpha(x) \frac{D-C}{L} \psi_{i}^{\prime}(x)\right) \mathrm{d} x
+		\end{aligned}
+		$$\bigbreak
+	\section[First-order derivative in the equation and boundary condition]{First-order derivative in the equation and boundary condition}
+		\label{sec:sec_12_2}
+		\noindent The next problem to formulate in variational form reads
+		
+		\begin{equation}
+		\label{eqa167}
+			-u^{\prime \prime}(x)+b u^{\prime}(x)=f(x), \quad x \in \Omega=[0, L], u(0)=C, u^{\prime}(L)=E .
+		\end{equation}
+	
+		\noindent The new features are a first-order derivative $u^{\prime}$ in the equation and the boundary condition involving the derivative: $u^{\prime}(L)=E$. Since we have a Dirichlet condition at $x=0$, we must force $\psi_{i}(0)=0$ and use a boundary function to take care of the condition $u(0)=C$. Because there is no Dirichlet condition on $x=L$ we do not make any requirements to $\psi_{i}(L)$. The simplest possible choice of $B(x)$ is $B(x)=C$.\smallbreak
+		The expansion for $u$ becomes
+		$$
+		u=C+\sum_{j \in \mathcal{I}_{s}} c_{j} \psi_{i}(x) .
+		$$ \smallbreak
+		The variational formulation arises from multiplying the equation by a test function $v \in V$ and integrating over $\Omega$ :
+		$$
+		\left(-u^{\prime \prime}+b u^{\prime}-f, v\right)=0, \quad \forall v \in V
+		$$
+		\noindent We apply integration by parts to the $u^{\prime \prime} v$ term only. Although we could also integrate $u^{\prime} v$ by parts, this is not common. The result becomes
+		$$
+		\left(u^{\prime}+b u^{\prime}, v^{\prime}\right)=(f, v)+\left[u^{\prime} v\right]_{0}^{L}, \quad \forall v \in V .
+		$$
+		Now, $v(0)=0$ so
+		$$
+		\left[u^{\prime} v\right]_{0}^{L}=u^{\prime}(L) v(L)=E v(L),
+		$$
+		because $u^{\prime}(L)=E$. Integration by parts allows us to take care of the Neumann condition in the boundary term.
+		
+		\begin{mybox}
+			\textbf{Natural and essential boundary conditions.}
+			
+			\noindent Omitting a boundary term like $\left[u^{\prime} v\right]_{0}^{L}$ implies that we actually impose the condition $u^{\prime}=0$ unless there is a Dirichlet condition (i.e., $v=0$ ) at that point! This result has great practical consequences, because it is easy to forget the boundary term, and this mistake may implicitly set a boundary condition! Since homogeneous Neumann conditions can be incorporated without doing anything, and non-homogeneous Neumann conditions can just be inserted in the boundary term, such conditions are known as \emph{natural boundary conditions}. Dirichlet conditions requires more essential steps in the mathematical formulation, such as forcing all $\varphi_{i}=0$ on the boundary and constructing a $B(x)$, and are therefore known as \emph{essential boundary conditions}.
+		\end{mybox}
+	
+		The final variational form reads
+		$$ \left(u^{\prime}, v^{\prime}\right)+\left(b u^{\prime}, v\right)=(f, v)+E v(L), \quad \forall v \in V . $$
+		In the abstract notation we have 
+		$$ a(u, v)=L(v) \quad \forall v \in V $$ 
+		with the particular formulas 
+		$$ a(u, v)=\left(u^{\prime}, v^{\prime}\right)+\left(b u^{\prime}, v\right), \quad L(v)=(f, v)+E v(L) $$ \smallbreak
+		The associated linear system is derived by inserting $u=B+\sum_{j} c_{j} \psi_{j}$ and replacing $v$ by $\psi_{i}$ for $i \in \mathcal{I}_{s}$. Some algebra results in
+		$$	\sum_{j \in \mathcal{I}_{s}} \underbrace{\left(\left(\psi_{j}^{\prime}, \psi_{i}^{\prime}\right)+\left(b \psi_{j}^{\prime}, \psi_{i}\right)\right)}_{A_{i, j}} c_{j}=\underbrace{\left(f, \psi_{i}\right)+E \psi_{i}(L)}_{b_{i}} . $$
+		Observe that in this problem, the coefficient matrix is not symmetric, because of the term
+		$$ \left(b \psi_{j}^{\prime}, \psi_{i}\right)=\int_{\Omega} b \psi_{j}^{\prime} \psi_{i} \mathrm{~d} x \neq \int_{\Omega} b \psi_{i}^{\prime} \psi_{j} \mathrm{~d} x=\left(\psi_{i}^{\prime}, b \psi_{j}\right) $$
+		
+	\section[Nonlinear coefficient]{Nonlinear coefficient}
+		\label{sec:sec_12_3}
+		\noindent Finally, we show that the techniques used above to derive variational forms also apply to nonlinear differential equation problems as well. Here is a model problem with a nonlinear coefficient and right-hand side:
+
+		\begin{equation}
+		\label{eqa168}
+			-\left(\alpha(u) u^{\prime}\right)^{\prime}=f(u), \quad x \in[0, L], u(0)=0, u^{\prime}(L)=E .
+		\end{equation}
+	
+		\noindent Our space $V$ has basis $\left\{\psi_{i}\right\}_{i \in \mathcal{I}_{s}}$, and because of the condition $u(0)=0$, we must require $\psi_{i}(0)=0, i \in \mathcal{I}_{s}$.
+		
+		Galerkin's method is about inserting the approximate $u$, multiplying the differential equation by $v \in V$, and integrate,
+		$$
+		-\int_{0}^{L} \frac{d}{d x}\left(\alpha(u) \frac{d u}{d x}\right) v \mathrm{~d} x=\int_{0}^{L} f(u) v \mathrm{~d} x \quad \forall v \in V
+		$$
+		The integration by parts does not differ from the case where we have $\alpha(x)$ instead of $\alpha(u)$ :
+		$$
+		\int_{0}^{L} \alpha(u) \frac{d u}{d x} \frac{d v}{d x} \mathrm{~d} x=\int_{0}^{L} f(u) v \mathrm{~d} x+\left[\alpha(u) v u^{\prime}\right]_{0}^{L} \quad \forall v \in V
+		$$
+		The term $\alpha(u(0)) v(0) u^{\prime}(0)=0$ since $v(0)$. The other term, $\alpha(u(L)) v(L) u^{\prime}(L)$, is used to impose the other boundary condition $u^{\prime}(L)=E$, resulting in
+		
+		$$
+		\int_{0}^{L} \alpha(u) \frac{d u}{d x} \frac{d v}{d x} v \mathrm{~d} x=\int_{0}^{L} f(u) v \mathrm{~d} x+\alpha(u(L)) v(L) E \quad \forall v \in V
+		$$
+		or alternatively written more compactly as
+		$$
+		\left(\alpha(u) u^{\prime}, v^{\prime}\right)=(f(u), v)+\alpha(L) v(L) E \quad \forall v \in V .
+		$$
+		Since the problem is nonlinear, we cannot identify a bilinear form $a(u, v)$ and a linear form $L(v)$. An abstract notation is typically find $u$ such that
+		$$
+		F(u ; v)=0 \quad \forall v \in V,
+		$$
+		with
+		$$
+		F(u ; v)=\left(a(u) u^{\prime}, v^{\prime}\right)-(f(u), v)-a(L) v(L) E .
+		$$
+		By inserting $u=\sum_{j} c_{j} \psi_{j}$ we get a nonlinear system of algebraic equations for the unknowns $c_{i}, i \in \mathcal{I}_{s}$. Such systems must be solved by constructing a sequence of linear systems whose solutions hopefully converge to the solution of the nonlinear system. Frequently applied methods are Picard iteration and Newton's method.\bigbreak 
+	
+	\section[Computing with Dirichlet and Neumann conditions]{Computing with Dirichlet and Neumann conditions}
+	\label{sec:sec_12_4}
+		\noindent Let us perform the necessary calculations to solve
+		$$
+		-u^{\prime \prime}(x)=2, \quad x \in \Omega=[0,1], \quad u^{\prime}(0)=C, u(1)=D,
+		$$
+		using a global polynomial basis $\psi_{i} \sim x^{i}$. The requirements on $\psi_{i}$ is that $\psi_{i}(1)=0$, because $u$ is specified at $x=1$, so a proper set of polynomial basis functions can be
+		$$
+		\psi_{i}(x)=(1-x)^{i+1}, \quad i \in \mathcal{I}_{s} .
+		$$
+		A suitable $B(x)$ function to handle the boundary condition $u(1)=D$ is $B(x)=$ $D x$. The variational formulation becomes
+		$$
+		\left(u^{\prime}, v^{\prime}\right)=(2, v)-C v(0) \quad \forall v \in V .
+		$$
+		The entries in the linear system are then
+		$$
+		\begin{aligned}
+			A_{i, j} &=\left(\psi_{j}, \psi_{i}\right)=\int_{0}^{1} \psi_{i}^{\prime}(x) \psi_{j}^{\prime}(x) \mathrm{d} x=\int_{0}^{1}(i+1)(j+1)(1-x)^{i+j} \mathrm{~d} x=\frac{i j+i+j+1}{i+j+1} \\
+			b_{i} &=\left(2, \psi_{i}\right)-\left(D, \psi_{i}^{\prime}\right)-C \psi_{i}(0) \\
+			&=\int_{0}^{1}\left(2 \psi_{i}(x)-D \psi_{i}^{\prime}(x)\right) \mathrm{d} x-C \psi_{i}(0) \\
+			&=\int_{0}^{1}\left(2(1-x)^{i+1}-D(i+1)(1-x)^{i}\right) \mathrm{d} x-C \psi_{i}(0) \\
+			&=\frac{2-(2+i)(D+C)}{i+2}
+		\end{aligned}
+		$$\smallbreak 
+		With $N=1$ the global matrix system is
+		$$
+		\left(\begin{array}{cc}
+			1 & 1 \\
+			1 & 4 / 3
+		\end{array}\right)\left(\begin{array}{c}
+			c_{0} \\
+			c_{1}
+		\end{array}\right)=\left(\begin{array}{c}
+			-C+D+1 \\
+			2 / 3-C+D
+		\end{array}\right)
+		$$
+		The solution becomes $c_{0}=-C+D+2$ and $c_{1}=-1$, resulting in
+		
+		\begin{equation}
+		\label{eqa169}
+			u(x)=1-x^{2}+D+C(x-1)
+		\end{equation}
+			
+		The exact solution is found by. integrating twice and applying the boundary conditions, either by hand or using sympy as shown in Section 11.2. It appears that the numerical solution coincides with the exact one. This result is to be expected because if $\left(u_{\mathrm{e}}-B\right) \in V, u=u_{\mathrm{e}}$, as proved next. \bigbreak
+			
+	\section[When the numerical method is exact]{When the numerical method is exact}
+		\label{sec:sec_12_5}
+		\noindent We have some variational formulation: find $(u-B) \in V$ such that $a(u, v)=$ $L(u) \forall V$. The exact solution also fulfills $a\left(u_{e}, v\right)=L(v)$, but normally $\left(u_{e}-B\right)$ lies in a much larger (infinite-dimensional) space. Suppose, nevertheless, that $u_{\mathrm{e}}=B+E$, where $E \in V$. That is, apart from Dirichlet conditions, $u_{\mathrm{e}}$ lines in our finite-dimensional space $V$ we use to compute $u$. Writing also $u$ on the same form $u=B+F$, we have
+		$$
+		\begin{aligned}
+			a(B+E, v)=L(v) & \forall v \in V \\
+			a(B+F, v)=L(v) & \forall v \in V
+		\end{aligned}
+		$$
+		Subtracting the equations show that $a(E-F, v)=0$ for all $v \in V$, and therefore $E-F=0$ and $u=u_{\mathrm{e}}$.
+			
+		The case treated in Section $12.4$ is of the type where $u_{\mathrm{e}}-B$ is a quadratic function that is 0 at $x=1$, and therefore $\left(u_{\mathrm{e}}-B\right) \in V$, and the method finds the exact solution.
+	
+
+
+	
+\clearpage
+\end{document} 
