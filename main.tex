@@ -11,6 +11,10 @@
 \usepackage{caption}
 \usepackage{float}  
 
+\usepackage{chngcntr}
+\counterwithout{equation}{chapter} %licznik numeru rownan
+\counterwithout{figure}{chapter}   %licznik numeru zdjec
+
 %  begin    mybox
 \usepackage[framemethod=default]{mdframed}
 \newmdenv[innerlinewidth=0.5pt, roundcorner=4pt,linecolor=black,innerleftmargin=6pt,innerrightmargin=6pt,innertopmargin=6pt,innerbottommargin=6pt]{mybox}
@@ -22,23 +26,21 @@
 
 \UseRawInputEncoding
 
-\graphicspath{ {./figi/} } %zmienilem
+\graphicspath{ {./figi/} } 
 
 \begin{document}
     \tableofcontents
     \addcontentsline{toc}{section}{Contents}
 	\listoffigures    
     \clearpage
-
-
  
     \subfile{ch1/ch1}  
     \subfile{ch2/ch2}
     \subfile{ch3/ch3} 
-    \subfile{ch4/ch4}
+  	\subfile{ch4/ch4}
     \subfile{ch5/ch5}
     \subfile{ch6/ch6} 
-    \subfile{ch7/ch7}
+   	\subfile{ch7/ch7}
   	\subfile{ch8/ch8}
 	\subfile{ch9/ch9}
 	\subfile{ch10/ch10}
@@ -52,6 +54,5 @@
 	\subfile{ch18/ch18}
 	\subfile{ch19/ch19} 
 	\subfile{ch20/ch20}
-
 
 \end{document}

@@ -1,6 +1,7 @@
 \documentclass[../main.tex]{subfiles}
 \begin{document}
 
+
 	\chapter{Approximation of functions}
 	\label{chap:chap_2}
 	Let $V$ be a function space spanned by a set of \textit{basis functions} $\psi_{0}, \ldots, \psi_{N}$,
@@ -8,9 +9,12 @@
 	V=\operatorname{span}\left\{\psi_{0}, \ldots, \psi_{N}\right\},
 	$$
 	such that any function $u \in V$ can be written as a linear combination of the basis functions:
+	
 	\begin{equation}\label{eqa23}
 		u=\sum_{j \in \mathcal{I}_{s}} c_{j} \psi_{j}.
 	\end{equation}
+	
+	
 	The index set $\mathcal{I}_{s}$ is defined as $\mathcal{I}_{s}=\{0, \ldots, N\}$ and is used both for compact notation and for flexibility in the numbering of elements in sequences.
 	
 	For now, in this introduction, we shall look at functions of a single variable $x: u=u(x), \psi_{i}=\psi_{i}(x), i \in \mathcal{I}_{s}$. Later, we will almost trivially extend the mathematical details to functions of two- or three-dimensional physical spaces.
@@ -106,8 +110,8 @@
 	\section[Implementation of the least squares method]{Implementation of the least squares method}
 	\label{sec:sec_2_4}
 	\noindent The linear system can be computed either symbolically or numerically (a numer-
-	ical integration rule is needed in the latter case). Here is a function for symbolic
-	computation of the linear system, where f (x) is given as a sympy expression f
+	ical integration rule is needed in the lattsf case). Here is a function for symbolic
+	computation of the linear system,where \mycode{f(x)} is given as a sympy expression f
 	involving the symbol x, psi is a list of expressions for $\left\{\psi_{i}\right\}_{i \in \mathcal{I}_{s}}$, and Omega is a 2-tuple/list holding the limits of the domain $\Omega$ :
 	
 	\begin{lstlisting}[numbers=none]
