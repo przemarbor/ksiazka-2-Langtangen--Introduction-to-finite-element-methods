@@ -49,17 +49,17 @@
 		\label{fig:img_16}
 	\end{figure}
 	
-	For the purpose of implementation, we introduce two lists or arrays: nodes
+	For the purpose of implementation, we introduce two lists or arrays: \mycode{nodes}
 	for storing the coordinates of the nodes, with the global node numbers as indices,
-	and elements for holding the global node numbers in each element, with the
-	local node numbers as indices. The nodes and elements lists for the sample
+	and \mycode{elements} for holding the global node numbers in each element, with the
+	local node numbers as indices. The \mycode{nodes} and \mycode{elements} lists for the sample
 	mesh above take the form
 	\begin{lstlisting}[numbers=none]
 		nodes = [0, 0.2, 0.4, 0.7, 1]
 		elements = [[0, 1, 2], [2, 3, 4]]	
 	\end{lstlisting}
 	Looking up the coordinate of local node number 2 in element 1 is here done by
-	nodes[elements[1][2]] (recall that nodes and elements start their numbering
+	\mycode{nodes[elements[1][2]]} (recall that nodes and elements start their numbering
 	at 0).
 	
 	The numbering of elements and nodes does not need to be regular. Figure \hyperref[fig:img_17]{17}
@@ -114,7 +114,7 @@
 	We let each element have $d+1$ nodes, resulting in local Lagrange polynomials of degree $d$. It is not a requirement to have the same $d$ value in each element, but for now we will assume so.
 	\section[Example on piecewise quadratic finite element functions]{Example on piecewise quadratic finite element functions}
 	\label{sec:sec_3_3}
-	\noindent Figure 18 illustrates how piecewise quadratic basis functions can look like $(d=2)$. We work with the domain $\Omega=[0,1]$ divided into four equal-sized elements, each having three nodes. The nodes and elements lists in this particular example become
+	\noindent Figure 18 illustrates how piecewise quadratic basis functions can look like $(d=2)$. We work with the domain $\Omega=[0,1]$ divided into four equal-sized elements, each having three nodes. The \mycode{nodes} and \mycode{elements} lists in this particular example become
 	\begin{lstlisting}[numbers=none]
 		nodes = [0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0]
 		elements = [[0, 1, 2], [2, 3, 4], [4, 5, 6], [6, 7, 8]]	
@@ -465,7 +465,7 @@
 	\end{equation}
 	In the last two expressions we have used the element midpoint $x_{m}$.
 	
-	Integration of lower-degree polynomials above is tedious, and higher-degree polynomials involve very much more algebra, but sympy may help. For example, we can easily calculate (\hyperref[eqa73]{73}), (\hyperref[eqa73]{73}) and (\hyperref[eqa77]{77}) by
+	Integration of lower-degree polynomials above is tedious, and higher-degree polynomials involve very much more algebra, but \mycode{sympy} may help. For example, we can easily calculate (\hyperref[eqa73]{73}), (\hyperref[eqa73]{73}) and (\hyperref[eqa77]{77}) by
 	\begin{lstlisting}[numbers=none]
 		>>> import sympy as sp
 		>>> x, x_m, h, X = sp.symbols('x x_m h X')
@@ -478,8 +478,8 @@
 		>>> print b_0
 		-h**3/24 + h**2*x_m/6 - h**2/12 - h*x_m**2/2 + h*x_m/2	
 	\end{lstlisting}
-	For inclusion of formulas in documents (like the present one), sympy can print
-	expressions in LATEX format:
+	For inclusion of formulas in documents (like the present one), \mycode{sympy} can print
+	expressions in \mycode{LATEX} format:
 	\begin{lstlisting}[numbers=none]
 	>>> print sp.latex(b_0, mode='plain')
 	- \frac{1}{24} h^{3} + \frac{1}{6} h^{2} x_{m}

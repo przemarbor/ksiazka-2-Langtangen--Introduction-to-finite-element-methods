@@ -237,10 +237,10 @@
 	\begin{lstlisting}[numbers=none]
 		# A[i,j]: coefficient matrix, b[i]: right-hand side
 		for e in range(len(Ae)):
-		for r in range(Ae[e].shape[0]):
-		for s in range(Ae[e].shape[1]):
-		A[dof_map[e,r],dof_map[e,s]] += Ae[e][i,j]
-		b[dof_map[e,r]] += be[e][i,j]
+			for r in range(Ae[e].shape[0]):
+				for s in range(Ae[e].shape[1]):
+					A[dof_map[e,r],dof_map[e,s]] += Ae[e][i,j]
+				b[dof_map[e,r]] += be[e][i,j]
 	\end{lstlisting}
 	
 	The general case with \textbf{\texttt{N\_e}} P1 elements of length \textbf{\texttt{h}} has

@@ -16,8 +16,18 @@
 \counterwithout{figure}{chapter}   %licznik numeru zdjec
 
 %  begin    mybox
-\usepackage[framemethod=default]{mdframed}
-\newmdenv[innerlinewidth=0.5pt, roundcorner=4pt,linecolor=black,innerleftmargin=6pt,innerrightmargin=6pt,innertopmargin=6pt,innerbottommargin=6pt]{mybox}
+%\usepackage[framemethod=default]{mdframed}
+%\newmdenv[innerlinewidth=0.5pt, roundcorner=4pt,linecolor=black,innerleftmargin=6pt,innerrightmargin=6pt,innertopmargin=6pt,innerbottommargin=6pt]{mybox}
+
+\usepackage[many]{tcolorbox}    	
+\newtcolorbox{mybox}{
+    boxrule = 0.9pt,
+    rounded corners,
+    arc = 10pt   % zaokraglenie
+}
+
+
+
 
 \usepackage{titlesec}
 \titleformat{\chapter}[hang] 
@@ -54,5 +64,6 @@
 	\subfile{ch18/ch18}
 	\subfile{ch19/ch19} 
 	\subfile{ch20/ch20}
+	\subfile{ch21/ch21}
 
 \end{document}

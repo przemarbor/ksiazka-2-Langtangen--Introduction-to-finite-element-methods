@@ -11,13 +11,13 @@
 		\label{sec:sec_16_1}
 		\noindent We first consider implementations when $\psi_{i}$ are global functions are hence different from zero on most of $\Omega=[0, L]$ so all integrals need integration over the entire domain. Since the expressions for the entries in the linear system depend on the differential equation problem being solved, the user must supply the necessary formulas via Python functions. The implementations here attempt to perform symbolic calculations, but fall back on numerical computations if the symbolic ones fail.
 		
-		The user must prepare a function \textbf{\texttt{integrand\_lhs(psi, i, j)}} for returning the integrand of the integral that contributes to matrix entry $(i, j)$. The psi variable is a Python dictionary holding the basis functions and their derivatives in symbolic form. More precisely, \textbf{\texttt{psi[q]}} is a list of
+		The user must prepare a function \mycode{integrand\_lhs(psi, i, j)} for returning the integrand of the integral that contributes to matrix entry $(i, j)$. The \mycode{psi} variable is a Python dictionary holding the basis functions and their derivatives in symbolic form. More precisely, \mycode{psi[q]} is a list of
 		$$
 		\left\{\frac{d^{q} \psi_{0}}{d x^{q}}, \ldots, \frac{d^{q} \psi_{N}}{d x^{q}}\right\} .
 		$$
-		Similarly, \textbf{\texttt{integrand\_rhs(psi, i)}} returns the integrand for entry number $i$ in the right-hand side vector.
+		Similarly, \mycode{integrand\_rhs(psi, i)} returns the integrand for entry number $i$ in the right-hand side vector.
 		
-		Since we also have contributions to the right-hand side vector, and potentially also the matrix, from boundary terms without any integral, we introduce two additional functions, \textbf{\texttt{boundary\_lhs(psi, i, j)}} and \textbf{\texttt{boundary\_rhs(psi, i)}} for returning terms in the variational formulation that are not to be integrated over the domain $\Omega$. Examples shown later will explain in more detail how these user-supplied function may look like.
+		Since we also have contributions to the right-hand side vector, and potentially also the matrix, from boundary terms without any integral, we introduce two additional functions, \mycode{boundary\_lhs(psi, i, j)} and \mycode{boundary\_rhs(psi, i)} for returning terms in the variational formulation that are not to be integrated over the domain $\Omega$. Examples shown later will explain in more detail how these user-supplied function may look like.
 		
 		The linear system can be computed and solved symbolically by the following function:
 		\begin{lstlisting}[numbers=none]
@@ -45,8 +45,8 @@
 				return u
 		\end{lstlisting}\smallbreak
 		
-		Not surprisingly, symbolic solution of differential equations, discretized by a Galerkin or least squares method with global basis functions, is of limited interest beyond the simplest problems, because symbolic integration might be very time consuming or impossible, not only in \textbf{\texttt{sympy}} but also in \href{https://www.wolframalpha.com/}{WolframAlpha} (which applies the perhaps most powerful symbolic integration software available today: Mathematica). Numerical integration as an option is therefore desirable.\smallbreak
-		The extended \textbf{\texttt{solve}} function below tries to combine symbolic and numerical integration. The latter can be enforced by the user, or it can be invoked after a non-successful symbolic integration (being detected by an \textbf{\texttt{Integral}} object as the result of the integration in \textbf{\texttt{sympy}}). Note that for a numerical integration, symbolic expressions must be converted to Python functions (using \textbf{\texttt{lambdify}}), and the expressions cannot contain other symbols than $\mathrm{x}$. The real \textbf{\texttt{solve}} routine in the \textbf{\texttt{\href{https://github.com/hplgit/INF5620/blob/master/src/fem/varform1D.py}{varform1D.py}}} file has error checking and meaningful error messages in such cases. The \textbf{\texttt{solve}} code below is a condensed version of the real one, with the purpose of showing how to automate the Galerkin or least squares method for solving differential equations in $1 \mathrm{D}$ with global basis functions:
+		Not surprisingly, symbolic solution of differential equations, discretized by a Galerkin or least squares method with global basis functions, is of limited interest beyond the simplest problems, because symbolic integration might be very time consuming or impossible, not only in \mycode{sympy} but also in \href{https://www.wolframalpha.com/}{WolframAlpha} (which applies the perhaps most powerful symbolic integration software available today: Mathematica). Numerical integration as an option is therefore desirable.\smallbreak
+		The extended \mycode{solve} function below tries to combine symbolic and numerical integration. The latter can be enforced by the user, or it can be invoked after a non-successful symbolic integration (being detected by an \mycode{Integral} object as the result of the integration in \mycode{sympy}). Note that for a numerical integration, symbolic expressions must be converted to Python functions (using \mycode{lambdify}), and the expressions cannot contain other symbols than \mycode{x}. The real \mycode{solve} routine in the \textbf{\texttt{\href{https://github.com/hplgit/INF5620/blob/master/src/fem/varform1D.py}{varform1D.py}}} file has error checking and meaningful error messages in such cases. The \mycode{solve} code below is a condensed version of the real one, with the purpose of showing how to automate the Galerkin or least squares method for solving differential equations in $1 \mathrm{D}$ with global basis functions:
 		\begin{lstlisting}[numbers=none]
 			def solve(integrand_lhs, integrand_rhs, psi, Omega,
 				boundary_lhs=None, boundary_rhs=None, symbolic=True):
@@ -103,7 +103,7 @@
 			\sum_{j \in \mathcal{I}_{s}}\left(\int_{0}^{1} \psi_{i}^{\prime} \psi_{j}^{\prime} \mathrm{d} x\right) c_{j}=\int_{0}^{1}\left(f-B^{\prime}\right) \psi_{i} \mathrm{~d} x, \quad i \in \mathcal{I}_{s}
 		\end{equation}
 		
-		The application can be coded as follows in \textbf{\texttt{sympy}}:
+		The application can be coded as follows in \mycode{sympy}:
 		
 		\begin{lstlisting}[numbers=none]
 			x, b = sp.symbols('x b')
@@ -132,7 +132,7 @@
 		\end{lstlisting}
 	
 	\noindent The printout of $\mathrm{u}$ reads \textbf{\texttt{-b*x**2/2 + b*x/2 - x + 1}}. Note that expanding $\mathrm{u}$ and then simplifying is in the present case necessary to get a compact, final expression with sympy. A non-expanded u might be preferable in other cases this depends on the problem in question.\smallbreak
-	The exact solution $u_{e}(x)$ can be derived by some \textbf{\texttt{sympy}} code that closely follows the examples in Section \ref{sec:sec_11_2}. The idea is to integrate $-u^{\prime \prime}=b$ twice and determine the integration constants from the boundary conditions:
+	The exact solution $u_{e}(x)$ can be derived by some \mycode{sympy} code that closely follows the examples in Section \ref{sec:sec_11_2}. The idea is to integrate $-u^{\prime \prime}=b$ twice and determine the integration constants from the boundary conditions:
 
 		\begin{lstlisting}[numbers=none]
 			C1, C2 = sp.symbols('C1 C2') # integration constants
@@ -171,9 +171,9 @@
 			boundary_rhs(phi, r, x)
 		\end{lstlisting}
 	 
-	 	\noindent Here, \textbf{\texttt{phi}} is a dictionary where \textbf{\texttt{phi[q]}} holds a list of the derivatives of order $q$ of the basis functions at the an evaluation point; \textbf{\texttt{r}} and \textbf{\texttt{s}} are indices for the corresponding entries in the element matrix and vector, and \textbf{\texttt{x}} is the global coordinate value corresponding to the current evaluation point.
+	 	\noindent Here, \mycode{phi} is a dictionary where \mycode{phi[q]} holds a list of the derivatives of order $q$ of the basis functions at the an evaluation point; \mycode{r} and \mycode{s} are indices for the corresponding entries in the element matrix and vector, and \mycode{x} is the global coordinate value corresponding to the current evaluation point.
 	 	
-	 	Given a mesh represented by \textbf{\texttt{vertices}}, \textbf{\texttt{cells}}, and \textbf{\texttt{dof\_map}} as explained before, we can write a pseudo Python code to list all the steps in the computational algorithm for finite element solution of a differential equation.
+	 	Given a mesh represented by \mycode{vertices}, \mycode{cells}, and \mycode{dof\_map} as explained before, we can write a pseudo Python code to list all the steps in the computational algorithm for finite element solution of a differential equation.
 	 	
 	 	\begin{lstlisting}[numbers=none]
 			<Declare global matrix and rhs: A, b>

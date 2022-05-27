@@ -111,7 +111,7 @@
 	\bigbreak
 	\section*{Exercise 17: Approximate a step function by finite elements}
 	\label{sec:sec_10_17}
-	\noindent Approximate the step function
+	\noindent  Approximate the step function
 	$$
 	f(x)= \begin{cases}1 & x<1 / 2 \\ 2 & x \geq 1 / 2\end{cases}
 	$$
@@ -120,9 +120,9 @@
 	\begin{lstlisting}[numbers=none]
 		f = sp.Heaviside(x - sp.Rational(1,2))	
 	\end{lstlisting}
-	making the approximate function in the fe\textunderscore approx1D.py module an obvious candidate to solve the problem. However, sympy does not handle symbolic integration with this particular integrand, and the approximate function faces a problem when converting $f$ to a Python function (for plotting) since Heaviside is not an available function in numpy. It is better to make special-purpose code for this case or perform all calculations by hand.
+	making the \mycode{approximate}  function in the \mycode{fe\textunderscore approx1D.py} module an obvious candidate to solve the problem. However, \mycode{sympy}  does not handle symbolic integration with this particular integrand, and the \mycode{approximate}  function faces a problem when converting $f$ to a Python function (for plotting) since Heaviside is not an available function in \mycode{numpy}. It is better to make special-purpose code for this case or perform all calculations by hand.
 	
-	Filename: Heaviside\textunderscore approx\textunderscore P1P2.py ..
+	Filename:\mycode{Heaviside\textunderscore approx\textunderscore P1P2.py}  ..
 	\bigbreak
 	\section*{Exercise 18: 2D approximation with orthogonal functions}
 	\label{sec:sec_10_18}
@@ -158,10 +158,10 @@
 		
 		Run the least squares or projection/Galerkin method for $N_{P}=2,4,8,16,32$. Compute the error $E=\|u-f\|_{L^{2}}$.
 		\bigbreak
-		\textbf{Hint.} Use the fe\textunderscore approx1D\textunderscore numint module to compute $u$ and use the technique from Section \hyperref[sec:sec_6_4]{6.4} to compute the norm of the error.
+		\textbf{Hint.} Use the \mycode{fe\textunderscore approx1D\textunderscore numint}  module to compute $u$ and use the technique from Section \hyperref[sec:sec_6_4]{6.4} to compute the norm of the error.
 		\item Repeat the set of experiments in the above point, but use interpolation/collocation based on the node points to compute $u(x)$ (recall that $c_{i}$ is now simply $\left.f\left(x_{i}\right)\right)$. Compute the error $E=\|u-f\|_{L^{2}}$. Which method seems to be most accurate?
 		
-		Filename: P1\textunderscore vs\textunderscore interp.py.
+		Filename: \mycode{P1\textunderscore vs\textunderscore interp.py} .
 	\end{enumerate}
 	\bigbreak
 	\section*{Exercise 21: Implement 3D computations with global basis functions}

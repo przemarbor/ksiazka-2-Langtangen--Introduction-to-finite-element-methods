@@ -112,60 +112,60 @@
 	\noindent The linear system can be computed either symbolically or numerically (a numer-
 	ical integration rule is needed in the lattsf case). Here is a function for symbolic
 	computation of the linear system,where \mycode{f(x)} is given as a sympy expression f
-	involving the symbol x, psi is a list of expressions for $\left\{\psi_{i}\right\}_{i \in \mathcal{I}_{s}}$, and Omega is a 2-tuple/list holding the limits of the domain $\Omega$ :
+	involving the symbol \mycode{x}, \mycode{psi} is a list of expressions for $\left\{\psi_{i}\right\}_{i \in \mathcal{I}_{s}}$, and \mycode{Omega} is a 2-tuple/list holding the limits of the domain $\Omega$ :
 	
 	\begin{lstlisting}[numbers=none]
 		import sympy as sp
 		def least_squares(f, psi, Omega):
-		N = len(psi) - 1
-		A = sp.zeros((N+1, N+1))
-		b = sp.zeros((N+1, 1))
-		x = sp.Symbol('x')
-		for i in range(N+1):
-		for j in range(i, N+1):
-		A[i,j] = sp.integrate(psi[i]*psi[j],
-		(x, Omega[0], Omega[1]))
-		A[j,i] = A[i,j]
-		b[i,0] = sp.integrate(psi[i]*f, (x, Omega[0], Omega[1]))
-		c = A.LUsolve(b)
-		u = 0
-		for i in range(len(psi)):
-		u += c[i,0]*psi[i]
-		return u, c
+			N = len(psi) - 1
+			A = sp.zeros((N+1, N+1))
+			b = sp.zeros((N+1, 1))
+			x = sp.Symbol('x')
+			for i in range(N+1):
+				for j in range(i, N+1):
+					A[i,j] = sp.integrate(psi[i]*psi[j],
+											(x, Omega[0], Omega[1]))
+					A[j,i] = A[i,j]
+				b[i,0] = sp.integrate(psi[i]*f, (x, Omega[0], Omega[1]))
+			c = A.LUsolve(b)
+			u = 0
+			for i in range(len(psi)):
+				u += c[i,0]*psi[i]
+			return u, c
 	\end{lstlisting}
 	Observe that we exploit the symmetry of the coefficient matrix: only the
-	upper triangular part is computed. Symbolic integration in sympy is often
+	upper triangular part is computed. Symbolic integration in \mycode{sympy} is often
 	time consuming, and (roughly) halving the work has noticeable effect on the
 	waiting time for the function to finish execution.
 	
 	Comparing the given f (x) and the approximate u(x) visually is done by
-	the following function, which with the aid of sympy's lambdify tool converts a
-	sympy expression to a Python function for numerical computations:
+	the following function, which with the aid of \mycode{sympy's lambdify} tool converts a
+	\mycode{sympy} expression to a Python function for numerical computations:
 	\begin{lstlisting}[numbers=none]
 		def comparison_plot(f, u, Omega, filename='tmp.pdf'):
-		x = sp.Symbol('x')
-		f = sp.lambdify([x], f, modules="numpy")
-		u = sp.lambdify([x], u, modules="numpy")
-		resolution = 401 # no of points in plot
-		xcoor = linspace(Omega[0], Omega[1], resolution)
-		exact = f(xcoor)
-		approx = u(xcoor)
-		plot(xcoor, approx)
-		hold('on')
-		plot(xcoor, exact)
-		legend(['approximation', 'exact'])
-		savefig(filename)
+			x = sp.Symbol('x')
+			f = sp.lambdify([x], f, modules="numpy")
+			u = sp.lambdify([x], u, modules="numpy")
+			resolution = 401 # no of points in plot
+			xcoor = linspace(Omega[0], Omega[1], resolution)
+			exact = f(xcoor)
+			approx = u(xcoor)
+			plot(xcoor, approx)
+			hold('on')
+			plot(xcoor, exact)
+			legend(['approximation', 'exact'])
+			savefig(filename)
 	\end{lstlisting}
-	The modules='numpy' argument to lambdify is important if there are mathe-
+	The \mycode{modules='numpy'} argument to \mycode{lambdify} is important if there are mathe-
 	matical functions, such as sin or exp in the symbolic expressions in f or u, and
 	these mathematical functions are to be used with vector arguments, like xcoor
 	above.
 	
-	Both the least\textunderscore squares and comparison\textunderscore plot are found and coded in the
-	file \href{http://tinyurl.com/jvzzcfn/fem/approx1D.py}{approx1D.py.} The forthcoming examples on their use appear in ex\textunderscore approx1D.py.
+	Both the \mycode{least\textunderscore squares} and \mycode{comparison\textunderscore plot} are found and coded in the
+	file \mycode{\href{http://tinyurl.com/jvzzcfn/fem/approx1D.py}{approx1D.py.}} The forthcoming examples on their use appear in \mycode{ex\textunderscore approx1D.py.}
 	\section[Perfect approximation]{Perfect approximation}
 	\label{sec:sec_2_5}
-	Let us use the code above to recompute the problem from Section \hyperref[sec:sec_2_3]{2.3} where we want to approximate a parabola. What happens if we add an element $x^{2}$ to the basis and test what the best approximation is if V is the space of all parabolic
+	Let us use the code above to recompute the problem from Section \hyperref[sec:sec_2_3]{2.3} where we want to approximate a parabola. What happens if we add an element $x^{2}$ to the basis and test what the best approximation is if \textit{V} is the space of all parabolic
 	functions? The answer is quickly found by running
 	\begin{lstlisting}[numbers=none]
 		>>> from approx1D import *
@@ -177,7 +177,7 @@
 		>>> print sp.expand(f)
 		10*x**2 - 20*x + 9
 	\end{lstlisting}
-	Now, what if we use $\psi_{i}(x)=x^{i}$ for $i=0,1, \ldots, N=40$ ? The output from least\textunderscore squares gives $c_{i}=0$ for $i>2$, which means that the method finds the perfect approximation.
+	Now, what if we use $\psi_{i}(x)=x^{i}$ for $i=0,1, \ldots, N=40$ ? The output from \mycode{least\textunderscore squares} gives $c_{i}=0$ for $i>2$, which means that the method finds the perfect approximation.
 	
 	In fact, we have a general result that if $f \in V$, the least squares and projection/Galerkin methods compute the exact solution $u=f$. The proof is straightforward: if $f \in V, f$ can be expanded in terms of the basis functions, $f=\sum_{j \in \mathcal{I}_{s}} d_{j} \psi_{j}$, for some coefficients $\left\{d_{i}\right\}_{i \in \mathcal{I}_{s}}$, and the right-hand side then has entries
 	$$
@@ -190,7 +190,7 @@
 	which implies that $c_{i}=d_{i}$ for $i \in \mathcal{I}_{s}$.
 	\section[Ill-conditioning]{Ill-conditioning}
 	\label{sec:sec_2_6}
-	The computational example in Section \hyperref[sec:sec_2_5]{2.5} applies the least\textunderscore squares function which invokes symbolic methods to calculate and solve the linear system. The correct solution $c_{0}=9, c_{1}=-20, c_{2}=10, c_{i}=0$ for $i \geq 3$ is perfectly recovered.
+	The computational example in Section \hyperref[sec:sec_2_5]{2.5} applies the \mycode{least\textunderscore squares} function which invokes symbolic methods to calculate and solve the linear system. The correct solution $c_{0}=9, c_{1}=-20, c_{2}=10, c_{i}=0$ for $i \geq 3$ is perfectly recovered.
 	
 	Suppose we convert the matrix and right-hand side to floating-point arrays and then solve the system using finite-precision arithmetics, which is what one will (almost) always do in real life. This time we get astonishing results! Up to about $N=7$ we get a solution that is reasonably close to the exact one. Increasing $N$ shows that seriously wrong coefficients are computed. Below is a table showing the solution of the linear system arising from approximating a parabola by functions on the form $u(x)=c_{0}+c_{1} x+c_{2} x^{2}+\cdots+c_{10} x^{10}$. Analytically, we know that $c_{j}=0$ for $j>2$, but numerically we may get $c_{j} \neq 0$ for $j>2$.
 	
@@ -212,14 +212,14 @@
 	\bigbreak
 	\noindent The exact value of $c_{j}, j=0,1, \ldots, 10$, appears in the first column while the other columns correspond to results obtained by three different methods:
 	\begin{itemize}
-		\item Column 2: The matrix and vector are converted to the data structure sympy .mpmath.fp.matrix and the sympy.mpmath.fp.lu\textunderscore solve function is used to solve the system.
-		\item Column 3: The matrix and vector are converted to numpy arrays with data type numpy.float32 (single precision floating-point number) and solved by the numpy.linalg.solve function.
-		\item Column 4: As column 3, but the data type is numpy.float64 (double precision floating-point number).
+		\item Column 2: The matrix and vector are converted to the data structure \mycode{sympy.mpmath.fp.matrix} and the \mycode{sympy.mpmath.fp.lu\textunderscore solve} function is used to solve the system.
+		\item Column 3: The matrix and vector are converted to numpy arrays with data type \mycode{numpy.float32} (single precision floating-point number) and solved by the \mycode{numpy.linalg.solve} function.
+		\item Column 4: As column 3, but the data type is \mycode{numpy.float64} (double precision floating-point number).
 	\end{itemize}
 	
 	\noindent We see from the numbers in the table that double precision performs much better than single precision. Nevertheless, when plotting all these solutions the curves cannot be visually distinguished (!). This means that the approximations look perfect, despite the partially very wrong values of the coefficients.
 	
-	Increasing $N$ to 12 makes the numerical solver in numpy abort with the message: "matrix is numerically singular". A matrix has to be non-singular to be invertible, which is a requirement when solving a linear system. Already when the matrix is close to singular, it is \textit{ill-conditioned}, which here implies that the numerical solution algorithms are sensitive to round-off errors and may produce (very) inaccurate results.
+	Increasing $N$ to 12 makes the numerical solver in \mycode{numpy} abort with the message: "matrix is numerically singular". A matrix has to be non-singular to be invertible, which is a requirement when solving a linear system. Already when the matrix is close to singular, it is \textit{ill-conditioned}, which here implies that the numerical solution algorithms are sensitive to round-off errors and may produce (very) inaccurate results.
 	
 	The reason why the coefficient matrix is nearly singular and ill-conditioned is that our basis functions $\psi_{i}(x)=x^{i}$ are nearly linearly dependent for large $i$. That is, $x^{i}$ and $x^{i+1}$ are very close for $i$ not very small. This phenomenon is illustrated in Figure 4. There are 15 lines in this figure, but only half of them are visually distinguishable. Almost linearly dependent basis functions give rise to an ill-conditioned and almost singular matrix. This fact can be illustrated by computing the determinant, which is indeed very close to zero (recall that a zero determinant implies a singular and non-invertible matrix): $10^{-65}$ for $N=10$ and $10^{-92}$ for $N=12$. Already for $N=28$ the numerical determinant computation returns a plain zero.
 	\begin{figure}[H]
@@ -244,7 +244,7 @@
 	$$
 	\psi_{i}(x)=\sin ((i+1) \pi x), \quad i \in \mathcal{I}_{s} .
 	$$
-	An approximation to the $f(x)$ function from Section \hyperref[sec:sec_2_3]{2.3} can then be computed by the least\textunderscore squares function from Section \hyperref[sec:sec_2_4]{2.4}:
+	An approximation to the $f(x)$ function from Section \hyperref[sec:sec_2_3]{2.3} can then be computed by the \mycode{least\textunderscore squares} function from Section \hyperref[sec:sec_2_4]{2.4}:
 	\begin{lstlisting}[numbers=none]
 		N = 3
 		from sympy import sin, pi
@@ -289,84 +289,86 @@
 	\begin{equation}\label{eqa41}
 		c_{i}=2 \int_{0}^{1} f(x) \sin ((i+1) \pi x) \mathrm{d} x, \quad i \in \mathcal{I}_{s},
 	\end{equation}
-	which is nothing but the classical formula for the coefficients of the Fourier sine series of $f(x)$ on $[0,1]$. In fact, when $V$ contains the basic functions used in a Fourier series expansion, the approximation method derived in Section \hyperref[chap:chap_2]{2} results in the classical Fourier series for $f(x)$ (see Exercise \hyperref[sec:sec_10_8]{8} for details).
+	which is nothing but the classical formula for the coefficients of the Fourier sine series of $f(x)$ on $[0,1]$. In fact, when \textit{$V$} contains the basic functions used in a Fourier series expansion, the approximation method derived in Section \hyperref[chap:chap_2]{2} results in the classical Fourier series for $f(x)$ (see Exercise \hyperref[sec:sec_10_8]{8} for details).
 	
-	With orthogonal basis functions we can make the least\textunderscore squares function (much) more efficient since we know that the matrix is diagonal and only the diagonal elements need to be computed:
+	With orthogonal basis functions we can make the \mycode{least\textunderscore squares} function (much) more efficient since we know that the matrix is diagonal and only the diagonal elements need to be computed:
 	\begin{lstlisting}[numbers=none]
 		def least_squares_orth(f, psi, Omega):
-		N = len(psi) - 1
-		A = [0]*(N+1)
-		b = [0]*(N+1)
-		x = sp.Symbol('x')
-		for i in range(N+1):
-		A[i] = sp.integrate(psi[i]**2, (x, Omega[0], Omega[1]))
-		b[i] = sp.integrate(psi[i]*f, (x, Omega[0], Omega[1]))
-		c = [b[i]/A[i] for i in range(len(b))]
-		u = 0
-		for i in range(len(psi)):
-		u += c[i]*psi[i]
-		return u, c
+			N = len(psi) - 1
+			A = [0]*(N+1)
+			b = [0]*(N+1)
+			x = sp.Symbol('x')
+			for i in range(N+1):
+				A[i] = sp.integrate(psi[i]**2, (x, Omega[0], Omega[1]))
+				b[i] = sp.integrate(psi[i]*f, (x, Omega[0], Omega[1]))
+			c = [b[i]/A[i] for i in range(len(b))]
+			u = 0
+			for i in range(len(psi)):
+				u += c[i]*psi[i]
+			return u, c
 	\end{lstlisting}
-	This function is found in the file approx1D.py.
+	This function is found in the file \mycode{approx1D.py.}
 	\section[Numerical computations]{Numerical computations}
 	\label{sec:sec_2_9}
-	\noindent Sometimes the basis functions $\psi_{i}$ and/or the function $f$ have a nature that makes symbolic integration CPU-time consuming or impossible. Even though we implemented a fallback on numerical integration of $\int f \varphi_{i} d x$ considerable time might be required by sympy in the attempt to integrate symbolically. Therefore, it will be handy to have function for fast \textit{numerical} integration and \textit{numerical} solution of the linear system. Below is such a method. It requires Python functions $\mathrm{f}(\mathrm{x})$ and psi $(\mathrm{x}, i)$ for $f(x)$ and $\psi_{i}(x)$ as input. The output is a mesh function with values $u$ on the mesh with points in the array $x$. Three numerical integration methods are offered: scipy. integrate. quad (precision set to $10^{-8}$ ), sympy -mpmath . quad (high precision), and a Trapezoidal rule based on the points in $x$.
+	\noindent Sometimes the basis functions $\psi_{i}$ and/or the function $f$ have a nature that makes symbolic integration CPU-time consuming or impossible. Even though we implemented a fallback on numerical integration of $\int f \varphi_{i} d x$ considerable time might be required by sympy in the attempt to integrate symbolically. Therefore, it will be handy to have function for fast \textit{numerical} integration and \textit{numerical} solution of the linear system. Below is such a method. It requires Python functions $\mathrm{f}(\mathrm{x})$ and psi $(\mathrm{x}, i)$ for $f(x)$ and $\psi_{i}(x)$ as input. The output is a mesh function with values $u$ on the mesh with points in the array $x$. Three numerical integration methods are offered: \mycode{scipy.integrate.quad} (precision set to $10^{-8}$ ), \mycode{sympy.mpmath.quad} (high precision), and a Trapezoidal rule based on the points in \mycode{x}.
 	\begin{lstlisting}[numbers=none]
 		def least_squares_numerical(f, psi, N, x,
-		integration_method='scipy',
-		orthogonal_basis=False):
-		import scipy.integrate
-		A = np.zeros((N+1, N+1))
-		b = np.zeros(N+1)
-		Omega = [x[0], x[-1]]
-		dx = x[1] - x[0]
-		
-		for i in range(N+1):
-		j_limit = i+1 if orthogonal_basis else N+1
-		for j in range(i, j_limit):
-		print '(%d,%d)' % (i, j)
-		if integration_method == 'scipy':
-		A_ij = scipy.integrate.quad(
-		lambda x: psi(x,i)*psi(x,j),
-		Omega[0], Omega[1], epsabs=1E-9, epsrel=1E-9)[0]
-		elif integration_method == 'sympy':
-		A_ij = sp.mpmath.quad(
-		lambda x: psi(x,i)*psi(x,j),
-		[Omega[0], Omega[1]])
-		else:
-		values = psi(x,i)*psi(x,j)
-		A_ij = trapezoidal(values, dx)
-		A[i,j] = A[j,i] = A_ij
-		
-		if integration_method == 'scipy':
-		b_i = scipy.integrate.quad(			
-		lambda x: f(x)*psi(x,i), Omega[0], Omega[1],
-		epsabs=1E-9, epsrel=1E-9)[0]
-		elif integration_method == 'sympy':
-		b_i = sp.mpmath.quad(
-		lambda x: f(x)*psi(x,i), [Omega[0], Omega[1]])
-		else:
-		values = f(x)*psi(x,i)
-		b_i = trapezoidal(values, dx)
-		b[i] = b_i
-		
-		c = b/np.diag(A) if orthogonal_basis else np.linalg.solve(A, b)
-		u = sum(c[i]*psi(x, i) for i in range(N+1))
-		return u, c
-		
+									integration_method='scipy',
+									orthogonal_basis=False):
+			import scipy.integrate
+			A = np.zeros((N+1, N+1))
+			b = np.zeros(N+1)
+			Omega = [x[0], x[-1]]
+			dx = x[1] - x[0]
+			
+			for i in range(N+1):
+				j_limit = i+1 if orthogonal_basis else N+1
+				for j in range(i, j_limit):
+					print '(%d,%d)' % (i, j)
+					if integration_method == 'scipy':
+						A_ij = scipy.integrate.quad(
+							lambda x: psi(x,i)*psi(x,j),
+							Omega[0], Omega[1], epsabs=1E-9, epsrel=1E-9)[0]
+					elif integration_method == 'sympy':
+						A_ij = sp.mpmath.quad(
+							lambda x: psi(x,i)*psi(x,j),
+							[Omega[0], Omega[1]])
+					else:
+						values = psi(x,i)*psi(x,j)
+						A_ij = trapezoidal(values, dx)
+					A[i,j] = A[j,i] = A_ij
+			
+				if integration_method == 'scipy':
+					b_i = scipy.integrate.quad(			
+						lambda x: f(x)*psi(x,i), Omega[0], Omega[1],
+						epsabs=1E-9, epsrel=1E-9)[0]
+				elif integration_method == 'sympy':
+					b_i = sp.mpmath.quad(
+						lambda x: f(x)*psi(x,i), [Omega[0], Omega[1]])
+				else:
+					values = f(x)*psi(x,i)
+					b_i = trapezoidal(values, dx)
+				b[i] = b_i
+			
+			c = b/np.diag(A) if orthogonal_basis else np.linalg.solve(A, b)
+			u = sum(c[i]*psi(x, i) for i in range(N+1))
+			return u, c
+			
 		def trapezoidal(values, dx):
-		"""Integrate values by the Trapezoidal rule (mesh size dx)."""
-		return dx*(np.sum(values) - 0.5*values[0] - 0.5*values[-1])
+			"""Integrate values by the Trapezoidal rule (mesh size dx)."""
+			return dx*(np.sum(values) - 0.5*values[0] - 0.5*values[-1])
 	\end{lstlisting}
 	Here is an example on calling the function:
 	\begin{lstlisting}[numbers=none]
 		from numpy import linspace, tanh, pi
+		
 		def psi(x, i):
-		return sin((i+1)*x)
+			return sin((i+1)*x)
+			
 		x = linspace(0, 2*pi, 501)
 		N = 20
 		u, c = least_squares_numerical(lambda x: tanh(x-pi), psi, N, x,
-		orthogonal_basis=True)
+										orthogonal_basis=True)
 	\end{lstlisting}
 	\section[The interpolation (or collocation) method]{The interpolation (or collocation) method}
 	\label{sec:sec_2_10}
@@ -391,30 +393,30 @@
 	Given $f$ as a sympy symbolic expression $\mathrm{f},\left\{\psi_{i}\right\}_{i \in \mathcal{I}_{s}}$ as a list psi, and a set of points $\left\{x_{i}\right\}_{i \in \mathcal{I}_{s}}$ as a list or array points, the following Python function sets up and solves the matrix system for the coefficients $\left\{c_{i}\right\}_{i \in \mathcal{I}_{s}}$ :
 	\begin{lstlisting}[numbers=none]
 		def interpolation(f, psi, points):
-		N = len(psi) - 1
-		A = sp.zeros((N+1, N+1))
-		b = sp.zeros((N+1, 1))
-		x = sp.Symbol('x')
-		# Turn psi and f into Python functions
-		psi = [sp.lambdify([x], psi[i]) for i in range(N+1)]
-		f = sp.lambdify([x], f)
-		for i in range(N+1):
-		for j in range(N+1):
-		A[i,j] = psi[j](points[i])
-		b[i,0] = f(points[i])
-		c = A.LUsolve(b)
-		u = 0
-		for i in range(len(psi)):
-		u += c[i,0]*psi[i](x)
-		return u	
+			N = len(psi) - 1
+			A = sp.zeros((N+1, N+1))
+			b = sp.zeros((N+1, 1))
+			x = sp.Symbol('x')
+			# Turn psi and f into Python functions
+			psi = [sp.lambdify([x], psi[i]) for i in range(N+1)]
+			f = sp.lambdify([x], f)
+			for i in range(N+1):
+				for j in range(N+1):
+					A[i,j] = psi[j](points[i])
+				b[i,0] = f(points[i])
+			c = A.LUsolve(b)
+			u = 0
+			for i in range(len(psi)):
+				u += c[i,0]*psi[i](x)
+			return u	
 	\end{lstlisting}	
-	The interpolation function is a part of the approx1D module.
+	The \mycode{interpolation} function is a part of the \mycode{approx1D} module.
 	
-	We found it convenient in the above function to turn the expressions f
-	and psi into ordinary Python functions of x, which can be called with float
-	values in the list points when building the matrix and the right-hand side.
-	The alternative is to use the subs method to substitute the x variable in an
-	expression by an element from the points list. The following session illustrates
+	We found it convenient in the above function to turn the expressions \mycode{f}
+	and \mycode{psi} into ordinary Python functions of \mycode{x}, which can be called with \mycode{float}
+	values in the list \mycode{points} when building the matrix and the right-hand side.
+	The alternative is to use the subs method to substitute the \mycode{x} variable in an
+	expression by an element from the \mycode{points} list. The following session illustrates
 	both approaches in a simple setting:\\
 	\begin{lstlisting}[numbers=none]
 		>>> from sympy import *
@@ -486,28 +488,28 @@
 	\begin{equation}\label{eqa49}
 		u(x)=\sum_{j \in \mathcal{I}_{s}} f\left(x_{i}\right) \psi_{i}(x).
 	\end{equation}
-	The following function computes the Lagrange interpolating polynomial $\psi_{i}(x)$, given the interpolation points $x_{0}, \ldots, x_{N}$ in the list or array points:
+	The following function computes the Lagrange interpolating polynomial $\psi_{i}(x)$, given the interpolation points $x_{0}, \ldots, x_{N}$ in the list or array \mycode{points}:
 	\begin{lstlisting}[numbers=none]
 		def Lagrange_polynomial(x, i, points):
-		p = 1
-		for k in range(len(points)):
-		if k != i:
-		p *= (x - points[k])/(points[i] - points[k])
-		return p
+			p = 1
+			for k in range(len(points)):
+				if k != i:
+					p *= (x - points[k])/(points[i] - points[k])
+			return p
 	\end{lstlisting}
 	The next function computes a complete basis using equidistant points throughout
 	$\Omega$:
 	\begin{lstlisting}[numbers=none]
 		def Lagrange_polynomials_01(x, N):
-		if isinstance(x, sp.Symbol):
-		h = sp.Rational(1, N-1)
-		else:
-		h = 1.0/(N-1)
-		points = [i*h for i in range(N)]
-		psi = [Lagrange_polynomial(x, i, points) for i in range(N)]
-		return psi, points	
+			if isinstance(x, sp.Symbol):
+				h = sp.Rational(1, N-1)
+			else:
+				h = 1.0/(N-1)
+			points = [i*h for i in range(N)]
+			psi = [Lagrange_polynomial(x, i, points) for i in range(N)]
+			return psi, points	
 	\end{lstlisting}
-	When $x$ is an sp. Symbol object, we let the spacing between the interpolation points, $\mathrm{h}$, be a sympy rational number for nice end results in the formulas for $\psi_{i}$. The other case, when $\mathrm{x}$ is a plain Python $\mathrm{float}$, signifies numerical computing, and then we let $\mathrm{h}$ be a floating-point number. Observe that the Lagrange\textunderscore polynomial function works equally well in the symbolic and numerical case - just think of x being an sp.Symbol object or a Python float. A little
+	When \mycode{x} is an \mycode{sp.Symbol} object, we let the spacing between the interpolation points, $\mathrm{h}$, be a sympy rational number for nice end results in the formulas for $\psi_{i}$. The other case, when $\mathrm{x}$ is a plain Python \mycode{float}, signifies numerical computing, and then we let $\mathrm{h}$ be a floating-point number. Observe that the \mycode{Lagrange\textunderscore polynomial} function works equally well in the symbolic and numerical case - just think of x being an \mycode{sp.Symbol} object or a \mycode{Python float}. A little
 	interactive session illustrates the difference between symbolic and numerical
 	computing of the basis functions and points:
 	\begin{lstlisting}[numbers=none]
@@ -518,6 +520,7 @@
 		[0, 1/2, 1]
 		>>> psi
 		[(1 - x)*(1 - 2*x), 2*x*(2 - 2*x), -x*(1 - 2*x)]
+		
 		>>> x = 0.5 # numerical computing
 		>>> psi, points = Lagrange_polynomials_01(x, N=3)
 		>>> points
@@ -534,11 +537,11 @@
 	as basis is able to approximate a polynomial, e.g., a parabola. Running
 	\begin{lstlisting}[numbers=none]
 		for N in 2, 4, 5, 6, 8, 10, 12:
-		f = x**2
-		psi, points = Lagrange_polynomials_01(x, N)
-		u = interpolation(f, psi, points)	
+			f = x**2
+			psi, points = Lagrange_polynomials_01(x, N)
+			u = interpolation(f, psi, points)	
 	\end{lstlisting}
-	shows the result that up to $\mathrm{N}=4$ we achieve an exact approximation, and then round-off errors start to grow, such that $\mathrm{N}=15$ leads to a 15 -degree polynomial for $u$ where the coefficients in front of $x^{r}$ for $r>2$ are of size $10^{-5}$ and smaller.
+	shows the result that up to \mycode{N=4} we achieve an exact approximation, and then round-off errors start to grow, such that \mycode{N=15} leads to a 15 -degree polynomial for $u$ where the coefficients in front of $x^{r}$ for $r>2$ are of size $10^{-5}$ and smaller.
 	Successful example. Trying out the Lagrange polynomial basis for approximating $f(x)=\sin 2 \pi x$ on $\Omega=[0,1]$ with the least squares and the interpolation techniques can be done by
 	\begin{lstlisting}[numbers=none]
 		x = sp.Symbol('x')
@@ -566,25 +569,26 @@
 	\begin{equation}\label{eqa50}
 		x_{i}=\frac{1}{2}(a+b)+\frac{1}{2}(b-a) \cos \left(\frac{2 i+1}{2(N+1)} p i\right), \quad i=0 \ldots, N,
 	\end{equation}
-	on the interval $\Omega=[a, b]$. Here is a flexible version of the Lagrange\textunderscore polynomials\textunderscore 01 function above, valid for any interval $\Omega=[a, b]$ and with the possibility to generate both uniformly distributed points and Chebyshev nodes:
+	on the interval $\Omega=[a, b]$. Here is a flexible \mycode{Lagrange\textunderscore polynomials\textunderscore 01} function above, valid for any interval $\Omega=[a, b]$ and with the possibility to generate both uniformly distributed points and Chebyshev nodes:
 	\begin{lstlisting}[numbers=none]
 		def Lagrange_polynomials(x, N, Omega, point_distribution='uniform'):
-		if point_distribution == 'uniform':
-		if isinstance(x, sp.Symbol):
-		h = sp.Rational(Omega[1] - Omega[0], N)
-		else:
-		h = (Omega[1] - Omega[0])/float(N)
-		points = [Omega[0] + i*h for i in range(N+1)]
-		elif point_distribution == 'Chebyshev':
-		points = Chebyshev_nodes(Omega[0], Omega[1], N)
-		psi = [Lagrange_polynomial(x, i, points) for i in range(N+1)]
-		return psi, points
+			if point_distribution == 'uniform':
+				if isinstance(x, sp.Symbol):
+					h = sp.Rational(Omega[1] - Omega[0], N)
+				else:
+					h = (Omega[1] - Omega[0])/float(N)
+				points = [Omega[0] + i*h for i in range(N+1)]
+			elif point_distribution == 'Chebyshev':
+				points = Chebyshev_nodes(Omega[0], Omega[1], N)
+			psi = [Lagrange_polynomial(x, i, points) for i in range(N+1)]
+			return psi, points
+			
 		def Chebyshev_nodes(a, b, N):
-		from math import cos, pi
-		return [0.5*(a+b) + 0.5*(b-a)*cos(float(2*i+1)/(2*N+1))*pi) \
-		for i in range(N+1)]
+			from math import cos, pi
+			return [0.5*(a+b) + 0.5*(b-a)*cos(float(2*i+1)/(2*N+1))*pi) \
+					for i in range(N+1)]
 	\end{lstlisting}
-	All the functions computing Lagrange polynomials listed above are found in the module file Lagrange.py. Figure 11 shows the improvement of using Chebyshev nodes (compared with Figure \hyperref[fig:img_9]{9}). The reason is that the corresponding Lagrange polynomials have much smaller oscillations as seen in Figure \hyperref[fig:img_12]{12} (compare with Figure \hyperref[fig:img_10]{10}).
+	All the functions computing Lagrange polynomials listed above are found in the module file \mycode{Lagrange.py.} Figure 11 shows the improvement of using Chebyshev nodes (compared with Figure \hyperref[fig:img_9]{9}). The reason is that the corresponding Lagrange polynomials have much smaller oscillations as seen in Figure \hyperref[fig:img_12]{12} (compare with Figure \hyperref[fig:img_10]{10}).
 	
 	Another cure for undesired oscillation of higher-degree interpolating polynomials is to use lower-degree Lagrange polynomials on many small patches of the domain, which is the idea pursued in the finite element method. For instance, linear Lagrange polynomials on $[0,1 / 2]$ and $[1 / 2,1]$ would yield a perfect approximation to $f(x)=|1-2 x|$ on $\Omega=[0,1]$ since $f$ is piecewise linear.
 	\begin{figure}[H]
@@ -593,17 +597,17 @@
 		\caption{Interpolation of an absolute value function by Lagrange polynomials and uniformly distributed interpolation points: degree 7 (left) and 14 (right).}
 		\label{fig:img_9}
 	\end{figure}
-	How does the least squares or projection methods work with Lagrange polynomials? Unfortunately, sympy has problems integrating the $f(x)=|1-2 x|$ function times a polynomial. Other choices of $f(x)$ can also make the symbolic integration fail. Therefore, we should extend the least\textunderscore squares function such that it falls back on numerical integration if the symbolic integration is unsuccessful. In the latter case, the returned value from sympy's integrate function is an object of type Integral. We can test on this type and utilize the mpmath module in sympy to perform numerical integration of high precision. Here is the code:
+	How does the least squares or projection methods work with Lagrange polynomials? Unfortunately, \mycode{sympy} has problems integrating the $f(x)=|1-2 x|$ function times a polynomial. Other choices of $f(x)$ can also make the symbolic integration fail. Therefore, we should extend the \mycode{least\textunderscore squares} function such that it falls back on numerical integration if the symbolic integration is unsuccessful. In the latter case, the returned value from \mycode{sympy's integrate} function is an object of type \mycode{Integral.} We can test on this type and utilize the \mycode{mpmath} module in \mycode{sympy} to perform numerical integration of high precision. Here is the code:
 	\begin{lstlisting}[numbers=none]
 		def least_squares(f, psi, Omega):
-		N = len(psi) - 1
-		A = sp.zeros((N+1, N+1))
-		b = sp.zeros((N+1, 1))
-		x = sp.Symbol('x')
-		for i in range(N+1):
-		for j in range(i, N+1):
-		integrand = psi[i]*psi[j]
-		I = sp.integrate(integrand, (x, Omega[0], Omega[1]))	
+			N = len(psi) - 1
+			A = sp.zeros((N+1, N+1))
+			b = sp.zeros((N+1, 1))
+			x = sp.Symbol('x')
+			for i in range(N+1):
+				for j in range(i, N+1):
+					integrand = psi[i]*psi[j]
+					I = sp.integrate(integrand, (x, Omega[0], Omega[1]))	
 	\end{lstlisting}
 	\begin{figure}[H]
 		\centering
@@ -620,16 +624,16 @@
 		\label{fig:img_11}
 	\end{figure}
 	\begin{lstlisting}[numbers=none]
-		if isinstance(I, sp.Integral):
-		# Could not integrate symbolically, fallback
-		# on numerical integration with mpmath.quad
-		integrand = sp.lambdify([x], integrand)
-		I = sp.mpmath.quad(integrand, [Omega[0], Omega[1]])
-		A[i,j] = A[j,i] = I
-		integrand = psi[i]*f
-		I = sp.integrate(integrand, (x, Omega[0], Omega[1]))
-		if isinstance(I, sp.Integral):
-		integrand = sp.lambdify([x], integrand)
+				if isinstance(I, sp.Integral):
+					# Could not integrate symbolically, fallback
+					# on numerical integration with mpmath.quad
+					integrand = sp.lambdify([x], integrand)
+					I = sp.mpmath.quad(integrand, [Omega[0], Omega[1]])
+				A[i,j] = A[j,i] = I
+			integrand = psi[i]*f
+			I = sp.integrate(integrand, (x, Omega[0], Omega[1]))
+			if isinstance(I, sp.Integral):
+				integrand = sp.lambdify([x], integrand)
 	\end{lstlisting}
 	\begin{figure}[H]
 		\centering
@@ -638,13 +642,13 @@
 		\label{fig:img_12}
 	\end{figure}
 	\begin{lstlisting}[numbers=none]
-		I = sp.mpmath.quad(integrand, [Omega[0], Omega[1]])
-		b[i,0] = I
-		c = A.LUsolve(b)
-		u = 0
-		for i in range(len(psi)):
-		u += c[i,0]*psi[i]
-		return u
+					I = sp.mpmath.quad(integrand, [Omega[0], Omega[1]])
+				b[i,0] = I
+			c = A.LUsolve(b)
+			u = 0
+			for i in range(len(psi)):
+				u += c[i,0]*psi[i]
+			return u
 	\end{lstlisting}
 	
 

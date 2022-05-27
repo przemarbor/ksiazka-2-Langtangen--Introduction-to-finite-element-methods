@@ -34,9 +34,9 @@
 	\label{sec:sec_6_3}
 	\noindent Implementationwise,
 	\begin{itemize}
-		\item we replace nodes by vertices;
-		\item we introduce cells such that cell [e] [r] gives the mapping from local vertex $r$ in cell e to the global vertex number in vertices;
-		\item we replace elements by dof\textunderscore map (the contents are the same for $\mathrm{P} d$ elements).
+		\item we replace \mycode{nodes} by vertices;
+		\item we introduce \mycode{cells} such that \mycode{cell [e] [r]} gives the mapping from local vertex $r$ in cell e to the global vertex number in vertices;
+		\item we replace \mycode{elements} by \mycode{dof\textunderscore map} (the contents are the same for $\mathrm{P} d$ elements).
 	\end{itemize}
 	
 	\noindent Consider the example from Section \hyperref[sec:sec_3_1]{3.1} where $\Omega=[0,1]$ is divided into two cells, $\Omega^{(0)}=[0,0.4]$ and $\Omega^{(1)}=[0.4,1]$, as depicted in Figure \hyperref[fig:img_16]{16} . The vertices are $[0,0.4,1]$. Local vertex 0 and 1 are 0 and $0.4$ in cell 0 and $0.4$ and 1 in cell 1 . A P2 element means that the degrees of freedom are the value of $u$ at three equally spacèd points (nodes) in each céll. The data structuress become
@@ -45,11 +45,11 @@
 		cells = [[0, 1], [1, 2]]
 		dof_map = [[0, 1, 2], [2, 3, 4]]	
 	\end{lstlisting}
-	If we would approximate $f$ by piecewise constants, known as $\mathrm{P} 0$ elements, we simply introduce one point or node in an element, preferably $X=0$, and define one degree of freedom, which is the function value at this node. Moreover, we set $\tilde{\varphi}_{0}(X)=1$. The cells and vertices arrays remain the same, but dof\textunderscore map is altered:
+	If we would approximate $f$ by piecewise constants, known as $\mathrm{P} 0$ elements, we simply introduce one point or node in an element, preferably $X=0$, and define one degree of freedom, which is the function value at this node. Moreover, we set $\tilde{\varphi}_{0}(X)=1$. The \mycode{cells} and \mycode{vertices} arrays remain the same, but \mycode{dof\textunderscore map} is altered:
 	\begin{lstlisting}[numbers=none]
 		dof_map = [[0], [1]]	
 	\end{lstlisting}
-	We use the cells and vertices lists to retrieve information on the geometry of a cell, while dof\textunderscore map is the $q(e, r)$ mapping introduced earlier in the assembly of element matrices and vectors. For example, the Omega\textunderscore e variable (representing the cell interval) in previous code snippets must now be computed as
+	We use the \mycode{cells} and \mycode{vertices} lists to retrieve information on the geometry of a cell, while \mycode{dof\textunderscore map}  is the $q(e, r)$ mapping introduced earlier in the assembly of element matrices and vectors. For example, the \mycode{Omega\textunderscore e}  variable (representing the cell interval) in previous code snippets must now be computed as
 	\begin{lstlisting}[numbers=none]
 		Omega_e = [vertices[cells[e][0], vertices[cells[e][1]]	
 	\end{lstlisting}
@@ -59,8 +59,8 @@
 		b[dof_map[e][r]] += b_e[r]	
 	\end{lstlisting}
 	We will hereafter drop the nodes and elements arrays and work exculsively
-	with cells, vertices, and dof\textunderscore map. The module fe\textunderscore approx1D\textunderscore numint.py
-	now replaces the module fe\textunderscore approx1D and offers similar functions that work
+	with cells, vertices, and dof\textunderscore map. The module \textbf{fe\textunderscore approx1D\textunderscore numint.py} 
+	now replaces the module \textbf{fe\textunderscore approx1D}  and offers similar functions that work
 	with the new concepts:
 	\begin{lstlisting}[numbers=none]
 		from fe_approx1D_numint import *
@@ -72,17 +72,16 @@
 		A, b = assemble(vertices, cells, dof_map, phi, f)
 		c = np.linalg.solve(A, b)
 		# Make very fine mesh and sample u(x) on this mesh for plotting
-		x_u, u = u_glob(c, vertices, cells, dof_map,
-		resolution_per_element=51)
+		x_u, u = u_glob(c, vertices, cells, dof_map, resolution_per_element=51)
 		plot(x_u, u)	
 	\end{lstlisting}
-	These steps are offered in the approximate function, which we here apply to see
+	These steps are offered in the \mycode{approximate} function, which we here apply to see
 	how well four P0 elements (piecewise constants) can approximate a parabola:
 	\begin{lstlisting}[numbers=none]
 		from fe_approx1D_numint import *
 		x=sp.Symbol("x")
 		for N_e in 4, 8:
-		approximate(x*(1-x), d=0, N_e=N_e, Omega=[0,1])	
+			approximate(x*(1-x), d=0, N_e=N_e, Omega=[0,1])	
 	\end{lstlisting}
 	Figure \hyperref[fig:img_32]{32} shows the result.
 	
@@ -98,7 +97,7 @@
 		\caption{Approximation of a parabola by 4 (left) and 8 (right) P0 elements.}
 		\label{fig:img_32}
 	\end{figure}
-	\noindent Since the finite element approximation is defined for all $x \in \Omega$, and we are interested in how $u(x)$ deviates from $f(x)$ through all the elements, we can either integrate analytically or use an accurate numerical approximation. The latter is more convenient as it is a generally feasible and simple approach. The idea is to sample $e(x)$ at a large number of points in each element. The function u\textunderscore glob in the fe\textunderscore approx1D\textunderscore numint module does this for $u(x)$ and returns an array $\mathbf{x}$ with coordinates and an array $u$ with the $u$ values:
+	\noindent Since the finite element approximation is defined for all $x \in \Omega$, and we are interested in how $u(x)$ deviates from $f(x)$ through all the elements, we can either integrate analytically or use an accurate numerical approximation. The latter is more convenient as it is a generally feasible and simple approach. The idea is to sample $e(x)$ at a large number of points in each element. The function u\textunderscore glob in the \textbf{fe\textunderscore approx1D\textunderscore numint}  module does this for $u(x)$ and returns an array $\mathbf{x}$ with coordinates and an array $u$ with the $u$ values:
 	\begin{lstlisting}[numbers=none]
 		x, u = u_glob(c, vertices, cells, dof_map,
 		resolution_per_element=101)
@@ -106,7 +105,7 @@
 	\end{lstlisting}
 	Let us use the Trapezoidal method to approximate the integral. Because different
 	elements may have different lengths, the x array has a non-uniformly distributed
-	set of coordinates. Also, the u\textunderscore glob function works in an element by element
+	set of coordinates. Also, the \mycode{u\textunderscore glob}  function works in an element by element
 	fashion such that coordinates at the boundaries between elements appear twice.
 	We therefore need to use a ”raw” version of the Trapezoidal rule where we just
 	add up all the trapezoids:

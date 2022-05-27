@@ -11,54 +11,55 @@
 	now explained in detail in terms of code and text.
 	\section[Integration]{Integration}
 	\label{sec:sec_4_1}
-	First we need a Python function for defining $\tilde{\varphi}_{r}(X)$ in terms of a Lagrange polynomial of degree $d$ :
+	First we need a Python function for defining $\tilde{\varphi}_{r}(X)$ in terms of a Lagrange polynomial of degree \mycode{d}:
 	\begin{lstlisting}[numbers=none]
 		import sympy as sp
 		import numpy as np
+		
 		def phi_r(r, X, d):
-		if isinstance(X, sp.Symbol):
-		h = sp.Rational(1, d) # node spacing
-		nodes = [2*i*h - 1 for i in range(d+1)]
-		else:
-		# assume X is numeric: use floats for nodes
-		nodes = np.linspace(-1, 1, d+1)
-		return Lagrange_polynomial(X, r, nodes)
+			if isinstance(X, sp.Symbol):
+				h = sp.Rational(1, d) # node spacing
+				nodes = [2*i*h - 1 for i in range(d+1)]
+			else:
+				# assume X is numeric: use floats for nodes
+				nodes = np.linspace(-1, 1, d+1)
+			return Lagrange_polynomial(X, r, nodes)
 		
 		def Lagrange_polynomial(x, i, points):
-		p = 1
-		for k in range(len(points)):
-		if k != i:
-		p *= (x - points[k])/(points[i] - points[k])
+			p = 1
+			for k in range(len(points)):
+				if k != i:
+					p *= (x - points[k])/(points[i] - points[k])
 		return p	
 	\end{lstlisting}
-	Observe how we construct the phi\textunderscore r function to be a symbolic expression for $\tilde{\varphi}_{r}(X)$ if $\mathrm{X}$ is a Symbol object from sympy. Otherwise, we assume that $\mathrm{X}$ is a float object and compute the corresponding floating-point value of $\ddot{\varphi}_{r}(X)$. Recall that the Lagrange\textunderscore polynomial function, here simply copied from Section \hyperref[sec:sec_2_7]{2.7}, works with both symbolic and numeric variables.
+	Observe how we construct the \mycode{phi\textunderscore r} function to be a symbolic expression for $\tilde{\varphi}_{r}(X)$ if $\mathrm{X}$ is a Symbol object from \mycode{sympy}. Otherwise, we assume that $\mathrm{X}$ is a float object and compute the corresponding floating-point value of $\ddot{\varphi}_{r}(X)$. Recall that the \mycode{Lagrange\textunderscore polynomial} function, here simply copied from Section \hyperref[sec:sec_2_7]{2.7}, works with both symbolic and numeric variables.
 	
 	The complete basis $\tilde{\varphi}_{0}(X), \ldots, \tilde{\varphi}_{d}(X)$ on the reference element, represented as a list of symbolic expressions, is constructed by
 	\begin{lstlisting}[numbers=none]
 		def basis(d=1):
-		X = sp.Symbol('X')
-		phi = [phi_r(r, X, d) for r in range(d+1)]
-		return phi	
+			X = sp.Symbol('X')
+			phi = [phi_r(r, X, d) for r in range(d+1)]
+			return phi	
 	\end{lstlisting}
 	Now we are in a position to write the function for computing the element matrix:
 	\begin{lstlisting}[numbers=none]
 		def element_matrix(phi, Omega_e, symbolic=True):
-		n = len(phi)
-		A_e = sp.zeros((n, n))
-		X = sp.Symbol('X')
-		if symbolic:
-		h = sp.Symbol('h')
-		else:
-		h = Omega_e[1] - Omega_e[0]
-		detJ = h/2 # dx/dX
-		for r in range(n):
-		for s in range(r, n):
-		A_e[r,s] = sp.integrate(phi[r]*phi[s]*detJ, (X, -1, 1))
-		A_e[s,r] = A_e[r,s]
-		return A_e	
+			n = len(phi)
+			A_e = sp.zeros((n, n))
+			X = sp.Symbol('X')
+			if symbolic:
+				h = sp.Symbol('h')
+			else:
+				h = Omega_e[1] - Omega_e[0]
+			detJ = h/2 # dx/dX
+			for r in range(n):
+				for s in range(r, n):
+					A_e[r,s] = sp.integrate(phi[r]*phi[s]*detJ, (X, -1, 1))
+					A_e[s,r] = A_e[r,s]
+			return A_e	
 	\end{lstlisting}
-	In the symbolic case (symbolic is True), we introduce the element length as
-	a symbol h in the computations. Otherwise, the real numerical value of the element interval Omega\textunderscore e is used and the final matrix elements are numbers, not
+	In the symbolic case (\mycode{symbolic} is \mycode{True}), we introduce the element length as
+	a symbol h in the computations. Otherwise, the real numerical value of the element interval \mycode{Omega\textunderscore e} is used and the final matrix elements are numbers, not
 	symbols. This functionality can be demonstrated:
 	\begin{lstlisting}[numbers=none]
 		>>> from fe_approx1D import *
@@ -75,81 +76,81 @@
 	The computation of the element vector is done by a similar procedure:
 	\begin{lstlisting}[numbers=none]
 		def element_vector(f, phi, Omega_e, symbolic=True):
-		n = len(phi)
-		b_e = sp.zeros((n, 1))
-		# Make f a function of X
-		X = sp.Symbol('X')
-		if symbolic:
-		h = sp.Symbol('h')
-		else:
-		h = Omega_e[1] - Omega_e[0]
-		x = (Omega_e[0] + Omega_e[1])/2 + h/2*X # mapping
-		f = f.subs('x', x) # substitute mapping formula for x
-		detJ = h/2 # dx/dX
-		for r in range(n):
-		b_e[r] = sp.integrate(f*phi[r]*detJ, (X, -1, 1))
-		return b_e	
+			n = len(phi)
+			b_e = sp.zeros((n, 1))
+			# Make f a function of X
+			X = sp.Symbol('X')
+			if symbolic:
+				h = sp.Symbol('h')
+			else:
+				h = Omega_e[1] - Omega_e[0]
+			x = (Omega_e[0] + Omega_e[1])/2 + h/2*X # mapping
+			f = f.subs('x', x) # substitute mapping formula for x
+			detJ = h/2 # dx/dX
+			for r in range(n):
+				b_e[r] = sp.integrate(f*phi[r]*detJ, (X, -1, 1))
+			return b_e	
 	\end{lstlisting}
 	Here we need to replace the symbol $x$ in the expression for $f$ by the mapping formula such that $f$ can be integrated in terms of $X$, cf. the formula $\tilde{b}_{r}^{(e)}=$ $\int_{-1}^{1} f(x(X)) \tilde{\varphi}_{r}(X) \frac{h}{2} d X$.
 	
-	The integration in the element matrix function involves only products of polynomials, which sympy can easily deal with, but for the right-hand side sympy may face difficulties with certain types of expressions $f$. The result of the integral is then an Integral object and not a number or expression as when symbolic integration is successful. It may therefore be wise to introduce a fallback on numerical integration. The symbolic integration can also take much time before an unsuccessful conclusion so we may also introduce a parameter symbolic and set it to False to avoid symbolic integration:
+	The integration in the element matrix function involves only products of polynomials, which \mycode{sympy} can easily deal with, but for the right-hand side \mycode{sympy} may face difficulties with certain types of expressions \mycode{f}. The result of the integral is then an \mycode{Integral} object and not a number or expression as when symbolic integration is successful. It may therefore be wise to introduce a fallback on numerical integration. The symbolic integration can also take much time before an unsuccessful conclusion so we may also introduce a parameter symbolic and set it to \mycode{False}  to avoid symbolic integration:
 	\begin{lstlisting}[numbers=none]
 		def element_vector(f, phi, Omega_e, symbolic=True):
-		...
-		if symbolic:
-		I = sp.integrate(f*phi[r]*detJ, (X, -1, 1))
-		if not symbolic or isinstance(I, sp.Integral):
-		h = Omega_e[1] - Omega_e[0] # Ensure h is numerical
-		detJ = h/2
-		integrand = sp.lambdify([X], f*phi[r]*detJ)
-		I = sp.mpmath.quad(integrand, [-1, 1])
-		b_e[r] = I
-		...
+				...
+				if symbolic:
+					I = sp.integrate(f*phi[r]*detJ, (X, -1, 1))
+				if not symbolic or isinstance(I, sp.Integral):
+					h = Omega_e[1] - Omega_e[0] # Ensure h is numerical
+					detJ = h/2
+					integrand = sp.lambdify([X], f*phi[r]*detJ)
+					I = sp.mpmath.quad(integrand, [-1, 1])
+				b_e[r] = I
+				...
 	\end{lstlisting}
 	Numerical integration requires that the symbolic integrand is converted to a plain
-	Python function (integrand) and that the element length h is a real number.
+	Python function \mycode{(integrand)} and that the element length \mycode{h} is a real number.
 	\section[Linear system assembly and solution]{Linear system assembly and solution}
 	\label{sec:sec_4_2}
 	The complete algorithm for computing and assembling the elementwise contributions takes the following form
 	\begin{lstlisting}[numbers=none]
 		def assemble(nodes, elements, phi, f, symbolic=True):
-		N_n, N_e = len(nodes), len(elements)
-		if symbolic:
-		A = sp.zeros((N_n, N_n))
-		b = sp.zeros((N_n, 1)) # note: (N_n, 1) matrix
-		else:
-		A = np.zeros((N_n, N_n))
-		b = np.zeros(N_n)
-		for e in range(N_e):
-		Omega_e = [nodes[elements[e][0]], nodes[elements[e][-1]]]
+			N_n, N_e = len(nodes), len(elements)
+			if symbolic:
+				A = sp.zeros((N_n, N_n))
+				b = sp.zeros((N_n, 1)) # note: (N_n, 1) matrix
+			else:
+				A = np.zeros((N_n, N_n))
+				b = np.zeros(N_n)
+			for e in range(N_e):
+				Omega_e = [nodes[elements[e][0]], nodes[elements[e][-1]]]
 		
-		A_e = element_matrix(phi, Omega_e, symbolic)
-		b_e = element_vector(f, phi, Omega_e, symbolic)
+				A_e = element_matrix(phi, Omega_e, symbolic)
+				b_e = element_vector(f, phi, Omega_e, symbolic)
 		
 		for r in range(len(elements[e])):
-		for s in range(len(elements[e])):
-		A[elements[e][r],elements[e][s]] += A_e[r,s]
-		b[elements[e][r]] += b_e[r]
+			for s in range(len(elements[e])):
+				A[elements[e][r],elements[e][s]] += A_e[r,s]
+			b[elements[e][r]] += b_e[r]
 		return A, b	
 	\end{lstlisting}
-	The nodes and elements variables represent the finite element mesh as explained earlier.
+	The \mycode{nodes} and \mycode{elements} variables represent the finite element mesh as explained earlier.
 	
-	Given the coefficient matrix $\mathrm{A}$ and the right-hand side $\mathrm{b}$, we can compute the coefficients $\left\{c_{i}\right\}_{i \in \mathcal{I}_{s}}$ in the expansion $u(x)=\sum_{j} c_{j} \varphi_{j}$ as the solution vector $c$ of the linear system:
+	Given the coefficient matrix $\mathrm{\textbf{A}}$ and the right-hand side $\mathrm{b}$, we can compute the coefficients $\left\{c_{i}\right\}_{i \in \mathcal{I}_{s}}$ in the expansion $u(x)=\sum_{j} c_{j} \varphi_{j}$ as the solution vector $c$ of the linear system:
 	\begin{lstlisting}[numbers=none]
 		if symbolic:
-		c = A.LUsolve(b)
+			c = A.LUsolve(b)
 		else:
-		c = np.linalg.solve(A, b)
+			c = np.linalg.solve(A, b)
 	\end{lstlisting}
-	When A and b are sympy arrays, the solution procedure implied by A.LUsolve is
-	symbolic. Otherwise, A and b are numpy arrays and a standard numerical solver
+	When \mycode{A} and b are \mycode{sympy} arrays, the solution procedure implied by \mycode{A}.LUsolve is
+	symbolic. Otherwise, \mycode{A} and b are \mycode{numpy} arrays and a standard numerical solver
 	is called. The symbolic version is suited for small problems only (small N values)
 	since the calculation time becomes prohibitively large otherwise. Normally, the
-	symbolic integration will be more time consuming in small problems than the
-	symbolic solution of the linear system.
+	symbolic \textit{integration}  will be more time consuming in small problems than the
+	symbolic \textit{solution} of the linear system.
 	\section[Example on computing symbolic approximations]{Example on computing symbolic approximations}
 	\label{sec:sec_4_3}
-	We can exemplify the use of assemble on the computational case from Section \hyperref[sec:sec_3_6]{3.6} with two P1 clcments (lincar basis functions) on the domain $\Omega=[0,1]$. Let us first work with a symbolic element length:
+	We can exemplify the use of \mycode{assemble} on the computational case from Section \hyperref[sec:sec_3_6]{3.6} with two P1 clcments (lincar basis functions) on the domain $\Omega=[0,1]$. Let us first work with a symbolic element length:
 	\begin{lstlisting}[numbers=none]
 		>>> h, x = sp.symbols('h x')
 		>>> nodes = [0, h, 2*h]
@@ -190,7 +191,7 @@
 	\section[Example on computing numerical approximations]{Example on computing numerical approximations}
 	\label{sec:sec_4_5}
 	The numerical computations corresponding to the symbolic ones in Section \hyperref[sec:sec_4_3]{4.3},
-	and still done by sympy and the assemble function, go as follows:
+	and still done by \mycode{sympy} and the \mycode{assemble} function, go as follows:
 	\begin{lstlisting}[numbers=none]
 		>>> nodes = [0, 0.5, 1]
 		>>> elements = [[0, 1], [1, 2]]
@@ -212,10 +213,10 @@
 		[ 0.291666666666667]
 		[0.0416666666666666]	
 	\end{lstlisting}
-	The fe\textunderscore approx1D module contains functions for generating the nodes and
+	The \textbf{fe\textunderscore approx1D}  module contains functions for generating the nodes and
 	elements lists for equal-sized elements with any number of nodes per element.
-	The coordinates in nodes can be expressed either through the element length
-	symbol h (symbolic=True) or by real numbers (symbolic=False):
+	The coordinates in \mycode{nodes} can be expressed either through the element length
+	symbol h \mycode{(symbolic=True)} or by real numbers \mycode{(symbolic=False)}:
 	\begin{lstlisting}[numbers=none]
 		nodes, elements = mesh_uniform(N_e=10, d=3, Omega=[0,1],
 		symbolic=True)	
@@ -224,11 +225,11 @@
 	\begin{lstlisting}[numbers=none]
 		def approximate(f, symbolic=False, d=1, N_e=4, filename='tmp.pdf'):
 	\end{lstlisting}
-	which computes a mesh with $\mathrm{N}_{-}$e elements, basis functions of degree $\mathrm{d}$, and approximates a given symbolic expression $\mathrm{f}$ by a finite element expansion $u(x)=$ $\sum_{j} c_{j} \varphi_{j}(x)$. When symbolic is False, $u(x)=\sum_{j} c_{j} \varphi_{j}(x)$ can be computed at a (large) number of points and plotted together with $f(x)$. The construction of $u$ points from the solution vector $\mathrm{c}$ is done elementwise by evaluating $\sum_{r} c_{r} \tilde{\varphi}_{r}(X)$ at a (large) number of points in each element in the local coordinate system, and the discrete $(x, u)$ values on each element are stored in separate arrays that are finally concatenated to form a global array for $x$ and for $u$. The details are found in the $u_{-} g$ lob function in fe\textunderscore approx1D.py.
+	which computes a mesh with  $\mathrm{\textbf{N}}_{-}$\textbf{e} elements, basis functions of degree $\mathrm{\textbf{d}}$, and approximates a given symbolic expression $\mathrm{\textbf{f}}$ by a finite element expansion $u(x)=$ $\sum_{j} c_{j} \varphi_{j}(x)$. When \mycode{symbolic} is \mycode{False}, $u(x)=\sum_{j} c_{j} \varphi_{j}(x)$ can be computed at a (large) number of points and plotted together with $f(x)$. The construction of $u$ points from the solution vector $\mathrm{c}$ is done elementwise by evaluating $\sum_{r} c_{r} \tilde{\varphi}_{r}(X)$ at a (large) number of points in each element in the local coordinate system, and the discrete $(x, u)$ values on each element are stored in separate arrays that are finally concatenated to form a global array for $x$ and for $u$. The details are found in the $u_{-} g$ lob function in \textbf{fe\textunderscore approx1D.py} .
 	\section[The structure of the coefficient matrix]{The structure of the coefficient matrix}
 	\label{sec:sec_4_6}
 	\noindent Let us first see how the global matrix looks like if we assemble symbolic element
-	matrices, expressed in terms of h, from several elements:
+	matrices, expressed in terms of \mycode{h}, from several elements:
 	\begin{lstlisting}[numbers=none]
 		>>> d=1; N_e=8; Omega=[0,1] # 8 linear elements on [0,1]
 		>>> phi = basis(d)
@@ -305,11 +306,12 @@
 	multiplied by $h / 30$. The rows with odd numbers correspond to nodes at the element boundaries and get contributions from two neighboring elements in the assembly process, while the even numbered rows correspond to internal nodes in the elements where the only one element contributes to the values in the global matrix.
 	\section[Applications]{Applications}
 	\label{sec:sec_4_7}
-	\noindent With the aid of the approximate function in the fe\textunderscore approx1D module we can easily investigate the quality of various finite element approximations to some given functions. Figure 29 shows how linear and quadratic elements approximates the polynomial $f(x)=x(1-x)^{8}$ on $\Omega=[0,1]$, using equal-sized elements. The results arise from the program
+	\noindent With the aid of the \mycode{approximate} function in the  \textbf{fe\textunderscore approx1D}  module we can easily investigate the quality of various finite element approximations to some given functions. Figure 29 shows how linear and quadratic elements approximates the polynomial $f(x)=x(1-x)^{8}$ on $\Omega=[0,1]$, using equal-sized elements. The results arise from the program
 	\begin{lstlisting}[numbers=none]
 		import sympy as sp
 		from fe_approx1D import approximate
 		x = sp.Symbol('x')
+		
 		approximate(f=x*(1-x)**8, symbolic=False, d=1, N_e=4)
 		approximate(f=x*(1-x)**8, symbolic=False, d=2, N_e=2)
 		approximate(f=x*(1-x)**8, symbolic=False, d=1, N_e=8)
@@ -329,7 +331,7 @@
 	\end{figure}
 	\section[Sparse matrix storage and solution]{Sparse matrix storage and solution}
 	\label{sec:sec_4_8}
-	\noindent Some of the examples in the preceding section took several minutes to compute, even on small meshes consisting of up to eight elements. The main explanation for slow computations is unsuccessful symbolic integration: sympy may use a lot of energy on integrals like $\int f(x(X)) \tilde{\varphi}_{r}(X) h / 2 d x$ before giving up, and the program then resorts to numerical integration. Codes that can deal with a large number of basis functions and accept flexible choices of $f(x)$ should compute all integrals numerically and replace the matrix objects from sympy by the far more efficient array objects from numpy.
+	\noindent Some of the examples in the preceding section took several minutes to compute, even on small meshes consisting of up to eight elements. The main explanation for slow computations is unsuccessful symbolic integration: \mycode{sympy} may use a lot of energy on integrals like $\int f(x(X)) \tilde{\varphi}_{r}(X) h / 2 d x$ before giving up, and the program then resorts to numerical integration. Codes that can deal with a large number of basis functions and accept flexible choices of $f(x)$ should compute all integrals numerically and replace the matrix objects from \mycode{sympy} by the far more efficient array objects from \mycode{numpy}.
 	
 	Another reason for slow code is related to the fact that most of the matrix entries $A_{i, j}$ are zero, because $\left(\varphi_{i}, \varphi_{j}\right)=0$ unless $i$ and $j$ are nodes in the same element. A matrix whose majority of entries are zeros, is known as a sparse matrix. The sparsity should be utilized in software as it dramatically decreases the storage demands and the CPU-time needed to compute the solution of the linear system. This optimization is not critical in 1D problems where modern computers can afford computing with all the zeros in the complete square matrix, but in $2 \mathrm{D}$ and especially in 3D, sparse matrices are fundamental for feasible finite element computations.
 	

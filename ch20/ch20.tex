@@ -306,6 +306,7 @@ where $\mathcal{L}_{i}$ is some differential operator defining differential equa
 		Note that in the general case where all unknowns enter all equations, we have to solve the compound system (\ref{eqa297})-(\ref{eqa298}) since then we cannot utilize the special property that (\ref{eqa270}) does not involve $T$ and can be solved first.
 		
 		When the viscosity depends on the temperature, the $\mu \nabla^{2} w$ term must be replaced by $\nabla \cdot(\mu(T) \nabla w)$, and then $T$ enters the equation for $w$. Now we have a two-way coupling since both equations contain $w$ and $T$ and therefore must be solved simultaneously Th equation $\nabla \cdot(\mu(T) \nabla w)=-\beta$ is nonlinear, and if some iteration procedure is invoked, where we use a previously computed $T_{-}$in the viscosity $\left(\mu\left(T_{-}\right)\right)$, the coefficient is known, and the equation involves only one unknown, $w$. In that case we are back to the one-way coupled set of PDEs.
+		
 		We may also formulate our PDE system as a vector equation. To this end, we introduce the vector of unknowns $\boldsymbol{u}=\left(u^{(0)}, u^{(1)}\right)$, where $u^{(0)}=w$ and $u^{(1)}=T$. We then have
 		$$
 		\nabla^{2} u=\left(\begin{array}{c}
@@ -458,158 +459,10 @@ where $\mathcal{L}_{i}$ is some differential operator defining differential equa
 			\kappa \frac{1}{r} \frac{d}{d r}\left(r \frac{d T}{d r}\right)=-\mu\left(\frac{d w}{d r}\right)^{2}
 		\end{equation}
 		
-		\noindent The domain for (\ref{eqa305}) - (\ref{eqa306}) is $\Omega=[0, H]$, with boundary conditions $w(0)=$ $w(H)=0$ and $T(0)=T(H)=T_{0}$. For (\ref{eqa307})-(\ref{eqa308}) the domain is $[0, R]$ ( $R$ being the radius of the pipe) and the boundary conditions are $d u / d r=d T / d r=0$ for $r=0, u(R)=0$, and $T(R)=T_{0} .$\smallbreak
+		The domain for (\ref{eqa305}) - (\ref{eqa306}) is $\Omega=[0, H]$, with boundary conditions $w(0)=$ $w(H)=0$ and $T(0)=T(H)=T_{0}$. For (\ref{eqa307})-(\ref{eqa308}) the domain is $[0, R]$ ( $R$ being the radius of the pipe) and the boundary conditions are $d u / d r=d T / d r=0$ for $r=0, u(R)=0$, and $T(R)=T_{0} .$\smallbreak
 		\textbf{Calculations to be continued...}
 	
-\chapter{Exercises}
-	\section*{Exercise 23: Refactor functions into a more general class}
-		\label{sec:sec_21_23}
-		Section \ref{sec:sec_11_2} displays three functions for computing the analytical solution of some simple model problems. There is quite some repetitive code, suggesting that the functions can benefit from being refactored into a class where the user can define the $f(x), a(x)$, and the boundary conditions in particular methods in subclasses. Demonstrate how the new class can be used to solve the three particular problems in Section \ref{sec:sec_11_2}.
-		
-		In the method that computes the solution, check that the solution found fulfills the differential equation and the boundary conditions. 
-		Filename: \textbf{\texttt{uxx\_f\_sympy\_class.py}}.\bigbreak
-	\section*{Exercise 24: Compute the deflection of a cable with sine functions}
-		\label{sec:sec_21_24}
-		\noindent A hanging cable of length $L$ with significant tension has a downward deflection $w(x)$ governed by
-		Solve
-		$$
-		T w^{\prime \prime}(x)=\ell(x),
-		$$
-		where $T$ is the tension in the cable and $\ell(x)$ the load per unit length. The cable is fixed at $x=0$ and $x=L$ so the boundary conditions become $T(0)=T(L)=0$. We assume a constant load $\ell(x)=$ const.
-		
-		The solution is expected to be symmetric around $x=L / 2$. Formulating the problem for $x \in \Omega=[0, L / 2]$ and then scaling it, results in the scaled problem for the dimensionless vertical deflection $u$ :
-		$$
-		u^{\prime \prime}=1, \quad x \in(0,1), \quad u(0)=0, u^{\prime}(1)=0 .
-		$$
-		Introduce the function space spanned by $\psi_{i}=\sin ((i+1) \pi x / 2), i=1, \ldots, N$. Use a Galerkin and a least squares method to find the coefficients $c_{j}$ in $u(x)=$ $\sum_{j} c_{j} \psi_{j}$. Find how fast the coefficients decrease in magnitude by looking at $c_{j} / c_{j-1}$. Find the error in the maximum deflection at $x=1$ when only one basis function is used $(N=0)$.
-		
-		What happens if we choose basis functions $\psi_{i}=\sin ((i+1) \pi x)$ ? These basis functions are appropriate if we do not utilize symmetry and solve the problem on $[0, L]$. A scaled version of this problem reads
-		$$
-		u^{\prime \prime}=1, \quad x \in(0,1), \quad u(0)=u(1)=0 .
-		$$
-		Carry out the computations with $N=0$ and demonstrate that the maximum deflection $u(1 / 2)$ is the same in the problem utilizing symmetry and the problem covering the whole cable.
-		Filename: \textbf{\texttt{cable\_sin.pdf}}. \bigbreak
-	\section*{Exercise 25: Check integration by parts}
-		Consider the Galerkin method for the problem involving $u$ in Exercise \hyperref[sec:sec_21_24]{24}. Show that the formulas for $c_{j}$ are independent of whether we perform integration by parts or not. Filename: \textbf{\texttt{cable\_integr\_by\_parts.pdf}}.\bigbreak
-	\section*{Exercise 26: Compute the deflection of a cable with 2 P1 elements}
-		Solve the problem for $u$ in Exercise \hyperref[sec:sec_21_24]{24} using two P1 linear elements. Filename: \textbf{\texttt{cable\_2P1.pdf}}.\bigbreak
-	\section*{Exercise 27: Compute the deflection of a cable with 1 P2 element}
-		Solve the problem for $u$ in Exercise \hyperref[sec:sec_21_24]{24} using one P2 element with quadratic basis functions. Filename: \textbf{\texttt{cable\_1P2.pdf.}} \bigbreak
-	\section*{Exercise 28: Compute the deflection of a cable with a step load}
-		\noindent We consider the deflection of a tension cable as described in Exercise \hyperref[sec:sec_21_24]{24}. Now the load is
-		$$
-		\ell(x)=\left\{\begin{array}{ll}
-			\ell_{1}, & x<L / 2, \\
-			\ell_{2}, & x \geq L / 2
-		\end{array} \quad x \in[0, L] .\right.
-		$$
-		This load is not symmetric with respect to the midpoint $x=L / 2$ so the solution loses its symmetry and we must solve the scaled problem
-		$$
-		u^{\prime \prime}=\left\{\begin{array}{ll}
-			1, & x<1 / 2, \\
-			0, & x \geq 1 / 2
-		\end{array} \quad x \in(0,1), \quad u(0)=0, u(1)=0\right.
-		$$
-		\begin{enumerate}
-			\item[a)] Use $\psi_{i}=\sin ((i+1) \pi x), i=0, \ldots, N$ and the Galerkin method without integration by parts. Derive a formula for $c_{j}$ in the solution expansion $u=$ $\sum_{j} c_{j} \psi_{j}$. Plot how fast the coefficients $c_{j}$ tend to zero (on a log scale).
-			\item[b)]Solve the problem with P1 finite elements. Plot the solution for $N_{e}=2,4,8$ elements.
-		\end{enumerate}
-		Filename: \textbf{\texttt{cable\_discont\_load.pdf}}.\bigbreak
-	\section*{Exercise 29: Show equivalence between linear systems}
-		\noindent Incorporation of Dirichlet conditions at $x=0$ and $x=L$ in a finite element mesh on $\Omega=[0, L]$ can either be done by introducing an expansion $u(x)=$ $U_{0} \varphi_{0}+U_{N_{n}} \varphi_{N_{n}}+\sum_{j=0}^{N} c_{j} \varphi_{\nu(j)}$, with $N=N_{n}-2$ and considering $u$ values at the inner nodes as unknowns, or one can assemble the matrix system with $u(x)=\sum_{j=0}^{N=N_{n}} c_{j} \varphi_{j}$ and afterwards replace the rows corresponding to known $c_{j}$ values by the boundary conditions. Show that the two approaches are equivalent.\bigbreak
-	\section*{Exercise 30: Compute with a non-uniform mesh}
-		\noindent Derive the linear system for the problem $-u^{\prime \prime}=2$ on $[0,1]$, with $u(0)=0$ and $u(1)=1$, using $\mathrm{P} 1$ elements and a non-uniform mesh. The vertices have coordinates $x_{0}=0<x_{1}<\cdots<x_{N}=1$, and the length of cell number $e$ is $h_{e}=x_{e+1}-x_{e}$.\smallbreak
-		It is of interest to compare the discrete equations for the finite element method in a non-uniform mesh with the corresponding discrete equations arising from a finite difference method. Go through the derivation of the finite difference formula $u^{\prime \prime}\left(x_{i}\right) \approx\left[D_{x} D_{x} u\right]_{i}$ and modify it to find a natural discretization of $u^{\prime \prime}\left(x_{i}\right)$ on a non-uniform mesh. \textbf{\texttt{Filename: nonuniform\_P1 pdf}}.\bigbreak		
-	\section*{Problem 31: Solve a 1D finite element problem by hand}
-		\noindent The following scaled 1D problem is a very simple, yet relevant, model for convective transport in fluids:
-		\begin{equation}
-			\label{309}
-			u^{\prime}=\epsilon u^{\prime \prime}, \quad u(0)=0, u(1)=1, x \in[0,1]
-		\end{equation}
-		\begin{enumerate}
-			\item[a)] Find the analytical solution to this problem. (Introduce $w=u^{\prime}$, solve the first-order differential equation for $w(x)$, and integrate once more.)
-			\item [b)] Derive the variational form of this problem.
-			\item[c)] Introduce a finite element mesh with uniform partitioning. Use P1 elements and compute the element matrix and vector for a general element.
-			\item[d)] Incorporate the boundary conditions and assemble the element contributions.
-			\item[e)] Identify the resulting linear system as a finite difference discretization of the differential equation using
-			$$	\left[D_{2 x} u=\epsilon D_{x} D_{x} u\right]_{i} $$
-			\item[f)] Compute the numerical solution and plot it together with the exact solution for a mesh with 20 elements and $\epsilon=10,1,0.1,0.01$.
-		\end{enumerate}
-		\textbf{\texttt{Filename: convdiff1D\_P1.pdf}}.\bigbreak 
-	\section*{Exercise 32: Compare finite elements and differences for a radially symmetric Poisson equation}
-		\noindent We consider the Poisson problem in a disk with radius $R$ with Dirichlet conditions at the boundary. Given that the solution is radially symmetric and hence dependent only on the radial coordinate $\left(r=\sqrt{x^{2}+y^{2}}\right)$, we can reduce the problem to a 1D Poisson equation
-		\begin{equation}
-			\label{eqa310}
-			-\frac{1}{r} \frac{d}{d r}\left(r \frac{d u}{d r}\right)=f(r), \quad r \in(0, R), u^{\prime}(0)=0, u(R)=U_{R} .
-		\end{equation}
-		\begin{enumerate}
-			\item [a)] Derive a variational form of (\ref{eqa310}) by integrating over the whole disk, or posed equivalently: use a weighting function $2 \pi r v(r)$ and integrate $r$ from 0 to $R$.
-			\item[b)] Use a uniform mesh partition with P1 elements and show what the resulting set of equations becomes. Integrate the matrix entries exact by hand, but use a Trapezoidal rule to integrate the $f$ term.
-			\item[c)]Explain that an intuitive finite difference method applied to (\ref{eqa310}) gives
-		\end{enumerate}
-		$$
-		\frac{1}{r_{i}} \frac{1}{h^{2}}\left(r_{i+\frac{1}{2}}\left(u_{i+1}-u_{i}\right)-r_{i-\frac{1}{2}}\left(u_{i}-u_{i-1}\right)\right)=f_{i}, \quad i=r h \text {. }
-		$$\smallbreak
-		For $i=0$ the factor $1 / r_{i}$ seemingly becomes problematic. One must always have $u^{\prime}(0)=0$, because of the radial symmetry, which implies $u_{-1}=u_{1}$, if we allow introduction of a fictitious value $u_{-1}$. Using this $u_{-1}$ in the difference equation for $i=0$ gives
-		$$
-		\begin{aligned}
-			&\frac{1}{r_{0}} \frac{1}{h^{2}}\left(r_{\frac{1}{2}}\left(u_{1}-u_{0}\right)-r_{-\frac{1}{2}}\left(u_{0}-u_{1}\right)\right)= \\
-			&\quad \frac{1}{r_{0}} \frac{1}{2 h^{2}}\left(\left(r_{0}+r_{1}\right)\left(u_{1}-u_{0}\right)-\left(r_{-1}+r_{0}\right)\left(u_{0}-u_{1}\right)\right) \approx 2\left(u_{1}-u_{0}\right)
-		\end{aligned}
-		$$
-		if we use $r_{-1}+r_{1} \approx 2 r_{0}$.\smallbreak
-		Set up the complete set of equations for the finite difference method and compare to the finite element method in case a Trapezoidal rule is used to integrate the $f$ term in the latter method.
-		Filename:\textbf{\texttt{radial\_Poisson1D\_P1.pdf}}. \bigbreak
-	\section*{Exercise 33: Compute with variable coefficients and P1 elements by hand}
-		\noindent Consider the problem
-		\begin{equation}
-			\label{311}
-			-\frac{d}{d x}\left(a(x) \frac{d u}{d x}\right)+\gamma u=f(x), \quad x \in \Omega=[0, L], \quad u(0)=\alpha, u^{\prime}(L)=\beta .
-		\end{equation}
-		We choose $a(x)=1+x^{2}$. Then
-		\begin{equation}
-			\label{312}
-			u(x)=\alpha+\beta\left(1+L^{2}\right) \tan ^{-1}(x),
-		\end{equation}
-		is an exact solution if $f(x)=\gamma u$.\smallbreak
-		Derive a variational formulation and compute general expressions for the element matrix and vector in an arbitrary element, using P1 elements and a uniform partitioning of $[0, L]$. The right-hand side integral is challenging and can be computed by a numerical integration rule. The Trapezoidal rule (101) gives particularly simple expressions. Filename: \textbf{\texttt{atan1D\_P1.pdf}}.\bigbreak
-	\section*{Exercise 34: Solve a 2D Poisson equation using polynomials and sines}
-		\noindent The classical problem of applying a torque to the ends of a rod can be modeled by a Poisson equation defined in the cross section $\Omega$ :
-		$$
-		-\nabla^{2} u=2, \quad(x, y) \in \Omega,
-		$$
-		with $u=0$ on $\partial \Omega$. Exactly the same problem arises for the deflection of a membrane with shape $\Omega$ under a constant load.\smallbreak
-		For a circular cross section one can readily find an analytical solution. For a rectangular cross section the analytical approach ends up with a sine series. The idea in this exercise is to use a single basis function to obtain an approximate answer.\smallbreak
-		We assume for simplicity that the cross section is the unit square: $\Omega=$ $[0,1] \times[0,1]$.
-		\begin{enumerate}
-			\item[a)] We consider the basis $\psi_{p, q}(x, y)=\sin ((p+1) \pi x) \sin (q \pi y), p, q=0, \ldots, n$. These basis functions fulfill the Dirichlet condition. Use a Galerkin method and $n=0$.
-			\item[b)] The basis function involving sine functions are orthogonal. Use this property in the Galerkin method to derive the coefficients $c_{p, q}$ in a formula $u=\sum_{p} \sum_{q} c_{p, q} \psi_{p, q}(x, y) .$
-			\item [c)] Another possible basis is $\psi_{i}(x, y)=(x(1-x) y(1-y))^{i+1}, i=0, \ldots, N$. Use the Galerkin method to compute the solution for $N=0$. Which choice of a single basis function is best, $u \sim x(1-x) y(1-y)$ or $u \sim \sin (\pi x) \sin (\pi y)$ ? In order to answer the question, it is necessary to search the web or the literature for an accurate estimate of the maximum $u$ value at $x=y=1 / 2$.
-		\end{enumerate}
-			Filename: \textbf{\texttt{torsion\_sin\_xy.pdf}}.\bigbreak
-	\section*{Exercise 35: Analyze a Crank-Nicolson scheme for the diffusion equation}		
-		\noindent Perform the analysis in Section \ref{sec:sec_19_10} for a $1 \mathrm{D}$ diffusion equation $u_{t}=\alpha u_{x x}$ discretized by the Crank-Nicolson scheme in time:
-		$$
-		\frac{u^{n+1}-u^{n}}{\Delta t}=\alpha \frac{1}{2}\left(\frac{u^{n+1}}{\partial x^{2}} \frac{u^{n}}{\partial x^{2}}\right)
-		$$
-		or written compactly with finite difference operators,
-		$$
-		\left[D_{t} u=\alpha D_{x} D_{x} \bar{u}^{t}\right]^{n+\frac{1}{2}}
-		$$
-		(From a strict mathematical point of view, the $u^{n}$ and $u^{n+1}$ in these equations should be replaced by $u_{e}^{n}$ and $u_{e}^{n+1}$ to indicate that the unknown is the exact solution of the PDE discretized in time, but not yet in space, see Section \ref{sec:sec_19_1}.) Make plots similar to those in Section \ref{sec:sec_19_10}. 
-		Filename: \textbf{\texttt{fe\_diffusion.pdf}}.\bigbreak
 
-%\begin{theindex}
-%	\item 
-%		\subitem 
-%		\subitem 
-%	\indexspace
-%	\item 
-%		\subitem 
-%		\subitem 
-%			\subsubitem 
-%			\subsubitem 
-%\end{theindex}
 
 \clearpage
 \end{document} 

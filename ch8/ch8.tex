@@ -167,32 +167,31 @@
 	\noindent The least\textunderscore squares function from Section \hyperref[sec:sec_2_8]{2.8} and/or the file \href{https://github.com/hplgit/INF5620/blob/master/src/fem/fe_approx1D.py}{approx1D.py} can with very small modifications solve $2 \mathrm{D}$ approximation problems. First, let Omega now be a list of the intervals in $x$ and $y$ direction. For example, $\Omega=\left[0, L_{x}\right] \times\left[0, L_{y}\right]$ can be represented by Omega $=\left[\left[0, L_{-} \mathrm{x}\right],\left[0, \mathrm{~L}_{-} \mathrm{y}\right]\right]$. Second, the symbolic integration must be extended to $2 \mathrm{D}$ :
 	\begin{lstlisting}[numbers=none]
 		import sympy as sp
-		
+	
 		integrand = psi[i]*psi[j]
 		I = sp.integrate(integrand,
-		
-		(x, Omega[0][0], Omega[0][1]),
-		(y, Omega[1][0], Omega[1][1]))	
+					(x, Omega[0][0], Omega[0][1]),
+					(y, Omega[1][0], Omega[1][1]))	
 	\end{lstlisting}
-	provided integrand is an expression involving the sympy symbols x and y. The
+	provided \mycode{integrand} is an expression involving the \mycode{sympy} symbols x and y. The
 	2D version of numerical integration becomes
 	\begin{lstlisting}[numbers=none]
 		if isinstance(I, sp.Integral):
-		integrand = sp.lambdify([x,y], integrand)
-		I = sp.mpmath.quad(integrand,
-		[Omega[0][0], Omega[0][1]],
-		[Omega[1][0], Omega[1][1]])	
+			integrand = sp.lambdify([x,y], integrand)
+				I = sp.mpmath.quad(integrand,
+						[Omega[0][0], Omega[0][1]],
+						[Omega[1][0], Omega[1][1]])	
 	\end{lstlisting}
 	The right-hand side integrals are modified in a similar way.
 	
 	Third, we must construct a list of $2 \mathrm{D}$ basis functions. Here are two examples based on tensor products of $1 \mathrm{D}$ "Taylor-style" polynomials $x^{i}$ and $1 \mathrm{D}$ sine functions $\sin ((i+1) \pi x)$ :
 	\begin{lstlisting}[numbers=none]
 		def taylor(x, y, Nx, Ny):
-		return [x**i*y**j for i in range(Nx+1) for j in range(Ny+1)]
+			return [x**i*y**j for i in range(Nx+1) for j in range(Ny+1)]
 		
 		def sines(x, y, Nx, Ny):
-		return [sp.sin(sp.pi*(i+1)*x)*sp.sin(sp.pi*(j+1)*y)
-		for i in range(Nx+1) for j in range(Ny+1)]	
+			return [sp.sin(sp.pi*(i+1)*x)*sp.sin(sp.pi*(j+1)*y)
+							for i in range(Nx+1) for j in range(Ny+1)]	
 	\end{lstlisting}
 	The complete code appears in \href{http://tinyurl.com/jvzzcfn/fem/fe_approx2D.py}{approx2D.py.}
 	
